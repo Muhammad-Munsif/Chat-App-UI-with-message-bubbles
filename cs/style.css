@@ -1,0 +1,208 @@
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      /* Custom styles to enhance Tailwind */
+      .chat-container {
+        transition: all 0.3s ease;
+      }
+
+      .contacts-sidebar {
+        transition: all 0.3s ease;
+      }
+
+      /* Message bubble animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message {
+        animation: fadeInUp 0.3s ease-out;
+      }
+
+      /* Custom scrollbar for chat messages */
+      #chat-messages::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      #chat-messages::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+
+      #chat-messages::-webkit-scrollbar-thumb {
+        background: #cbd5e0;
+        border-radius: 10px;
+      }
+
+      #chat-messages::-webkit-scrollbar-thumb:hover {
+        background: #a0aec0;
+      }
+
+      /* Typing indicator animation */
+      .typing-indicator div div {
+        animation: bounce 1.5s infinite ease-in-out;
+      }
+
+      @keyframes bounce {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Mobile drawer animation */
+      @keyframes slideInLeft {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideOutLeft {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-100%);
+        }
+      }
+
+      .contacts-sidebar.mobile-active {
+        animation: slideInLeft 0.3s forwards;
+      }
+
+      .contacts-sidebar.mobile-inactive {
+        animation: slideOutLeft 0.3s forwards;
+      }
+
+      /* Overlay for mobile */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 20;
+        display: none;
+      }
+
+      .overlay.active {
+        display: block;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .contacts-sidebar {
+          position: fixed;
+          left: 0;
+          top: 0;
+          height: 100vh;
+          z-index: 30;
+          margin-right: 0;
+          border-radius: 0;
+          width: 85%;
+          max-width: 320px;
+          transform: translateX(-100%);
+        }
+
+        .contacts-sidebar.mobile-active {
+          display: block;
+          transform: translateX(0);
+        }
+
+        .chat-container {
+          margin-left: 0;
+          width: 100%;
+          max-width: 100%;
+          height: 100vh;
+          border-radius: 0;
+        }
+        
+        .mobile-hidden {
+          display: none;
+        }
+        
+        .mobile-menu-btn {
+          display: block;
+        }
+      }
+      
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .chat-container {
+          max-width: 65%;
+        }
+        
+        .contacts-sidebar {
+          max-width: 35%;
+        }
+      }
+      
+      @media (min-width: 1025px) {
+        .chat-container {
+          max-width: 70%;
+        }
+        
+        .contacts-sidebar {
+          max-width: 30%;
+        }
+      }
+      
+      /* Enhanced message styling */
+      .incoming-message {
+        background: #f1f5f9;
+        color: #334155;
+        border-radius: 18px 18px 18px 4px;
+      }
+      
+      .outgoing-message {
+        background: #4f46e5;
+        color: white;
+        border-radius: 18px 18px 4px 18px;
+      }
+      
+      /* Enhanced contact item hover effect */
+      .contact-item {
+        transition: all 0.2s ease;
+      }
+      
+      .contact-item:hover {
+        background-color: #f8fafc;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      
+      /* Improved input focus states */
+      .message-input input:focus {
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+      }
+      
+      /* Better button interactions */
+      .btn-interactive {
+        transition: all 0.2s ease;
+      }
+      
+      .btn-interactive:hover {
+        transform: scale(1.05);
+      }
+      
+      .btn-interactive:active {
+        transform: scale(0.95);
+      }
