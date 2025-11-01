@@ -107,63 +107,6 @@
   display: block;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .contacts-sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    z-index: 30;
-    margin-right: 0;
-    border-radius: 0;
-    width: 85%;
-    max-width: 320px;
-    transform: translateX(-100%);
-  }
-
-  .contacts-sidebar.mobile-active {
-    display: block;
-    transform: translateX(0);
-  }
-
-  .chat-container {
-    margin-left: 0;
-    width: 100%;
-    max-width: 100%;
-    height: 100vh;
-    border-radius: 0;
-  }
-
-  .mobile-hidden {
-    display: none;
-  }
-
-  .mobile-menu-btn {
-    display: block;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .chat-container {
-    max-width: 65%;
-  }
-
-  .contacts-sidebar {
-    max-width: 35%;
-  }
-}
-
-@media (min-width: 1025px) {
-  .chat-container {
-    max-width: 70%;
-  }
-
-  .contacts-sidebar {
-    max-width: 30%;
-  }
-}
-
 /* Enhanced message styling */
 .incoming-message {
   background: #f1f5f9;
