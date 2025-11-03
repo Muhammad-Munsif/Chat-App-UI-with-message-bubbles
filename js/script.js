@@ -1,4 +1,4 @@
- <script>
+
       document.addEventListener("DOMContentLoaded", function () {
         // DOM Elements
         const chatMessages = document.getElementById("chat-messages");
@@ -341,4 +341,3 @@
           }
         });
       });
-    </script>
