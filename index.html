@@ -9,7 +9,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-   
   </head>
   <body class="bg-gray-100 h-screen flex items-center justify-center p-4">
     <!-- Overlay for mobile sidebar -->
@@ -314,7 +313,10 @@
               </div>
               <div class="mt-2 video-container">
                 <video class="video-player" id="sample-video" controls>
-                  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                  <source
+                    src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    type="video/mp4"
+                  />
                   Your browser does not support the video tag.
                 </video>
                 <div class="video-controls">
@@ -322,7 +324,14 @@
                     <i class="fas fa-play"></i>
                   </button>
                   <div class="flex-1 mx-2">
-                    <input type="range" min="0" max="100" value="0" class="w-full" id="progress-bar">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value="0"
+                      class="w-full"
+                      id="progress-bar"
+                    />
                   </div>
                   <button id="mute-btn">
                     <i class="fas fa-volume-up"></i>
@@ -396,7 +405,5 @@
         </div>
       </div>
     </div>
-
-   
   </body>
 </html>
