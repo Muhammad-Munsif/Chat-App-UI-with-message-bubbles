@@ -1,4 +1,4 @@
-<script>
+
     // Initial Data
     const users = [
       {
@@ -604,4 +604,4 @@
 
     // Initialize app when DOM is loaded
     document.addEventListener('DOMContentLoaded', initApp);
-  </script>
+  
