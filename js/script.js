@@ -1,4 +1,4 @@
-<script>
+
     // Data
     const users = [
       {
@@ -656,4 +656,4 @@
 
     // Initialize app
     document.addEventListener('DOMContentLoaded', initApp);
-  </script>
+  
