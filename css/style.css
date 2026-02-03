@@ -232,6 +232,7 @@ body {
 }
 
 @keyframes typing {
+
   0%,
   60%,
   100% {
@@ -351,11 +352,11 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.theme-switch input:checked + .theme-slider {
+.theme-switch input:checked+.theme-slider {
   background: var(--primary);
 }
 
-.theme-switch input:checked + .theme-slider:before {
+.theme-switch input:checked+.theme-slider:before {
   transform: translateX(28px);
 }
 
