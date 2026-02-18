@@ -1,4 +1,4 @@
-<style>
+
     * {
       margin: 0;
       padding: 0;
@@ -364,4 +364,4 @@
 
     /* improved touch targets */
     button, .clickable { cursor: pointer; min-width: 44px; min-height: 44px; }
-  </style>
+  
