@@ -1,4 +1,4 @@
-<script>
+
     (function() {
       // ---------- DATA ----------
       const users = [
@@ -216,4 +216,4 @@
       window.toggleEmojiPicker = ()=>alert('Emoji picker 🚧');
       window.sendMessage = sendMessage;
     })();
-  </script>
+  
