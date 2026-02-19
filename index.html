@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
@@ -7,7 +8,9 @@
   <!-- Tailwind (light) + Font Awesome 6 (free) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -18,7 +21,8 @@
 
     /* ----- LIGHT THEME (default) ----- */
     :root {
-      --primary: #2563eb;        /* solid blue, professional */
+      --primary: #2563eb;
+      /* solid blue, professional */
       --primary-dark: #1d4ed8;
       --primary-light: #3b82f6;
       --bg-main: #ffffff;
@@ -81,16 +85,22 @@
       transition: transform 0.25s ease;
       z-index: 50;
     }
+
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
-        left: 0; top: 0; bottom: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
         width: 85%;
         max-width: 340px;
         transform: translateX(-100%);
         box-shadow: var(--shadow);
       }
-      .sidebar.active { transform: translateX(0); }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
     }
 
     /* chat area */
@@ -112,20 +122,44 @@
       color: white;
       border-radius: 14px;
     }
-    .avatar-sm { width: 44px; height: 44px; font-size: 1.2rem; }
-    .avatar-md { width: 52px; height: 52px; font-size: 1.4rem; }
+
+    .avatar-sm {
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+    }
+
+    .avatar-md {
+      width: 52px;
+      height: 52px;
+      font-size: 1.4rem;
+    }
 
     .status-badge {
       position: absolute;
-      bottom: 2px; right: 2px;
-      width: 12px; height: 12px;
+      bottom: 2px;
+      right: 2px;
+      width: 12px;
+      height: 12px;
       border-radius: 10px;
       border: 2px solid var(--bg-sidebar);
     }
-    .online { background: var(--success); }
-    .away { background: var(--warning); }
-    .offline { background: var(--text-secondary); }
-    .dnd { background: var(--danger); }
+
+    .online {
+      background: var(--success);
+    }
+
+    .away {
+      background: var(--warning);
+    }
+
+    .offline {
+      background: var(--text-secondary);
+    }
+
+    .dnd {
+      background: var(--danger);
+    }
 
     /* conversation items */
     .conv-item {
@@ -138,7 +172,11 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .conv-item:hover { background: var(--bg-hover); }
+
+    .conv-item:hover {
+      background: var(--bg-hover);
+    }
+
     .conv-item.active {
       background: var(--bg-hover);
       border-left: 4px solid var(--primary);
@@ -153,8 +191,15 @@
       padding: 10px 16px;
       scrollbar-width: thin;
     }
-    .online-strip::-webkit-scrollbar { height: 4px; }
-    .online-strip::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 8px; }
+
+    .online-strip::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .online-strip::-webkit-scrollbar-thumb {
+      background: var(--text-secondary);
+      border-radius: 8px;
+    }
 
     /* messages panel */
     .msg-panel {
@@ -172,7 +217,10 @@
       margin-bottom: 8px;
       animation: fadeIn 0.2s;
     }
-    .msg-row.out { justify-content: flex-end; }
+
+    .msg-row.out {
+      justify-content: flex-end;
+    }
 
     .bubble {
       max-width: 70%;
@@ -180,14 +228,16 @@
       border-radius: 24px;
       font-size: 0.95rem;
       line-height: 1.45;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
       word-wrap: break-word;
     }
+
     .bubble.in {
       background: var(--incoming-bubble);
       color: var(--text-primary);
       border-bottom-left-radius: 6px;
     }
+
     .bubble.out {
       background: var(--outgoing-bubble);
       color: white;
@@ -207,6 +257,7 @@
       justify-content: center;
       margin: 16px 0;
     }
+
     .date-divider span {
       background: var(--bg-surface);
       padding: 5px 18px;
@@ -226,16 +277,49 @@
       border-radius: 30px;
       width: fit-content;
     }
+
     .typing-indicator span {
-      width: 8px; height: 8px;
+      width: 8px;
+      height: 8px;
       background: var(--text-secondary);
       border-radius: 50%;
       animation: pulse 1.4s infinite;
     }
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes pulse { 0%,60%,100%{ opacity:0.4; transform:translateY(0); } 30%{ opacity:1; transform:translateY(-3px); } }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      60%,
+      100% {
+        opacity: 0.4;
+        transform: translateY(0);
+      }
+
+      30% {
+        opacity: 1;
+        transform: translateY(-3px);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     /* message input */
     .input-area {
@@ -243,6 +327,7 @@
       border-top: 1px solid var(--border-light);
       padding: 14px 20px;
     }
+
     .input-wrapper {
       display: flex;
       align-items: center;
@@ -252,10 +337,12 @@
       padding: 4px 4px 4px 20px;
       border: 1px solid transparent;
     }
+
     .input-wrapper:focus-within {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
     }
+
     .msg-input {
       flex: 1;
       background: transparent;
@@ -265,8 +352,10 @@
       color: var(--text-primary);
       outline: none;
     }
+
     .icon-btn {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 40px;
       display: flex;
       align-items: center;
@@ -275,12 +364,17 @@
       background: transparent;
       cursor: pointer;
     }
+
     .send-btn {
       background: var(--primary);
       color: white;
-      box-shadow: 0 4px 8px rgba(37,99,235,0.3);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
     }
-    .send-btn:disabled { opacity: 0.4; pointer-events: none; }
+
+    .send-btn:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
 
     /* attachment menu (clean) */
     .attach-menu {
@@ -297,6 +391,7 @@
       z-index: 40;
       backdrop-filter: blur(8px);
     }
+
     .attach-item {
       display: flex;
       flex-direction: column;
@@ -306,43 +401,78 @@
       color: var(--text-secondary);
       cursor: pointer;
     }
-    .attach-item i { font-size: 1.5rem; color: var(--primary); }
+
+    .attach-item i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
 
     /* mobile overlay */
     .overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.3);
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(3px);
       z-index: 45;
-      opacity: 0; visibility: hidden;
+      opacity: 0;
+      visibility: hidden;
       transition: 0.2s;
     }
-    .overlay.active { opacity: 1; visibility: visible; }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
 
     /* mobile fab */
     .fab {
-      position: fixed; bottom: 24px; right: 24px;
-      width: 56px; height: 56px;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
       border-radius: 30px;
       background: var(--primary);
       color: white;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       box-shadow: var(--shadow);
       cursor: pointer;
       z-index: 49;
-      opacity: 0; visibility: hidden;
+      opacity: 0;
+      visibility: hidden;
     }
-    @media (max-width: 768px) { .fab { opacity: 1; visibility: visible; } }
+
+    @media (max-width: 768px) {
+      .fab {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
 
     /* minimal scroll */
-    .scrollable { scrollbar-width: thin; scrollbar-color: var(--text-secondary) transparent; }
-    .scrollable::-webkit-scrollbar { width: 5px; }
-    .scrollable::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 10px; }
+    .scrollable {
+      scrollbar-width: thin;
+      scrollbar-color: var(--text-secondary) transparent;
+    }
+
+    .scrollable::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+      background: var(--text-secondary);
+      border-radius: 10px;
+    }
 
     /* remove any emoji / extra decorations */
-    .no-emoji { font-style: normal; }
+    .no-emoji {
+      font-style: normal;
+    }
   </style>
 </head>
+
 <body data-theme="light">
   <div class="app">
     <!-- SIDEBAR -->
@@ -362,7 +492,8 @@
         </div>
         <!-- search -->
         <div class="mt-4 relative">
-          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-secondary" style="color: var(--text-secondary);"></i>
+          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-secondary"
+            style="color: var(--text-secondary);"></i>
           <input type="text" placeholder="Search chats" id="searchInput"
             class="w-full pl-11 pr-4 py-3 rounded-2xl bg-surface outline-none focus:ring-2 focus:ring-blue-500/50"
             style="background: var(--bg-surface); color: var(--text-primary);">
@@ -401,12 +532,14 @@
     <!-- MAIN CHAT -->
     <main class="chat">
       <!-- chat header -->
-      <div class="flex items-center justify-between px-5 py-3 border-b sticky top-0 bg-main" style="border-color: var(--border-light); background: var(--bg-main); z-index: 10;">
+      <div class="flex items-center justify-between px-5 py-3 border-b sticky top-0 bg-main"
+        style="border-color: var(--border-light); background: var(--bg-main); z-index: 10;">
         <div class="flex items-center gap-3 min-w-0">
           <button class="md:hidden icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
           <button class="hidden md:flex icon-btn" onclick="backToContacts()"><i class="fas fa-arrow-left"></i></button>
           <div class="relative">
-            <div class="avatar avatar-sm" id="currentUserAvatar" style="background: var(--primary);"><i class="fas fa-user-friends"></i></div>
+            <div class="avatar avatar-sm" id="currentUserAvatar" style="background: var(--primary);"><i
+                class="fas fa-user-friends"></i></div>
             <span class="status-badge online" id="currentUserStatus"></span>
           </div>
           <div class="min-w-0">
@@ -419,12 +552,17 @@
           <button class="icon-btn" onclick="startVideoCall()"><i class="fas fa-video"></i></button>
           <div class="relative">
             <button class="icon-btn" onclick="toggleChatMenu()"><i class="fas fa-ellipsis-v"></i></button>
-            <div id="chatMenu" class="absolute right-0 top-12 w-44 bg-surface border rounded-xl shadow-lg z-30 hidden" style="background: var(--bg-sidebar); border-color: var(--border-light);">
-              <button onclick="viewProfile()" class="block w-full text-left px-4 py-3 hover:bg-hover rounded-t-xl"><i class="fas fa-user w-6"></i> Profile</button>
-              <button onclick="muteChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i class="fas fa-bell-slash w-6"></i> Mute</button>
-              <button onclick="clearChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i class="fas fa-trash w-6"></i> Clear</button>
+            <div id="chatMenu" class="absolute right-0 top-12 w-44 bg-surface border rounded-xl shadow-lg z-30 hidden"
+              style="background: var(--bg-sidebar); border-color: var(--border-light);">
+              <button onclick="viewProfile()" class="block w-full text-left px-4 py-3 hover:bg-hover rounded-t-xl"><i
+                  class="fas fa-user w-6"></i> Profile</button>
+              <button onclick="muteChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i
+                  class="fas fa-bell-slash w-6"></i> Mute</button>
+              <button onclick="clearChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i
+                  class="fas fa-trash w-6"></i> Clear</button>
               <div class="border-t my-1" style="border-color: var(--border-light);"></div>
-              <button onclick="exportChat()" class="block w-full text-left px-4 py-3 hover:bg-hover rounded-b-xl"><i class="fas fa-download w-6"></i> Export</button>
+              <button onclick="exportChat()" class="block w-full text-left px-4 py-3 hover:bg-hover rounded-b-xl"><i
+                  class="fas fa-download w-6"></i> Export</button>
             </div>
           </div>
         </div>
@@ -433,12 +571,15 @@
       <!-- messages container -->
       <div class="msg-panel scrollable" id="messagesContainer">
         <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-4">
-          <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-5" style="background: var(--bg-surface);">
+          <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-5"
+            style="background: var(--bg-surface);">
             <i class="fas fa-comments text-5xl" style="color: var(--primary);"></i>
           </div>
           <h3 class="text-2xl font-bold mb-2">Welcome to WaveChat</h3>
           <p class="text-secondary max-w-xs mb-6">Start messaging with colleagues and friends</p>
-          <button onclick="newChat()" class="px-7 py-3 bg-blue-600 text-white rounded-full font-medium shadow-md hover:bg-blue-700 transition">New chat</button>
+          <button onclick="newChat()"
+            class="px-7 py-3 bg-blue-600 text-white rounded-full font-medium shadow-md hover:bg-blue-700 transition">New
+            chat</button>
         </div>
         <div id="chatMessages" class="hidden w-full"></div>
       </div>
@@ -448,7 +589,8 @@
         <div class="input-wrapper">
           <button class="icon-btn" onclick="toggleAttachmentMenu()"><i class="fas fa-plus"></i></button>
           <input type="text" class="msg-input" placeholder="Type a message" id="messageInput" disabled>
-          <button class="icon-btn" onclick="sendMessage()" id="sendButton" disabled><i class="fas fa-paper-plane"></i></button>
+          <button class="icon-btn" onclick="sendMessage()" id="sendButton" disabled><i
+              class="fas fa-paper-plane"></i></button>
         </div>
 
         <!-- attachment menu (hidden) -->
@@ -465,7 +607,7 @@
   <div class="fab" id="mobileFab" onclick="toggleSidebar()"><i class="fas fa-comment-dots text-2xl"></i></div>
 
   <script>
-    (function() {
+    (function () {
       // ---------- PROFESSIONAL DEMO DATA (ready for backend) ----------
       const users = [
         { id: 1, name: "John Doe", avatarIcon: "user-tie", status: "online", lastSeen: "just now", lastMessage: "Check out this photo", unread: 0, color: "from-blue-600 to-indigo-600", isFavorite: false },
@@ -539,7 +681,7 @@
           div.className = `conv-item ${currentChatId === u.id ? 'active' : ''}`;
           div.setAttribute('data-userid', u.id);
           div.onclick = () => selectChat(u.id);
-          div.innerHTML = `<div class="relative"><div class="avatar avatar-sm" style="background: var(--primary);"><i class="fas fa-${u.avatarIcon}"></i></div><span class="status-badge ${u.status}"></span>${u.isFavorite ? '<i class="fas fa-star text-yellow-400 absolute -top-1 -right-1 text-[9px]"></i>' : ''}</div><div class="flex-1 min-w-0"><div class="flex justify-between"><span class="font-semibold">${u.name}</span><span class="text-xs text-secondary">${u.lastSeen}</span></div><p class="text-sm text-secondary truncate">${u.lastMessage}</p></div>${u.unread ? '<span class="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5">'+u.unread+'</span>' : ''}`;
+          div.innerHTML = `<div class="relative"><div class="avatar avatar-sm" style="background: var(--primary);"><i class="fas fa-${u.avatarIcon}"></i></div><span class="status-badge ${u.status}"></span>${u.isFavorite ? '<i class="fas fa-star text-yellow-400 absolute -top-1 -right-1 text-[9px]"></i>' : ''}</div><div class="flex-1 min-w-0"><div class="flex justify-between"><span class="font-semibold">${u.name}</span><span class="text-xs text-secondary">${u.lastSeen}</span></div><p class="text-sm text-secondary truncate">${u.lastMessage}</p></div>${u.unread ? '<span class="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5">' + u.unread + '</span>' : ''}`;
           els.conversationsList.appendChild(div);
         });
       }
@@ -608,7 +750,7 @@
           els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
           setTimeout(() => {
             document.getElementById('typing')?.remove();
-            const reply = { id: Date.now()+1, type: 'text', content: 'Got it. Thanks.', incoming: true, time: getTime() };
+            const reply = { id: Date.now() + 1, type: 'text', content: 'Got it. Thanks.', incoming: true, time: getTime() };
             els.chatMessages.appendChild(createMsgEl(reply));
             els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
           }, 1300);
@@ -631,9 +773,9 @@
 
       // event listeners
       els.themeToggle.addEventListener('click', toggleTheme);
-      els.messageInput.addEventListener('input', function() { els.sendButton.disabled = this.value.trim() === ''; });
+      els.messageInput.addEventListener('input', function () { els.sendButton.disabled = this.value.trim() === ''; });
       els.messageInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && els.messageInput.value.trim()) { e.preventDefault(); sendMessage(); } });
-      els.searchInput.addEventListener('input', function(e) {
+      els.searchInput.addEventListener('input', function (e) {
         const term = e.target.value.toLowerCase();
         document.querySelectorAll('.conv-item').forEach((item, idx) => {
           const user = users[idx];
@@ -658,7 +800,7 @@
       window.toggleAttachmentMenu = () => els.attachmentMenu.classList.toggle('hidden');
       window.viewProfile = () => { alert(`view profile ${currentUser?.name}`); toggleChatMenu(); };
       window.muteChat = () => { alert('chat muted (backend)'); toggleChatMenu(); };
-      window.clearChat = () => { if(confirm('clear all messages?')) els.chatMessages.innerHTML = '<div class="date-divider"><span>Today</span></div>'; toggleChatMenu(); };
+      window.clearChat = () => { if (confirm('clear all messages?')) els.chatMessages.innerHTML = '<div class="date-divider"><span>Today</span></div>'; toggleChatMenu(); };
       window.exportChat = () => { alert('export chat (PDF)'); toggleChatMenu(); };
       window.attachPhoto = () => { alert('attach photo'); toggleAttachmentMenu(); };
       window.attachFile = () => { alert('attach file'); toggleAttachmentMenu(); };
@@ -667,4 +809,5 @@
     })();
   </script>
 </body>
+
 </html>
