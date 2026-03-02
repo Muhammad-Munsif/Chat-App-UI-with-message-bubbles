@@ -1,4 +1,4 @@
-  <script>
+
     (function () {
       // ---------- PROFESSIONAL DEMO DATA (ready for backend) ----------
       const users = [
@@ -226,4 +226,4 @@
       window.attachLocation = () => { alert('share location'); els.attachmentMenu.classList.add('hidden'); };
       window.sendMessage = sendMessage;
     })();
-  </script>
+  
