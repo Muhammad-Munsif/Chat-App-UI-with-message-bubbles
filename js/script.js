@@ -1,4 +1,4 @@
-<script>
+
     (function () {
       // ---------- PROFESSIONAL DEMO DATA (ready for backend) ----------
       const users = [
@@ -293,4 +293,4 @@
       window.sendMessage = sendMessage;
     })();
 
-  </script>
+  
