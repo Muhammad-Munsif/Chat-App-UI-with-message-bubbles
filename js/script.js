@@ -1,4 +1,4 @@
-  <script>
+
     (function () {
       // ---------- ENHANCED DEMO DATA ----------
       const users = [
@@ -283,4 +283,4 @@
       window.exportChat = () => { alert('📥 Exporting chat...'); els.chatMenu.classList.add('hidden'); };
       window.sendMessage = sendMessage;
     })();
-  </script>
+  
