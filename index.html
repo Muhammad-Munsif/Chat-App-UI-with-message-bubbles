@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
@@ -7,8 +8,10 @@
   <!-- Tailwind + Font Awesome 6 + Inter font + Glassmorphism effects -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    rel="stylesheet">
+
 </head>
 
 <body data-theme="light">
@@ -21,7 +24,9 @@
             <div class="avatar avatar-md">
               <i class="fa-regular fa-comment"></i>
             </div>
-            <h1 class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">WaveChat</h1>
+            <h1
+              class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              WaveChat</h1>
           </div>
           <div class="flex gap-1 shrink-0">
             <button class="icon-btn" id="themeToggle"><i class="fas fa-sun"></i></button>
@@ -71,7 +76,8 @@
     <!-- MAIN CHAT -->
     <main class="chat">
       <!-- chat header with glass -->
-      <div class="flex items-center justify-between px-4 md:px-5 py-3 border-b chat-header sticky top-0" style="border-color: var(--border-light); z-index: 10;">
+      <div class="flex items-center justify-between px-4 md:px-5 py-3 border-b chat-header sticky top-0"
+        style="border-color: var(--border-light); z-index: 10;">
         <div class="flex items-center gap-2 min-w-0">
           <button class="md:hidden icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
           <button class="hidden md:flex icon-btn" onclick="backToContacts()"><i class="fas fa-arrow-left"></i></button>
@@ -91,12 +97,18 @@
           <button class="icon-btn" onclick="startVideoCall()"><i class="fas fa-video"></i></button>
           <div class="relative">
             <button class="icon-btn" onclick="toggleChatMenu()"><i class="fas fa-ellipsis-v"></i></button>
-            <div id="chatMenu" class="absolute right-0 top-12 w-44 bg-surface border rounded-2xl shadow-lg z-30 hidden" style="background: var(--bg-sidebar); border-color: var(--border-light);">
-              <button onclick="viewProfile()" class="block w-full text-left px-4 py-3 hover:bg-hover rounded-t-2xl transition"><i class="fas fa-user w-6"></i> Profile</button>
-              <button onclick="muteChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i class="fas fa-bell-slash w-6"></i> Mute</button>
-              <button onclick="clearChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i class="fas fa-trash w-6"></i> Clear</button>
+            <div id="chatMenu" class="absolute right-0 top-12 w-44 bg-surface border rounded-2xl shadow-lg z-30 hidden"
+              style="background: var(--bg-sidebar); border-color: var(--border-light);">
+              <button onclick="viewProfile()"
+                class="block w-full text-left px-4 py-3 hover:bg-hover rounded-t-2xl transition"><i
+                  class="fas fa-user w-6"></i> Profile</button>
+              <button onclick="muteChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i
+                  class="fas fa-bell-slash w-6"></i> Mute</button>
+              <button onclick="clearChat()" class="block w-full text-left px-4 py-3 hover:bg-hover"><i
+                  class="fas fa-trash w-6"></i> Clear</button>
               <div class="border-t my-1" style="border-color: var(--border-light);"></div>
-              <button onclick="exportChat()" class="block w-full text-left px-4 py-3 hover:bg-hover rounded-b-2xl"><i class="fas fa-download w-6"></i> Export</button>
+              <button onclick="exportChat()" class="block w-full text-left px-4 py-3 hover:bg-hover rounded-b-2xl"><i
+                  class="fas fa-download w-6"></i> Export</button>
             </div>
           </div>
         </div>
@@ -105,12 +117,16 @@
       <!-- messages container -->
       <div class="msg-panel scrollable" id="messagesContainer">
         <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-4">
-          <div class="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg">
+          <div
+            class="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg">
             <i class="fas fa-comments text-5xl text-white"></i>
           </div>
-          <h3 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Welcome to WaveChat</h3>
+          <h3
+            class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Welcome to WaveChat</h3>
           <p class="text-secondary max-w-xs mb-8">Start messaging with colleagues and friends</p>
-          <button onclick="newChat()" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+          <button onclick="newChat()"
+            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
             <i class="fas fa-plus mr-2"></i>New chat
           </button>
         </div>
@@ -120,9 +136,11 @@
       <!-- input footer with glass -->
       <div class="input-area relative">
         <div class="input-wrapper">
-          <button class="icon-btn" onclick="toggleAttachmentMenu()" id="attachButton"><i class="fas fa-plus"></i></button>
+          <button class="icon-btn" onclick="toggleAttachmentMenu()" id="attachButton"><i
+              class="fas fa-plus"></i></button>
           <input type="text" class="msg-input" placeholder="Type a message" id="messageInput" disabled>
-          <button class="icon-btn send-btn" onclick="sendMessage()" id="sendButton" disabled><i class="fas fa-paper-plane"></i></button>
+          <button class="icon-btn send-btn" onclick="sendMessage()" id="sendButton" disabled><i
+              class="fas fa-paper-plane"></i></button>
         </div>
 
         <!-- hidden file inputs -->
@@ -134,7 +152,8 @@
         <div id="attachmentMenu" class="attach-menu hidden">
           <div class="attach-item" onclick="handlePhotoUpload()"><i class="fas fa-image"></i><span>Photo</span></div>
           <div class="attach-item" onclick="handleFileUpload()"><i class="fas fa-file"></i><span>File</span></div>
-          <div class="attach-item" onclick="handleLocationUpload()"><i class="fas fa-map-pin"></i><span>Location</span></div>
+          <div class="attach-item" onclick="handleLocationUpload()"><i class="fas fa-map-pin"></i><span>Location</span>
+          </div>
         </div>
       </div>
     </main>
@@ -145,4 +164,5 @@
 
 
 </body>
+
 </html>
