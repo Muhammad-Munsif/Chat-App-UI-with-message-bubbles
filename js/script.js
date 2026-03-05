@@ -1,4 +1,4 @@
-<script>
+
     (function () {
       // ---------- ENHANCED DATA WITH MORE VARIETY ----------
       const users = [
@@ -392,4 +392,4 @@
       };
       window.sendMessage = sendMessage;
     })();
-  </script>
+  
