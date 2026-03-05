@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>WaveChat · beautiful messaging</title>
+  <!-- Tailwind + Font Awesome 6 + Inter font + Anime.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ----- ADVANCED LIGHT THEME ----- */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #60a5fa;
+      --primary-gradient: linear-gradient(145deg, #2563eb, #7c3aed, #db2777);
+      --primary-gradient-subtle: linear-gradient(145deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+      --bg-main: #f9fafc;
+      --bg-surface: #ffffff;
+      --bg-sidebar: rgba(255, 255, 255, 0.85);
+      --bg-hover: rgba(37, 99, 235, 0.08);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --border-light: rgba(226, 232, 240, 0.6);
+      --incoming-bubble: #ffffff;
+      --outgoing-bubble: linear-gradient(145deg, #2563eb, #4f46e5);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 8px 24px -6px rgba(37, 99, 235, 0.25);
+      --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+      --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --blur-intensity: blur(12px);
+    }
+
+    /* ----- ADVANCED DARK THEME ----- */
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --primary-light: #93c5fd;
+      --primary-gradient: linear-gradient(145deg, #3b82f6, #8b5cf6, #ec4899);
+      --primary-gradient-subtle: linear-gradient(145deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+      --bg-main: #0a0f1e;
+      --bg-surface: #1a1f30;
+      --bg-sidebar: rgba(15, 23, 42, 0.9);
+      --bg-hover: rgba(59, 130, 246, 0.15);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border-light: rgba(51, 65, 85, 0.6);
+      --incoming-bubble: #1e293b;
+      --outgoing-bubble: linear-gradient(145deg, #3b82f6, #6366f1);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* main layout */
+    .app {
+      display: flex;
+      height: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      background: var(--bg-main);
+      position: relative;
+    }
+
+    /* ----- ULTRA-MODERN SIDEBAR ----- */
+    .sidebar {
+      width: 360px;
+      min-width: 280px;
+      background: var(--bg-sidebar);
+      backdrop-filter: var(--blur-intensity);
+      -webkit-backdrop-filter: var(--blur-intensity);
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 50;
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (min-width: 769px) {
+      .sidebar {
+        border-radius: 0 24px 24px 0;
+        margin-right: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: min(90%, 360px);
+        transform: translateX(-100%);
+        border-radius: 0 32px 32px 0;
+        border-right: none;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+    }
+
+    /* chat area with animated background */
+    .chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-main);
+      min-width: 0;
+      position: relative;
+    }
+
+    .chat::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* 3D avatars */
+    .avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 18px;
+      flex-shrink: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .avatar:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.6);
+    }
+
+    .avatar:hover::after {
+      opacity: 1;
+    }
+
+    .avatar-sm {
+      width: 48px;
+      height: 48px;
+      font-size: 1.3rem;
+    }
+
+    .avatar-md {
+      width: 56px;
+      height: 56px;
+      font-size: 1.5rem;
+    }
+
+    /* animated status badges */
+    .status-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 3px solid var(--bg-sidebar);
+      transition: all 0.3s;
+      animation: pulseStatus 2s infinite;
+    }
+
+    @keyframes pulseStatus {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    .online { background: var(--success); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3); }
+    .away { background: var(--warning); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3); }
+    .dnd { background: var(--danger); box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3); }
+
+    /* stunning conversation items */
+    .conv-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      margin: 6px 14px;
+      border-radius: 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      background: var(--primary-gradient-subtle);
+      background-size: 200% 200%;
+      background-position: 0% 0%;
+      border: 1px solid transparent;
+    }
+
+    .conv-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--primary-gradient);
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 0;
+    }
+
+    .conv-item:hover {
+      transform: translateX(8px) scale(1.02);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      background-position: 100% 100%;
+    }
+
+    .conv-item:hover::before {
+      opacity: 0.05;
+    }
+
+    .conv-item.active {
+      background: var(--primary-gradient);
+      border-left: 6px solid white;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .conv-item.active * {
+      color: white !important;
+    }
+
+    .conv-item.active .status-badge {
+      border-color: transparent;
+    }
+
+    .conv-item > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* glass online strip */
+    .online-strip {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 16px 20px;
+      scrollbar-width: thin;
+      background: var(--glass-border);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .online-strip::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .online-strip::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 20px;
+    }
+
+    .online-strip-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .online-strip-item:hover {
+      transform: translateY(-4px) scale(1.05);
+    }
+
+    .online-strip-item .avatar {
+      width: 56px;
+      height: 56px;
+      font-size: 1.4rem;
+    }
+
+    /* messages panel with smooth scroll */
+    .msg-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+
+    /* message bubbles with 3D effect */
+    .msg-row {
+      display: flex;
+      margin-bottom: 16px;
+      animation: messageSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .msg-row.out {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 70%;
+      padding: 16px 22px;
+      border-radius: 32px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+      position: relative;
+      transition: all 0.3s;
+      animation: bubblePop 0.3s ease;
+    }
+
+    @keyframes bubblePop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .bubble.in {
+      background: var(--incoming-bubble);
+      color: var(--text-primary);
+      border-bottom-left-radius: 8px;
+      box-shadow: var(--shadow-md), var(--shadow-inner);
+    }
+
+    .bubble.out {
+      background: var(--outgoing-bubble);
+      color: white;
+      border-bottom-right-radius: 8px;
+      box-shadow: var(--shadow-lg), inset 0 -2px 4px rgba(0,0,0,0.1);
+    }
+
+    .bubble:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .bubble.out:hover {
+      box-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.5);
+    }
+
+    /* attachment previews */
+    .attachment-preview {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 18px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 24px;
+      margin-top: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: slideIn 0.3s ease;
+    }
+
+    .attachment-preview i {
+      font-size: 1.8rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    }
+
+    .time {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-top: 8px;
+      letter-spacing: 0.3px;
+      font-weight: 500;
+    }
+
+    /* date divider with gradient */
+    .date-divider {
+      display: flex;
+      justify-content: center;
+      margin: 24px 0;
+    }
+
+    .date-divider span {
+      background: var(--primary-gradient);
+      padding: 8px 24px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+      box-shadow: var(--shadow-md);
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* typing indicator */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 28px;
+      background: var(--incoming-bubble);
+      border-radius: 40px;
+      width: fit-content;
+      box-shadow: var(--shadow-md);
+    }
+
+    .typing-indicator span {
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: wave 1.5s infinite;
+    }
+
+    @keyframes wave {
+      0%,60%,100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); background: var(--primary-light); }
+    }
+
+    /* input area with glass */
+    .input-area {
+      background: var(--bg-sidebar);
+      backdrop-filter: var(--blur-intensity);
+      -webkit-backdrop-filter: var(--blur-intensity);
+      border-top: 1px solid var(--border-light);
+      padding: 20px 28px;
+      position: relative;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-surface);
+      border-radius: 60px;
+      padding: 8px 8px 8px 28px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      box-shadow: var(--shadow-md);
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--primary);
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: 0 20px 30px -10px var(--primary);
+    }
+
+    .msg-input {
+      flex: 1;
+      background: transparent;
+      border: 0;
+      padding: 16px 0;
+      font-size: 1rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    /* animated icon buttons */
+    .icon-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .icon-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--primary-gradient);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.15) rotate(5deg);
+      color: white;
+    }
+
+    .icon-btn:hover::before {
+      opacity: 1;
+    }
+
+    .icon-btn i {
+      position: relative;
+      z-index: 1;
+    }
+
+    .send-btn {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 8px 20px -5px var(--primary);
+    }
+
+    .send-btn:hover {
+      transform: scale(1.2) rotate(10deg);
+      box-shadow: 0 15px 30px -5px var(--primary);
+    }
+
+    /* attachment menu */
+    .attach-menu {
+      position: absolute;
+      bottom: 100px;
+      left: 28px;
+      background: var(--bg-sidebar);
+      backdrop-filter: var(--blur-intensity);
+      -webkit-backdrop-filter: var(--blur-intensity);
+      border-radius: 60px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-light);
+      padding: 20px 40px;
+      display: flex;
+      gap: 40px;
+      z-index: 40;
+      animation: menuSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes menuSlide {
+      from { opacity: 0; transform: translateY(30px) scale(0.8); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .attach-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 8px 0;
+    }
+
+    .attach-item i {
+      font-size: 2rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.3s;
+    }
+
+    .attach-item:hover {
+      transform: translateY(-8px) scale(1.1);
+    }
+
+    .attach-item:hover i {
+      transform: scale(1.2) rotate(5deg);
+    }
+
+    /* file input hidden */
+    .file-input-hidden {
+      display: none;
+    }
+
+    /* mobile overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 45;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* floating action button */
+    .fab {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 15px 30px -5px var(--primary);
+      cursor: pointer;
+      z-index: 49;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+      visibility: hidden;
+      animation: float 3s infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .fab:hover {
+      transform: scale(1.15) rotate(90deg);
+    }
+
+    @media (max-width: 768px) {
+      .fab {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    /* custom scrollbar */
+    .scrollable::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .scrollable::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 20px;
+      opacity: 0.5;
+    }
+
+    /* welcome screen */
+    #welcomeScreen {
+      animation: fadeScale 0.6s ease;
+    }
+
+    @keyframes fadeScale {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* unread badge */
+    .unread-badge {
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    /* responsive adjustments */
+    @media (max-width: 640px) {
+      .bubble { max-width: 85%; font-size: 0.9rem; }
+      .msg-panel { padding: 16px 16px; }
+      .input-area { padding: 16px 16px; }
+      .icon-btn { width: 48px; height: 48px; }
+      .avatar-sm { width: 44px; height: 44px; }
+      .attach-menu { left: 16px; right: 16px; justify-content: space-around; gap: 0; }
+      .online-strip-item .avatar { width: 48px; height: 48px; }
+    }
+
+    @media (max-width: 380px) {
+      .bubble { max-width: 90%; }
+      .conv-item { margin: 4px 8px; padding: 10px 12px; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <div class="app">
+    <!-- SIDEBAR with premium design -->
+    <aside class="sidebar" id="sidebar">
+      <div class="p-6 border-b border-light" style="border-color: var(--border-light);">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="avatar avatar-md">
+              <i class="fa-regular fa-comment"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold">
+              <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                WaveChat
+              </span>
+            </h1>
+          </div>
+          <div class="flex gap-2">
+            <button class="icon-btn" id="themeToggle"><i class="fas fa-sun"></i></button>
+            <button class="icon-btn" onclick="newChat()"><i class="fas fa-pen"></i></button>
+          </div>
+        </div>
+        <!-- premium search -->
+        <div class="mt-5 relative group">
+          <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary transition-colors"></i>
+          <input type="text" placeholder="Search messages or people" id="searchInput"
+            class="w-full pl-14 pr-5 py-4 rounded-3xl bg-surface outline-none transition-all group-focus-within:ring-4 group-focus-within:ring-blue-500/20"
+            style="background: var(--bg-surface); color: var(--text-primary);">
+        </div>
+      </div>
+
+      <!-- online friends with cool effects -->
+      <div class="py-3 border-b border-light" style="border-color: var(--border-light);">
+        <div class="flex justify-between px-6 mb-2">
+          <span class="font-bold text-sm uppercase tracking-wider text-primary">online now</span>
+          <span class="text-sm font-bold bg-primary-gradient px-3 py-1 rounded-full text-white" id="onlineCount">0</span>
+        </div>
+        <div class="online-strip" id="onlineUsers"></div>
+      </div>
+
+      <!-- conversations -->
+      <div class="flex-1 overflow-y-auto scrollable py-3" id="conversationsList"></div>
+
+      <!-- current user profile -->
+      <div class="border-t p-5 flex items-center gap-4 group cursor-pointer hover:bg-hover transition-all" style="border-color: var(--border-light);">
+        <div class="relative">
+          <div class="avatar avatar-sm group-hover:rotate-12 transition-transform"><i class="fas fa-user"></i></div>
+          <span class="status-badge online"></span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="font-extrabold text-lg truncate">Alex Morgan</div>
+          <div class="text-sm text-secondary flex items-center gap-1.5">
+            <i class="fas fa-circle text-success text-[8px]"></i>
+            <span>Active now</span>
+          </div>
+        </div>
+        <button class="icon-btn opacity-70 group-hover:opacity-100" onclick="showSettings()">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- MAIN CHAT AREA -->
+    <main class="chat">
+      <!-- chat header with glass -->
+      <div class="flex items-center justify-between px-5 md:px-6 py-4 border-b chat-header sticky top-0" style="border-color: var(--border-light); z-index: 10; background: var(--bg-sidebar); backdrop-filter: var(--blur-intensity);">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="md:hidden icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+          <button class="hidden md:flex icon-btn" onclick="backToContacts()"><i class="fas fa-arrow-left"></i></button>
+          <div class="relative group">
+            <div class="avatar avatar-sm group-hover:rotate-12 transition-transform" id="currentUserAvatar">
+              <i class="fas fa-user-friends"></i>
+            </div>
+            <span class="status-badge online" id="currentUserStatus"></span>
+          </div>
+          <div class="min-w-0">
+            <h2 class="font-extrabold text-xl truncate" id="currentUserName">Select a chat</h2>
+            <p class="text-sm text-secondary flex items-center gap-1.5" id="currentUserStatusText">
+              <i class="fas fa-circle text-[8px] text-secondary"></i>
+              pick from sidebar
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button class="icon-btn" onclick="startCall()"><i class="fas fa-phone"></i></button>
+          <button class="icon-btn" onclick="startVideoCall()"><i class="fas fa-video"></i></button>
+          <div class="relative">
+            <button class="icon-btn" onclick="toggleChatMenu()"><i class="fas fa-ellipsis-v"></i></button>
+            <div id="chatMenu" class="absolute right-0 top-14 w-48 bg-surface border rounded-3xl shadow-2xl z-30 hidden py-2" style="background: var(--bg-sidebar); border-color: var(--border-light);">
+              <button onclick="viewProfile()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-user w-7"></i> Profile</button>
+              <button onclick="muteChat()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-bell-slash w-7"></i> Mute</button>
+              <button onclick="clearChat()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-trash w-7"></i> Clear</button>
+              <div class="border-t my-2" style="border-color: var(--border-light);"></div>
+              <button onclick="exportChat()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-download w-7"></i> Export</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- messages -->
+      <div class="msg-panel scrollable" id="messagesContainer">
+        <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-6">
+          <div class="w-32 h-32 rounded-3xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center mb-8 shadow-2xl animate-bounce">
+            <i class="fas fa-comments text-5xl text-white"></i>
+          </div>
+          <h3 class="text-4xl font-extrabold mb-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Welcome to WaveChat
+          </h3>
+          <p class="text-secondary max-w-sm mb-10 text-lg">Connect with friends in style</p>
+          <button onclick="newChat()" class="px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 flex items-center gap-3">
+            <i class="fas fa-plus-circle"></i>
+            Start new chat
+          </button>
+        </div>
+        <div id="chatMessages" class="hidden w-full"></div>
+      </div>
+
+      <!-- input area -->
+      <div class="input-area relative">
+        <div class="input-wrapper">
+          <button class="icon-btn" onclick="toggleAttachmentMenu()" id="attachButton"><i class="fas fa-plus"></i></button>
+          <input type="text" class="msg-input" placeholder="Write a message..." id="messageInput" disabled>
+          <button class="icon-btn send-btn" onclick="sendMessage()" id="sendButton" disabled>
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+
+        <!-- hidden file inputs -->
+        <input type="file" id="photoInput" class="file-input-hidden" accept="image/*" multiple>
+        <input type="file" id="fileInput" class="file-input-hidden" accept="*/*" multiple>
+        <input type="file" id="locationInput" class="file-input-hidden" accept=".kml,.gpx,.geojson" multiple>
+
+        <!-- attachment menu -->
+        <div id="attachmentMenu" class="attach-menu hidden">
+          <div class="attach-item" onclick="handlePhotoUpload()"><i class="fas fa-image"></i><span>Photo</span></div>
+          <div class="attach-item" onclick="handleFileUpload()"><i class="fas fa-file"></i><span>File</span></div>
+          <div class="attach-item" onclick="handleLocationUpload()"><i class="fas fa-map-pin"></i><span>Location</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- floating action button -->
+  <div class="fab" id="mobileFab"><i class="fas fa-comment-dots text-3xl"></i></div>
+
+  <script>
+    (function () {
+      // ---------- ENHANCED DATA WITH MORE VARIETY ----------
+      const users = [
+        { id: 1, name: "John Doe", avatarIcon: "user-tie", status: "online", lastSeen: "just now", lastMessage: "Sent you a photo 📸", unread: 0, isFavorite: false },
+        { id: 2, name: "Alice Smith", avatarIcon: "user-graduate", status: "online", lastSeen: "2 min ago", lastMessage: "Meeting at 3pm?", unread: 3, isFavorite: true },
+        { id: 3, name: "Mike Johnson", avatarIcon: "user-ninja", status: "away", lastSeen: "30 min", lastMessage: "Project files attached", unread: 0, isFavorite: false },
+        { id: 4, name: "Sarah Brown", avatarIcon: "user-astronaut", status: "offline", lastSeen: "2 hours", lastMessage: "Thanks for the help! 🙏", unread: 1, isFavorite: true },
+        { id: 5, name: "Team Group", avatarIcon: "users", status: "online", lastSeen: "yesterday", lastMessage: "Sarah: Let's sync up", unread: 5, isFavorite: false },
+        { id: 6, name: "Emma Davis", avatarIcon: "user-secret", status: "dnd", lastSeen: "5 min", lastMessage: "Quick call?", unread: 2, isFavorite: true },
+        { id: 7, name: "James Wilson", avatarIcon: "user-astronaut", status: "online", lastSeen: "1 min", lastMessage: "Check this out 🔥", unread: 0, isFavorite: false }
+      ];
+
+      const chatMessages = {
+        1: [
+          { id: 1, type: "text", content: "Hey there! How are you doing today? 👋", incoming: true, time: "10:30 AM" },
+          { id: 2, type: "text", content: "I'm doing great! Working on the new chat UI 🚀", incoming: false, time: "10:32 AM" },
+          { id: 3, type: "text", content: "Check out this design I made!", incoming: true, time: "10:35 AM" }
+        ],
+        2: [
+          { id: 1, type: "text", content: "Hi Alice! How's your day going? 🌟", incoming: false, time: "9:15 AM" },
+          { id: 2, type: "text", content: "Pretty good! Can we meet tomorrow for coffee? ☕", incoming: true, time: "9:20 AM" }
+        ],
+        4: [
+          { id: 1, type: "text", content: "Thanks for your help with the presentation! 🙌", incoming: true, time: "2 hours ago" },
+          { id: 2, type: "text", content: "You're welcome! Happy to help anytime 😊", incoming: false, time: "1 hour ago" }
+        ],
+        7: [
+          { id: 1, type: "text", content: "This new design is amazing! 🎨", incoming: true, time: "5 min ago" },
+          { id: 2, type: "text", content: "Thanks! I've been working on it all week 💪", incoming: false, time: "4 min ago" }
+        ]
+      };
+
+      // state
+      let currentChatId = null, currentUser = null, isMobile = window.innerWidth < 768, isDark = false;
+      const els = {
+        body: document.body,
+        sidebar: document.getElementById('sidebar'),
+        overlay: document.getElementById('overlay'),
+        themeToggle: document.getElementById('themeToggle'),
+        onlineUsers: document.getElementById('onlineUsers'),
+        conversationsList: document.getElementById('conversationsList'),
+        welcomeScreen: document.getElementById('welcomeScreen'),
+        chatMessages: document.getElementById('chatMessages'),
+        messagesContainer: document.getElementById('messagesContainer'),
+        currentUserName: document.getElementById('currentUserName'),
+        currentUserAvatar: document.getElementById('currentUserAvatar'),
+        currentUserStatus: document.getElementById('currentUserStatus'),
+        currentUserStatusText: document.getElementById('currentUserStatusText'),
+        messageInput: document.getElementById('messageInput'),
+        sendButton: document.getElementById('sendButton'),
+        attachmentMenu: document.getElementById('attachmentMenu'),
+        chatMenu: document.getElementById('chatMenu'),
+        searchInput: document.getElementById('searchInput'),
+        onlineCount: document.getElementById('onlineCount'),
+        mobileFab: document.getElementById('mobileFab'),
+        photoInput: document.getElementById('photoInput'),
+        fileInput: document.getElementById('fileInput'),
+        locationInput: document.getElementById('locationInput')
+      };
+
+      const getTime = () => {
+        const now = new Date();
+        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      };
+
+      function loadOnlineUsers() {
+        const online = users.filter(u => u.status === 'online');
+        els.onlineCount.innerText = online.length;
+        els.onlineUsers.innerHTML = '';
+        online.forEach(u => {
+          const div = document.createElement('div');
+          div.className = 'online-strip-item';
+          div.onclick = () => selectChat(u.id);
+          div.innerHTML = `
+            <div class="relative">
+              <div class="avatar avatar-sm"><i class="fas fa-${u.avatarIcon}"></i></div>
+              <span class="status-badge online"></span>
+            </div>
+            <span class="text-xs font-semibold max-w-[70px] truncate">${u.name.split(' ')[0]}</span>
+          `;
+          els.onlineUsers.appendChild(div);
+        });
+      }
+
+      function loadConversations() {
+        els.conversationsList.innerHTML = '';
+        users.forEach(u => {
+          const div = document.createElement('div');
+          div.className = `conv-item ${currentChatId === u.id ? 'active' : ''}`;
+          div.setAttribute('data-userid', u.id);
+          div.onclick = () => selectChat(u.id);
+          const favStar = u.isFavorite ? '<i class="fas fa-star text-yellow-300 absolute -top-1 -right-1 text-xs filter drop-shadow-lg"></i>' : '';
+          div.innerHTML = `
+            <div class="relative">
+              <div class="avatar avatar-sm"><i class="fas fa-${u.avatarIcon}"></i></div>
+              <span class="status-badge ${u.status}"></span>
+              ${favStar}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-center gap-2">
+                <span class="font-bold truncate text-base">${u.name}</span>
+                <span class="text-xs font-medium opacity-70 whitespace-nowrap">${u.lastSeen}</span>
+              </div>
+              <p class="text-sm opacity-70 truncate flex items-center gap-1">
+                ${u.lastMessage}
+              </p>
+            </div>
+            ${u.unread ? '<span class="unread-badge">' + u.unread + '</span>' : ''}
+          `;
+          els.conversationsList.appendChild(div);
+        });
+      }
+
+      function selectChat(id) {
+        currentChatId = id;
+        currentUser = users.find(u => u.id === id);
+        if (!currentUser) return;
+        
+        els.currentUserName.innerText = currentUser.name;
+        els.currentUserAvatar.innerHTML = `<i class="fas fa-${currentUser.avatarIcon}"></i>`;
+        els.currentUserStatus.className = `status-badge ${currentUser.status}`;
+        
+        const statusText = currentUser.status === 'online' ? 'Active now' : 
+                          currentUser.status === 'away' ? 'Away' :
+                          currentUser.status === 'dnd' ? 'Do not disturb' : 'Offline';
+        
+        els.currentUserStatusText.innerHTML = `<i class="fas fa-circle text-[8px] ${currentUser.status}"></i> ${statusText}`;
+        
+        els.welcomeScreen.classList.add('hidden');
+        els.chatMessages.classList.remove('hidden');
+        els.messageInput.disabled = false;
+        els.messageInput.placeholder = `Message @${currentUser.name.split(' ')[0].toLowerCase()}`;
+        
+        loadChatMessages();
+        updateActive();
+        
+        if (isMobile) closeSidebar();
+      }
+
+      function loadChatMessages() {
+        els.chatMessages.innerHTML = '';
+        const msgs = chatMessages[currentChatId] || [];
+        
+        // add date divider
+        const div = document.createElement('div');
+        div.className = 'date-divider';
+        div.innerHTML = '<span>✨ Today ✨</span>';
+        els.chatMessages.appendChild(div);
+        
+        msgs.forEach(m => els.chatMessages.appendChild(createMsgEl(m)));
+        els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+      }
+
+      function createMsgEl(m) {
+        const row = document.createElement('div');
+        row.className = `msg-row ${m.incoming ? '' : 'out'}`;
+
+        let content = m.content;
+        if (m.attachment) {
+          content = `
+            <div class="attachment-preview">
+              <i class="fas ${m.attachment.icon}"></i>
+              <span class="font-semibold">${m.attachment.name}</span>
+            </div>
+            <div class="mt-2">${m.content || ''}</div>
+          `;
+        }
+
+        const inner = `<div class="bubble ${m.incoming ? 'in' : 'out'}">${content}<div class="time">${m.time}</div></div>`;
+
+        if (m.incoming && currentUser) {
+          row.innerHTML = `<div class="avatar avatar-sm mr-3"><i class="fas fa-${currentUser.avatarIcon}"></i></div>${inner}`;
+        } else {
+          row.innerHTML = inner;
+        }
+        return row;
+      }
+
+      function updateActive() {
+        document.querySelectorAll('.conv-item').forEach(el => {
+          const uid = el.getAttribute('data-userid');
+          if (Number(uid) === currentChatId) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        });
+      }
+
+      function sendMessage() {
+        if (!currentChatId || !els.messageInput.value.trim()) return;
+        
+        const text = els.messageInput.value.trim();
+        const newMsg = { 
+          id: Date.now(), 
+          type: 'text', 
+          content: text, 
+          incoming: false, 
+          time: getTime() 
+        };
+        
+        els.chatMessages.appendChild(createMsgEl(newMsg));
+        els.messageInput.value = '';
+        els.sendButton.disabled = true;
+        els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+
+        // Simulate reply with typing animation
+        setTimeout(() => {
+          const typingDiv = document.createElement('div');
+          typingDiv.className = 'msg-row';
+          typingDiv.id = 'typing';
+          typingDiv.innerHTML = `
+            <div class="avatar avatar-sm mr-3"><i class="fas fa-${currentUser.avatarIcon}"></i></div>
+            <div class="typing-indicator"><span></span><span></span><span></span></div>
+          `;
+          els.chatMessages.appendChild(typingDiv);
+          els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+          
+          setTimeout(() => {
+            document.getElementById('typing')?.remove();
+            const replies = [
+              'Got it! 👍', 'Sounds good!', 'Awesome!', 'Thanks for letting me know!',
+              'Cool 😎', 'Perfect!', 'I\'ll check it out', '👍👍👍'
+            ];
+            const randomReply = replies[Math.floor(Math.random() * replies.length)];
+            const reply = { 
+              id: Date.now() + 1, 
+              type: 'text', 
+              content: randomReply, 
+              incoming: true, 
+              time: getTime() 
+            };
+            els.chatMessages.appendChild(createMsgEl(reply));
+            els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+          }, 1500);
+        }, 800);
+      }
+
+      function handleFileSelect(input, type) {
+        const files = input.files;
+        if (!files || files.length === 0 || !currentChatId) return;
+
+        Array.from(files).forEach(file => {
+          const icon = type === 'photo' ? 'fa-image' : (type === 'location' ? 'fa-map-pin' : 'fa-file');
+          const newMsg = {
+            id: Date.now() + Math.random(),
+            type: 'attachment',
+            content: `<i class="fas ${icon}"></i> ${file.name}`,
+            attachment: {
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              icon: icon
+            },
+            incoming: false,
+            time: getTime()
+          };
+          els.chatMessages.appendChild(createMsgEl(newMsg));
+        });
+
+        els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+        input.value = '';
+      }
+
+      // Attachment handlers
+      window.handlePhotoUpload = function() { 
+        els.attachmentMenu.classList.add('hidden'); 
+        els.photoInput.click(); 
+      };
+      
+      window.handleFileUpload = function() { 
+        els.attachmentMenu.classList.add('hidden'); 
+        els.fileInput.click(); 
+      };
+      
+      window.handleLocationUpload = function() { 
+        els.attachmentMenu.classList.add('hidden'); 
+        els.locationInput.click(); 
+      };
+
+      function toggleSidebar() {
+        els.sidebar.classList.toggle('active');
+        els.overlay.classList.toggle('active');
+        document.body.style.overflow = els.sidebar.classList.contains('active') ? 'hidden' : '';
+      }
+      
+      function closeSidebar() {
+        els.sidebar.classList.remove('active');
+        els.overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      function toggleTheme() {
+        isDark = !isDark;
+        els.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        els.themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        localStorage.setItem('wavechat-theme', isDark ? 'dark' : 'light');
+      }
+
+      // Initialize theme
+      const saved = localStorage.getItem('wavechat-theme');
+      if (saved === 'dark') { 
+        isDark = true; 
+        els.body.setAttribute('data-theme', 'dark'); 
+        els.themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; 
+      }
+
+      // Event listeners
+      els.themeToggle.addEventListener('click', toggleTheme);
+      
+      els.messageInput.addEventListener('input', function () { 
+        els.sendButton.disabled = this.value.trim() === ''; 
+      });
+      
+      els.messageInput.addEventListener('keypress', (e) => { 
+        if (e.key === 'Enter' && els.messageInput.value.trim()) { 
+          e.preventDefault(); 
+          sendMessage(); 
+        } 
+      });
+      
+      els.searchInput.addEventListener('input', function (e) {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.conv-item').forEach((item, idx) => {
+          const user = users[idx];
+          if (user) {
+            item.style.display = (user.name.toLowerCase().includes(term) || 
+                                 user.lastMessage.toLowerCase().includes(term) || 
+                                 term === '') ? 'flex' : 'none';
+          }
+        });
+      });
+      
+      els.overlay.addEventListener('click', closeSidebar);
+      els.mobileFab.addEventListener('click', toggleSidebar);
+
+      // File input handlers
+      els.photoInput.addEventListener('change', function() { handleFileSelect(this, 'photo'); });
+      els.fileInput.addEventListener('change', function() { handleFileSelect(this, 'file'); });
+      els.locationInput.addEventListener('change', function() { handleFileSelect(this, 'location'); });
+
+      // Window resize handler
+      window.addEventListener('resize', () => {
+        isMobile = window.innerWidth < 768;
+        if (!isMobile) closeSidebar();
+      });
+
+      // Close menus on outside click
+      document.addEventListener('click', (e) => {
+        if (!els.chatMenu.contains(e.target) && !e.target.closest('[onclick="toggleChatMenu()"]')) {
+          els.chatMenu.classList.add('hidden');
+        }
+        if (!els.attachmentMenu.contains(e.target) && 
+            !e.target.closest('[onclick="toggleAttachmentMenu()"]') && 
+            !e.target.closest('[onclick^="handle"]')) {
+          els.attachmentMenu.classList.add('hidden');
+        }
+      });
+
+      // Initialize
+      loadOnlineUsers();
+      loadConversations();
+
+      // Expose to window
+      window.selectChat = selectChat;
+      window.toggleSidebar = toggleSidebar;
+      window.backToContacts = toggleSidebar;
+      window.newChat = () => alert('✨ Start a new conversation with friends!');
+      window.showSettings = () => alert('⚙️ Customize your WaveChat experience');
+      window.startCall = () => currentUser ? alert(`📞 Calling ${currentUser.name}...`) : alert('Select a chat first');
+      window.startVideoCall = () => currentUser ? alert(`📹 Starting video call with ${currentUser.name}`) : alert('Select a chat first');
+      window.toggleChatMenu = () => els.chatMenu.classList.toggle('hidden');
+      window.toggleAttachmentMenu = () => els.attachmentMenu.classList.toggle('hidden');
+      window.viewProfile = () => { 
+        alert(`👤 ${currentUser?.name}'s profile\nStatus: ${currentUser?.status}\nLast seen: ${currentUser?.lastSeen}`); 
+        els.chatMenu.classList.add('hidden'); 
+      };
+      window.muteChat = () => { 
+        alert('🔇 Chat notifications muted for 1 hour'); 
+        els.chatMenu.classList.add('hidden'); 
+      };
+      window.clearChat = () => { 
+        if (confirm('Clear all messages in this conversation?')) { 
+          els.chatMessages.innerHTML = '<div class="date-divider"><span>✨ Today ✨</span></div>'; 
+        } 
+        els.chatMenu.classList.add('hidden'); 
+      };
+      window.exportChat = () => { 
+        alert('📥 Exporting chat history as PDF...'); 
+        els.chatMenu.classList.add('hidden'); 
+      };
+      window.sendMessage = sendMessage;
+    })();
+  </script>
+</body>
+</html>
