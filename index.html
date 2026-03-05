@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
@@ -7,7 +8,9 @@
   <!-- Tailwind + Font Awesome 6 + Inter font + Anime.js -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -113,6 +116,7 @@
         border-radius: 0 32px 32px 0;
         border-right: none;
       }
+
       .sidebar.active {
         transform: translateX(0);
       }
@@ -133,7 +137,7 @@
       position: absolute;
       inset: 0;
       background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.03) 0%, transparent 50%);
+        radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.03) 0%, transparent 50%);
       pointer-events: none;
     }
 
@@ -157,7 +161,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(145deg, rgba(255,255,255,0.3), transparent);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), transparent);
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -197,13 +201,33 @@
     }
 
     @keyframes pulseStatus {
-      0%,100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.8; }
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+      }
     }
 
-    .online { background: var(--success); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3); }
-    .away { background: var(--warning); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3); }
-    .dnd { background: var(--danger); box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3); }
+    .online {
+      background: var(--success);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+    }
+
+    .away {
+      background: var(--warning);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+    }
+
+    .dnd {
+      background: var(--danger);
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
+    }
 
     /* stunning conversation items */
     .conv-item {
@@ -258,7 +282,7 @@
       border-color: transparent;
     }
 
-    .conv-item > * {
+    .conv-item>* {
       position: relative;
       z-index: 1;
     }
@@ -292,7 +316,7 @@
       gap: 6px;
       cursor: pointer;
       transition: all 0.3s;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
     }
 
     .online-strip-item:hover {
@@ -340,8 +364,15 @@
     }
 
     @keyframes bubblePop {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     .bubble.in {
@@ -355,7 +386,7 @@
       background: var(--outgoing-bubble);
       color: white;
       border-bottom-right-radius: 8px;
-      box-shadow: var(--shadow-lg), inset 0 -2px 4px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-lg), inset 0 -2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .bubble:hover {
@@ -372,18 +403,18 @@
       align-items: center;
       gap: 14px;
       padding: 12px 18px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       border-radius: 24px;
       margin-top: 10px;
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       animation: slideIn 0.3s ease;
     }
 
     .attachment-preview i {
       font-size: 1.8rem;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
     }
 
     .time {
@@ -411,7 +442,7 @@
       box-shadow: var(--shadow-md);
       letter-spacing: 0.5px;
       backdrop-filter: blur(4px);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     /* typing indicator */
@@ -435,8 +466,17 @@
     }
 
     @keyframes wave {
-      0%,60%,100% { transform: translateY(0); }
-      30% { transform: translateY(-10px); background: var(--primary-light); }
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+      }
+
+      30% {
+        transform: translateY(-10px);
+        background: var(--primary-light);
+      }
     }
 
     /* input area with glass */
@@ -548,8 +588,15 @@
     }
 
     @keyframes menuSlide {
-      from { opacity: 0; transform: translateY(30px) scale(0.8); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     .attach-item {
@@ -627,8 +674,15 @@
     }
 
     @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
     }
 
     .fab:hover {
@@ -663,8 +717,15 @@
     }
 
     @keyframes fadeScale {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     /* unread badge */
@@ -681,18 +742,51 @@
 
     /* responsive adjustments */
     @media (max-width: 640px) {
-      .bubble { max-width: 85%; font-size: 0.9rem; }
-      .msg-panel { padding: 16px 16px; }
-      .input-area { padding: 16px 16px; }
-      .icon-btn { width: 48px; height: 48px; }
-      .avatar-sm { width: 44px; height: 44px; }
-      .attach-menu { left: 16px; right: 16px; justify-content: space-around; gap: 0; }
-      .online-strip-item .avatar { width: 48px; height: 48px; }
+      .bubble {
+        max-width: 85%;
+        font-size: 0.9rem;
+      }
+
+      .msg-panel {
+        padding: 16px 16px;
+      }
+
+      .input-area {
+        padding: 16px 16px;
+      }
+
+      .icon-btn {
+        width: 48px;
+        height: 48px;
+      }
+
+      .avatar-sm {
+        width: 44px;
+        height: 44px;
+      }
+
+      .attach-menu {
+        left: 16px;
+        right: 16px;
+        justify-content: space-around;
+        gap: 0;
+      }
+
+      .online-strip-item .avatar {
+        width: 48px;
+        height: 48px;
+      }
     }
 
     @media (max-width: 380px) {
-      .bubble { max-width: 90%; }
-      .conv-item { margin: 4px 8px; padding: 10px 12px; }
+      .bubble {
+        max-width: 90%;
+      }
+
+      .conv-item {
+        margin: 4px 8px;
+        padding: 10px 12px;
+      }
     }
   </style>
 </head>
@@ -720,7 +814,8 @@
         </div>
         <!-- premium search -->
         <div class="mt-5 relative group">
-          <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary transition-colors"></i>
+          <i
+            class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary transition-colors"></i>
           <input type="text" placeholder="Search messages or people" id="searchInput"
             class="w-full pl-14 pr-5 py-4 rounded-3xl bg-surface outline-none transition-all group-focus-within:ring-4 group-focus-within:ring-blue-500/20"
             style="background: var(--bg-surface); color: var(--text-primary);">
@@ -731,7 +826,8 @@
       <div class="py-3 border-b border-light" style="border-color: var(--border-light);">
         <div class="flex justify-between px-6 mb-2">
           <span class="font-bold text-sm uppercase tracking-wider text-primary">online now</span>
-          <span class="text-sm font-bold bg-primary-gradient px-3 py-1 rounded-full text-white" id="onlineCount">0</span>
+          <span class="text-sm font-bold bg-primary-gradient px-3 py-1 rounded-full text-white"
+            id="onlineCount">0</span>
         </div>
         <div class="online-strip" id="onlineUsers"></div>
       </div>
@@ -740,7 +836,8 @@
       <div class="flex-1 overflow-y-auto scrollable py-3" id="conversationsList"></div>
 
       <!-- current user profile -->
-      <div class="border-t p-5 flex items-center gap-4 group cursor-pointer hover:bg-hover transition-all" style="border-color: var(--border-light);">
+      <div class="border-t p-5 flex items-center gap-4 group cursor-pointer hover:bg-hover transition-all"
+        style="border-color: var(--border-light);">
         <div class="relative">
           <div class="avatar avatar-sm group-hover:rotate-12 transition-transform"><i class="fas fa-user"></i></div>
           <span class="status-badge online"></span>
@@ -764,7 +861,8 @@
     <!-- MAIN CHAT AREA -->
     <main class="chat">
       <!-- chat header with glass -->
-      <div class="flex items-center justify-between px-5 md:px-6 py-4 border-b chat-header sticky top-0" style="border-color: var(--border-light); z-index: 10; background: var(--bg-sidebar); backdrop-filter: var(--blur-intensity);">
+      <div class="flex items-center justify-between px-5 md:px-6 py-4 border-b chat-header sticky top-0"
+        style="border-color: var(--border-light); z-index: 10; background: var(--bg-sidebar); backdrop-filter: var(--blur-intensity);">
         <div class="flex items-center gap-3 min-w-0">
           <button class="md:hidden icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
           <button class="hidden md:flex icon-btn" onclick="backToContacts()"><i class="fas fa-arrow-left"></i></button>
@@ -787,12 +885,22 @@
           <button class="icon-btn" onclick="startVideoCall()"><i class="fas fa-video"></i></button>
           <div class="relative">
             <button class="icon-btn" onclick="toggleChatMenu()"><i class="fas fa-ellipsis-v"></i></button>
-            <div id="chatMenu" class="absolute right-0 top-14 w-48 bg-surface border rounded-3xl shadow-2xl z-30 hidden py-2" style="background: var(--bg-sidebar); border-color: var(--border-light);">
-              <button onclick="viewProfile()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-user w-7"></i> Profile</button>
-              <button onclick="muteChat()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-bell-slash w-7"></i> Mute</button>
-              <button onclick="clearChat()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-trash w-7"></i> Clear</button>
+            <div id="chatMenu"
+              class="absolute right-0 top-14 w-48 bg-surface border rounded-3xl shadow-2xl z-30 hidden py-2"
+              style="background: var(--bg-sidebar); border-color: var(--border-light);">
+              <button onclick="viewProfile()"
+                class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i
+                  class="fas fa-user w-7"></i> Profile</button>
+              <button onclick="muteChat()"
+                class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i
+                  class="fas fa-bell-slash w-7"></i> Mute</button>
+              <button onclick="clearChat()"
+                class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i
+                  class="fas fa-trash w-7"></i> Clear</button>
               <div class="border-t my-2" style="border-color: var(--border-light);"></div>
-              <button onclick="exportChat()" class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i class="fas fa-download w-7"></i> Export</button>
+              <button onclick="exportChat()"
+                class="block w-full text-left px-5 py-3.5 hover:bg-hover transition-all hover:pl-7"><i
+                  class="fas fa-download w-7"></i> Export</button>
             </div>
           </div>
         </div>
@@ -801,14 +909,17 @@
       <!-- messages -->
       <div class="msg-panel scrollable" id="messagesContainer">
         <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-6">
-          <div class="w-32 h-32 rounded-3xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center mb-8 shadow-2xl animate-bounce">
+          <div
+            class="w-32 h-32 rounded-3xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center mb-8 shadow-2xl animate-bounce">
             <i class="fas fa-comments text-5xl text-white"></i>
           </div>
-          <h3 class="text-4xl font-extrabold mb-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h3
+            class="text-4xl font-extrabold mb-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             Welcome to WaveChat
           </h3>
           <p class="text-secondary max-w-sm mb-10 text-lg">Connect with friends in style</p>
-          <button onclick="newChat()" class="px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 flex items-center gap-3">
+          <button onclick="newChat()"
+            class="px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 flex items-center gap-3">
             <i class="fas fa-plus-circle"></i>
             Start new chat
           </button>
@@ -819,7 +930,8 @@
       <!-- input area -->
       <div class="input-area relative">
         <div class="input-wrapper">
-          <button class="icon-btn" onclick="toggleAttachmentMenu()" id="attachButton"><i class="fas fa-plus"></i></button>
+          <button class="icon-btn" onclick="toggleAttachmentMenu()" id="attachButton"><i
+              class="fas fa-plus"></i></button>
           <input type="text" class="msg-input" placeholder="Write a message..." id="messageInput" disabled>
           <button class="icon-btn send-btn" onclick="sendMessage()" id="sendButton" disabled>
             <i class="fas fa-paper-plane"></i>
@@ -835,7 +947,8 @@
         <div id="attachmentMenu" class="attach-menu hidden">
           <div class="attach-item" onclick="handlePhotoUpload()"><i class="fas fa-image"></i><span>Photo</span></div>
           <div class="attach-item" onclick="handleFileUpload()"><i class="fas fa-file"></i><span>File</span></div>
-          <div class="attach-item" onclick="handleLocationUpload()"><i class="fas fa-map-pin"></i><span>Location</span></div>
+          <div class="attach-item" onclick="handleLocationUpload()"><i class="fas fa-map-pin"></i><span>Location</span>
+          </div>
         </div>
       </div>
     </main>
@@ -962,38 +1075,38 @@
         currentChatId = id;
         currentUser = users.find(u => u.id === id);
         if (!currentUser) return;
-        
+
         els.currentUserName.innerText = currentUser.name;
         els.currentUserAvatar.innerHTML = `<i class="fas fa-${currentUser.avatarIcon}"></i>`;
         els.currentUserStatus.className = `status-badge ${currentUser.status}`;
-        
-        const statusText = currentUser.status === 'online' ? 'Active now' : 
-                          currentUser.status === 'away' ? 'Away' :
-                          currentUser.status === 'dnd' ? 'Do not disturb' : 'Offline';
-        
+
+        const statusText = currentUser.status === 'online' ? 'Active now' :
+          currentUser.status === 'away' ? 'Away' :
+            currentUser.status === 'dnd' ? 'Do not disturb' : 'Offline';
+
         els.currentUserStatusText.innerHTML = `<i class="fas fa-circle text-[8px] ${currentUser.status}"></i> ${statusText}`;
-        
+
         els.welcomeScreen.classList.add('hidden');
         els.chatMessages.classList.remove('hidden');
         els.messageInput.disabled = false;
         els.messageInput.placeholder = `Message @${currentUser.name.split(' ')[0].toLowerCase()}`;
-        
+
         loadChatMessages();
         updateActive();
-        
+
         if (isMobile) closeSidebar();
       }
 
       function loadChatMessages() {
         els.chatMessages.innerHTML = '';
         const msgs = chatMessages[currentChatId] || [];
-        
+
         // add date divider
         const div = document.createElement('div');
         div.className = 'date-divider';
         div.innerHTML = '<span>✨ Today ✨</span>';
         els.chatMessages.appendChild(div);
-        
+
         msgs.forEach(m => els.chatMessages.appendChild(createMsgEl(m)));
         els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
       }
@@ -1036,16 +1149,16 @@
 
       function sendMessage() {
         if (!currentChatId || !els.messageInput.value.trim()) return;
-        
+
         const text = els.messageInput.value.trim();
-        const newMsg = { 
-          id: Date.now(), 
-          type: 'text', 
-          content: text, 
-          incoming: false, 
-          time: getTime() 
+        const newMsg = {
+          id: Date.now(),
+          type: 'text',
+          content: text,
+          incoming: false,
+          time: getTime()
         };
-        
+
         els.chatMessages.appendChild(createMsgEl(newMsg));
         els.messageInput.value = '';
         els.sendButton.disabled = true;
@@ -1062,7 +1175,7 @@
           `;
           els.chatMessages.appendChild(typingDiv);
           els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
-          
+
           setTimeout(() => {
             document.getElementById('typing')?.remove();
             const replies = [
@@ -1070,12 +1183,12 @@
               'Cool 😎', 'Perfect!', 'I\'ll check it out', '👍👍👍'
             ];
             const randomReply = replies[Math.floor(Math.random() * replies.length)];
-            const reply = { 
-              id: Date.now() + 1, 
-              type: 'text', 
-              content: randomReply, 
-              incoming: true, 
-              time: getTime() 
+            const reply = {
+              id: Date.now() + 1,
+              type: 'text',
+              content: randomReply,
+              incoming: true,
+              time: getTime()
             };
             els.chatMessages.appendChild(createMsgEl(reply));
             els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
@@ -1110,19 +1223,19 @@
       }
 
       // Attachment handlers
-      window.handlePhotoUpload = function() { 
-        els.attachmentMenu.classList.add('hidden'); 
-        els.photoInput.click(); 
+      window.handlePhotoUpload = function () {
+        els.attachmentMenu.classList.add('hidden');
+        els.photoInput.click();
       };
-      
-      window.handleFileUpload = function() { 
-        els.attachmentMenu.classList.add('hidden'); 
-        els.fileInput.click(); 
+
+      window.handleFileUpload = function () {
+        els.attachmentMenu.classList.add('hidden');
+        els.fileInput.click();
       };
-      
-      window.handleLocationUpload = function() { 
-        els.attachmentMenu.classList.add('hidden'); 
-        els.locationInput.click(); 
+
+      window.handleLocationUpload = function () {
+        els.attachmentMenu.classList.add('hidden');
+        els.locationInput.click();
       };
 
       function toggleSidebar() {
@@ -1130,7 +1243,7 @@
         els.overlay.classList.toggle('active');
         document.body.style.overflow = els.sidebar.classList.contains('active') ? 'hidden' : '';
       }
-      
+
       function closeSidebar() {
         els.sidebar.classList.remove('active');
         els.overlay.classList.remove('active');
@@ -1146,45 +1259,45 @@
 
       // Initialize theme
       const saved = localStorage.getItem('wavechat-theme');
-      if (saved === 'dark') { 
-        isDark = true; 
-        els.body.setAttribute('data-theme', 'dark'); 
-        els.themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; 
+      if (saved === 'dark') {
+        isDark = true;
+        els.body.setAttribute('data-theme', 'dark');
+        els.themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
       }
 
       // Event listeners
       els.themeToggle.addEventListener('click', toggleTheme);
-      
-      els.messageInput.addEventListener('input', function () { 
-        els.sendButton.disabled = this.value.trim() === ''; 
+
+      els.messageInput.addEventListener('input', function () {
+        els.sendButton.disabled = this.value.trim() === '';
       });
-      
-      els.messageInput.addEventListener('keypress', (e) => { 
-        if (e.key === 'Enter' && els.messageInput.value.trim()) { 
-          e.preventDefault(); 
-          sendMessage(); 
-        } 
+
+      els.messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && els.messageInput.value.trim()) {
+          e.preventDefault();
+          sendMessage();
+        }
       });
-      
+
       els.searchInput.addEventListener('input', function (e) {
         const term = e.target.value.toLowerCase();
         document.querySelectorAll('.conv-item').forEach((item, idx) => {
           const user = users[idx];
           if (user) {
-            item.style.display = (user.name.toLowerCase().includes(term) || 
-                                 user.lastMessage.toLowerCase().includes(term) || 
-                                 term === '') ? 'flex' : 'none';
+            item.style.display = (user.name.toLowerCase().includes(term) ||
+              user.lastMessage.toLowerCase().includes(term) ||
+              term === '') ? 'flex' : 'none';
           }
         });
       });
-      
+
       els.overlay.addEventListener('click', closeSidebar);
       els.mobileFab.addEventListener('click', toggleSidebar);
 
       // File input handlers
-      els.photoInput.addEventListener('change', function() { handleFileSelect(this, 'photo'); });
-      els.fileInput.addEventListener('change', function() { handleFileSelect(this, 'file'); });
-      els.locationInput.addEventListener('change', function() { handleFileSelect(this, 'location'); });
+      els.photoInput.addEventListener('change', function () { handleFileSelect(this, 'photo'); });
+      els.fileInput.addEventListener('change', function () { handleFileSelect(this, 'file'); });
+      els.locationInput.addEventListener('change', function () { handleFileSelect(this, 'location'); });
 
       // Window resize handler
       window.addEventListener('resize', () => {
@@ -1197,9 +1310,9 @@
         if (!els.chatMenu.contains(e.target) && !e.target.closest('[onclick="toggleChatMenu()"]')) {
           els.chatMenu.classList.add('hidden');
         }
-        if (!els.attachmentMenu.contains(e.target) && 
-            !e.target.closest('[onclick="toggleAttachmentMenu()"]') && 
-            !e.target.closest('[onclick^="handle"]')) {
+        if (!els.attachmentMenu.contains(e.target) &&
+          !e.target.closest('[onclick="toggleAttachmentMenu()"]') &&
+          !e.target.closest('[onclick^="handle"]')) {
           els.attachmentMenu.classList.add('hidden');
         }
       });
@@ -1218,26 +1331,27 @@
       window.startVideoCall = () => currentUser ? alert(`📹 Starting video call with ${currentUser.name}`) : alert('Select a chat first');
       window.toggleChatMenu = () => els.chatMenu.classList.toggle('hidden');
       window.toggleAttachmentMenu = () => els.attachmentMenu.classList.toggle('hidden');
-      window.viewProfile = () => { 
-        alert(`👤 ${currentUser?.name}'s profile\nStatus: ${currentUser?.status}\nLast seen: ${currentUser?.lastSeen}`); 
-        els.chatMenu.classList.add('hidden'); 
+      window.viewProfile = () => {
+        alert(`👤 ${currentUser?.name}'s profile\nStatus: ${currentUser?.status}\nLast seen: ${currentUser?.lastSeen}`);
+        els.chatMenu.classList.add('hidden');
       };
-      window.muteChat = () => { 
-        alert('🔇 Chat notifications muted for 1 hour'); 
-        els.chatMenu.classList.add('hidden'); 
+      window.muteChat = () => {
+        alert('🔇 Chat notifications muted for 1 hour');
+        els.chatMenu.classList.add('hidden');
       };
-      window.clearChat = () => { 
-        if (confirm('Clear all messages in this conversation?')) { 
-          els.chatMessages.innerHTML = '<div class="date-divider"><span>✨ Today ✨</span></div>'; 
-        } 
-        els.chatMenu.classList.add('hidden'); 
+      window.clearChat = () => {
+        if (confirm('Clear all messages in this conversation?')) {
+          els.chatMessages.innerHTML = '<div class="date-divider"><span>✨ Today ✨</span></div>';
+        }
+        els.chatMenu.classList.add('hidden');
       };
-      window.exportChat = () => { 
-        alert('📥 Exporting chat history as PDF...'); 
-        els.chatMenu.classList.add('hidden'); 
+      window.exportChat = () => {
+        alert('📥 Exporting chat history as PDF...');
+        els.chatMenu.classList.add('hidden');
       };
       window.sendMessage = sendMessage;
     })();
   </script>
 </body>
+
 </html>
