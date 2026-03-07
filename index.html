@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
@@ -7,7 +8,9 @@
   <!-- Tailwind + Font Awesome + Inter + WebRTC support -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -86,7 +89,10 @@
         width: min(90%, 360px);
         transform: translateX(-100%);
       }
-      .sidebar.active { transform: translateX(0); }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
     }
 
     /* ----- AVATARS ----- */
@@ -102,8 +108,17 @@
       transition: transform 0.3s;
     }
 
-    .avatar-sm { width: 48px; height: 48px; font-size: 1.3rem; }
-    .avatar-md { width: 56px; height: 56px; font-size: 1.5rem; }
+    .avatar-sm {
+      width: 48px;
+      height: 48px;
+      font-size: 1.3rem;
+    }
+
+    .avatar-md {
+      width: 56px;
+      height: 56px;
+      font-size: 1.5rem;
+    }
 
     .status-badge {
       position: absolute;
@@ -115,9 +130,17 @@
       border: 3px solid var(--bg-sidebar);
     }
 
-    .online { background: var(--success); }
-    .away { background: var(--warning); }
-    .dnd { background: var(--danger); }
+    .online {
+      background: var(--success);
+    }
+
+    .away {
+      background: var(--warning);
+    }
+
+    .dnd {
+      background: var(--danger);
+    }
 
     /* ----- CONVERSATION ITEMS ----- */
     .conv-item {
@@ -131,8 +154,14 @@
       transition: all 0.3s;
     }
 
-    .conv-item:hover { background: var(--bg-hover); }
-    .conv-item.active { background: var(--primary-gradient); color: white; }
+    .conv-item:hover {
+      background: var(--bg-hover);
+    }
+
+    .conv-item.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
 
     /* ----- CALL MODAL ----- */
     .call-modal {
@@ -146,7 +175,9 @@
       justify-content: center;
     }
 
-    .call-modal.active { display: flex; }
+    .call-modal.active {
+      display: flex;
+    }
 
     .call-container {
       width: 90%;
@@ -188,7 +219,10 @@
     }
 
     @media (max-width: 768px) {
-      .call-videos { flex-direction: column; padding: 12px; }
+      .call-videos {
+        flex-direction: column;
+        padding: 12px;
+      }
     }
 
     .video-container {
@@ -199,11 +233,20 @@
       background: #2a2f40;
     }
 
-    .video-container.remote-video { flex: 2; }
-    .video-container.local-video { flex: 1; max-width: 300px; }
+    .video-container.remote-video {
+      flex: 2;
+    }
+
+    .video-container.local-video {
+      flex: 1;
+      max-width: 300px;
+    }
 
     @media (max-width: 768px) {
-      .video-container.remote-video { flex: 3; }
+      .video-container.remote-video {
+        flex: 3;
+      }
+
       .video-container.local-video {
         max-width: 150px;
         position: absolute;
@@ -225,7 +268,7 @@
       bottom: 16px;
       left: 16px;
       color: white;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       padding: 6px 16px;
       border-radius: 30px;
       font-size: 0.9rem;
@@ -259,14 +302,37 @@
     }
 
     @media (max-width: 480px) {
-      .call-btn { width: 52px; height: 52px; font-size: 1.2rem; }
+      .call-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 1.2rem;
+      }
     }
 
-    .call-btn:hover { transform: scale(1.15); }
-    .call-btn.danger { background: var(--danger); color: white; }
-    .call-btn.success { background: var(--success); color: white; }
-    .call-btn.warning { background: var(--warning); color: white; }
-    .call-btn.muted { background: #6b7280; color: white; opacity: 0.7; }
+    .call-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .call-btn.danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .call-btn.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .call-btn.warning {
+      background: var(--warning);
+      color: white;
+    }
+
+    .call-btn.muted {
+      background: #6b7280;
+      color: white;
+      opacity: 0.7;
+    }
 
     .call-timer {
       font-size: 1.2rem;
@@ -288,7 +354,9 @@
       justify-content: center;
     }
 
-    .profile-modal.active { display: flex; }
+    .profile-modal.active {
+      display: flex;
+    }
 
     .profile-container {
       width: 90%;
@@ -326,7 +394,10 @@
       border-bottom: 1px solid var(--border-light);
     }
 
-    .profile-detail i { width: 24px; color: var(--primary); }
+    .profile-detail i {
+      width: 24px;
+      color: var(--primary);
+    }
 
     .mute-toggle {
       display: flex;
@@ -345,7 +416,10 @@
       transition: 0.3s;
     }
 
-    .toggle-switch.active { background: var(--primary); }
+    .toggle-switch.active {
+      background: var(--primary);
+    }
+
     .toggle-switch::after {
       content: '';
       position: absolute;
@@ -357,7 +431,10 @@
       left: 2px;
       transition: 0.3s;
     }
-    .toggle-switch.active::after { left: 26px; }
+
+    .toggle-switch.active::after {
+      left: 26px;
+    }
 
     /* ----- DEVICE SELECTOR ----- */
     .device-selector {
@@ -392,7 +469,9 @@
       background: transparent;
     }
 
-    .icon-btn:hover { background: var(--bg-hover); }
+    .icon-btn:hover {
+      background: var(--bg-hover);
+    }
 
     .send-btn {
       background: var(--primary-gradient);
@@ -415,7 +494,9 @@
       visibility: visible;
     }
 
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 
@@ -429,7 +510,8 @@
             <div class="avatar avatar-md">
               <i class="fa-regular fa-comment"></i>
             </div>
-            <h1 class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1
+              class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
               WaveChat
             </h1>
           </div>
@@ -471,7 +553,8 @@
     <!-- MAIN CHAT -->
     <main class="chat">
       <!-- chat header -->
-      <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
+      <div
+        class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
         style="border-color: var(--border-light); z-index: 10;">
         <div class="flex items-center gap-3">
           <button class="md:hidden icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
@@ -494,7 +577,8 @@
       <!-- messages -->
       <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4" id="messagesContainer">
         <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full">
-          <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6">
+          <div
+            class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6">
             <i class="fas fa-comments text-4xl text-white"></i>
           </div>
           <h3 class="text-2xl font-bold mb-2">Welcome to WaveChat</h3>
@@ -656,19 +740,19 @@
   <input type="file" id="fileInput" class="hidden" accept="*/*" multiple>
 
   <script>
-    (function() {
+    (function () {
       // ==================== STATE MANAGEMENT ====================
       let currentChatId = null;
       let currentUser = null;
       let isMobile = window.innerWidth < 768;
       let isDark = localStorage.getItem('theme') === 'dark';
-      
+
       // Mute states
       let isNotificationMuted = localStorage.getItem('notificationMute') === 'true';
       let isCallMuted = false;
       let isVideoEnabled = true;
       let isSpeakerMuted = false;
-      
+
       let callTimer = null;
       let callSeconds = 0;
       let localStream = null;
@@ -767,7 +851,7 @@
           if (e.key === 'Enter' && els.messageInput.value.trim()) sendMessage();
         });
         els.searchInput.addEventListener('input', filterConversations);
-        
+
         els.photoInput.addEventListener('change', (e) => handleFileSelect(e.target, 'photo'));
         els.fileInput.addEventListener('change', (e) => handleFileSelect(e.target, 'file'));
 
@@ -782,7 +866,7 @@
         isNotificationMuted = !isNotificationMuted;
         localStorage.setItem('notificationMute', isNotificationMuted);
         updateNotificationMuteUI();
-        
+
         // Show feedback
         const message = isNotificationMuted ? '🔇 Notifications muted' : '🔔 Notifications unmuted';
         showToast(message);
@@ -807,7 +891,7 @@
           if (audioTracks.length > 0) {
             isCallMuted = !isCallMuted;
             audioTracks.forEach(track => track.enabled = !isCallMuted);
-            
+
             // Update button UI
             const icon = els.callMuteBtn.querySelector('i');
             if (isCallMuted) {
@@ -831,7 +915,7 @@
           if (videoTracks.length > 0) {
             isVideoEnabled = !isVideoEnabled;
             videoTracks.forEach(track => track.enabled = isVideoEnabled);
-            
+
             const icon = els.callVideoBtn.querySelector('i');
             if (!isVideoEnabled) {
               icon.className = 'fas fa-video-slash';
@@ -848,7 +932,7 @@
 
       function toggleCallSpeaker() {
         isSpeakerMuted = !isSpeakerMuted;
-        
+
         // Update button UI
         const icon = els.callSpeakerBtn.querySelector('i');
         if (isSpeakerMuted) {
@@ -960,7 +1044,7 @@
           const user = users[idx];
           if (user) {
             const matches = user.name.toLowerCase().includes(term) ||
-                           user.lastMessage.toLowerCase().includes(term);
+              user.lastMessage.toLowerCase().includes(term);
             item.style.display = matches || !term ? 'flex' : 'none';
           }
         });
@@ -982,7 +1066,7 @@
           const reply = { id: Date.now(), content: 'Got it! 👍', incoming: true, time: new Date().toLocaleTimeString() };
           els.chatMessages.appendChild(createMessageElement(reply));
           els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
-          
+
           // Only show notification if not muted
           if (!isNotificationMuted) {
             showToast(`💬 New message from ${currentUser.name}`);
@@ -1038,7 +1122,7 @@
         isCallMuted = false;
         isVideoEnabled = true;
         isSpeakerMuted = false;
-        
+
         // Reset button icons
         updateCallButtonIcons();
 
@@ -1059,12 +1143,12 @@
         const muteIcon = els.callMuteBtn.querySelector('i');
         muteIcon.className = 'fas fa-microphone';
         els.callMuteBtn.classList.remove('muted');
-        
+
         // Reset video button
         const videoIcon = els.callVideoBtn.querySelector('i');
         videoIcon.className = 'fas fa-video';
         els.callVideoBtn.classList.remove('muted');
-        
+
         // Reset speaker button
         const speakerIcon = els.callSpeakerBtn.querySelector('i');
         speakerIcon.className = 'fas fa-volume-up';
@@ -1111,18 +1195,18 @@
           if (videoTracks.length > 0) {
             const currentFacingMode = videoTracks[0].getSettings().facingMode;
             const newFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
-            
+
             const constraints = {
               video: { facingMode: newFacingMode }
             };
 
             const newStream = await navigator.mediaDevices.getUserMedia(constraints);
             const newVideoTrack = newStream.getVideoTracks()[0];
-            
+
             videoTracks[0].stop();
             localStream.removeTrack(videoTracks[0]);
             localStream.addTrack(newVideoTrack);
-            
+
             els.localVideo.srcObject = localStream;
             showToast('📷 Camera switched');
           }
@@ -1135,16 +1219,16 @@
       async function shareScreen() {
         try {
           const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-          
+
           if (localStream) {
             const videoTrack = screenStream.getVideoTracks()[0];
             const oldTrack = localStream.getVideoTracks()[0];
-            
+
             if (oldTrack) {
               localStream.removeTrack(oldTrack);
               oldTrack.stop();
             }
-            
+
             localStream.addTrack(videoTrack);
             els.localVideo.srcObject = localStream;
 
@@ -1154,7 +1238,7 @@
                 startVideoCall();
               }
             };
-            
+
             showToast('🖥️ Screen sharing started');
           }
         } catch (err) {
@@ -1208,7 +1292,7 @@
       async function enumerateDevices() {
         try {
           const devices = await navigator.mediaDevices.enumerateDevices();
-          
+
           const audioInputs = devices.filter(d => d.kind === 'audioinput');
           els.audioInputSelect.innerHTML = audioInputs.map(d =>
             `<option value="${d.deviceId}">${d.label || 'Microphone'}</option>`
@@ -1359,4 +1443,5 @@
     })();
   </script>
 </body>
+
 </html>
