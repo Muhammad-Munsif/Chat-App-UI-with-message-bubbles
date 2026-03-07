@@ -1,4 +1,4 @@
-<script>
+
     (function () {
       // ==================== STATE MANAGEMENT ====================
       let currentChatId = null;
@@ -700,4 +700,4 @@
       // Initialize
       init();
     })();
-  </script>
+  
