@@ -1,4 +1,4 @@
-<script src="js/script.js">
+
 
   (function () {
     // ==================== STATE MANAGEMENT ====================
@@ -702,4 +702,3 @@
   init();
     })();
 
-</script>
