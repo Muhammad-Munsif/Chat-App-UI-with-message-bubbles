@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
@@ -7,7 +8,9 @@
   <!-- Tailwind + Font Awesome + Inter + WebRTC support -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -85,7 +88,10 @@
         width: min(90%, 360px);
         transform: translateX(-100%);
       }
-      .sidebar.active { transform: translateX(0); }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
     }
 
     /* Avatars */
@@ -101,8 +107,17 @@
       transition: transform 0.3s;
     }
 
-    .avatar-sm { width: 48px; height: 48px; font-size: 1.3rem; }
-    .avatar-md { width: 56px; height: 56px; font-size: 1.5rem; }
+    .avatar-sm {
+      width: 48px;
+      height: 48px;
+      font-size: 1.3rem;
+    }
+
+    .avatar-md {
+      width: 56px;
+      height: 56px;
+      font-size: 1.5rem;
+    }
 
     .status-badge {
       position: absolute;
@@ -114,9 +129,17 @@
       border: 3px solid var(--bg-sidebar);
     }
 
-    .online { background: var(--success); }
-    .away { background: var(--warning); }
-    .dnd { background: var(--danger); }
+    .online {
+      background: var(--success);
+    }
+
+    .away {
+      background: var(--warning);
+    }
+
+    .dnd {
+      background: var(--danger);
+    }
 
     /* Conversation items */
     .conv-item {
@@ -130,8 +153,14 @@
       transition: all 0.3s;
     }
 
-    .conv-item:hover { background: var(--bg-hover); }
-    .conv-item.active { background: var(--primary-gradient); color: white; }
+    .conv-item:hover {
+      background: var(--bg-hover);
+    }
+
+    .conv-item.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
 
     /* Call Modal */
     .call-modal {
@@ -145,7 +174,9 @@
       justify-content: center;
     }
 
-    .call-modal.active { display: flex; }
+    .call-modal.active {
+      display: flex;
+    }
 
     .call-container {
       width: 95%;
@@ -215,6 +246,7 @@
         flex: 3;
         min-height: 60%;
       }
+
       .video-container.local-video {
         max-width: 140px;
         position: absolute;
@@ -291,17 +323,47 @@
       }
     }
 
-    .call-btn:hover { transform: scale(1.15); }
-    .call-btn.danger { background: var(--danger); color: white; }
-    .call-btn.success { background: var(--success); color: white; }
-    .call-btn.warning { background: var(--warning); color: white; }
-    .call-btn.muted { background: #6b7280; color: white; opacity: 0.8; }
-    .call-btn.ringing { animation: ring 1s infinite; }
+    .call-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .call-btn.danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .call-btn.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .call-btn.warning {
+      background: var(--warning);
+      color: white;
+    }
+
+    .call-btn.muted {
+      background: #6b7280;
+      color: white;
+      opacity: 0.8;
+    }
+
+    .call-btn.ringing {
+      animation: ring 1s infinite;
+    }
 
     @keyframes ring {
-      0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
-      70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+      }
+
+      70% {
+        box-shadow: 0 0 0 15px rgba(37, 99, 235, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+      }
     }
 
     .call-timer {
@@ -329,7 +391,9 @@
       min-width: 320px;
     }
 
-    .incoming-call.active { display: block; }
+    .incoming-call.active {
+      display: block;
+    }
 
     .incoming-call .avatar {
       width: 100px;
@@ -357,9 +421,19 @@
       transition: all 0.3s;
     }
 
-    .incoming-btn.accept { background: var(--success); color: white; }
-    .incoming-btn.decline { background: var(--danger); color: white; }
-    .incoming-btn:hover { transform: scale(1.15); }
+    .incoming-btn.accept {
+      background: var(--success);
+      color: white;
+    }
+
+    .incoming-btn.decline {
+      background: var(--danger);
+      color: white;
+    }
+
+    .incoming-btn:hover {
+      transform: scale(1.15);
+    }
 
     /* Profile modal */
     .profile-modal {
@@ -373,7 +447,9 @@
       justify-content: center;
     }
 
-    .profile-modal.active { display: flex; }
+    .profile-modal.active {
+      display: flex;
+    }
 
     .profile-container {
       width: 90%;
@@ -411,7 +487,10 @@
       border-bottom: 1px solid var(--border-light);
     }
 
-    .profile-detail i { width: 24px; color: var(--primary); }
+    .profile-detail i {
+      width: 24px;
+      color: var(--primary);
+    }
 
     .mute-toggle {
       display: flex;
@@ -430,7 +509,10 @@
       transition: 0.3s;
     }
 
-    .toggle-switch.active { background: var(--primary); }
+    .toggle-switch.active {
+      background: var(--primary);
+    }
+
     .toggle-switch::after {
       content: '';
       position: absolute;
@@ -442,7 +524,10 @@
       left: 2px;
       transition: 0.3s;
     }
-    .toggle-switch.active::after { left: 26px; }
+
+    .toggle-switch.active::after {
+      left: 26px;
+    }
 
     /* Device selector */
     .device-selector {
@@ -477,8 +562,14 @@
       background: transparent;
     }
 
-    .icon-btn:hover { background: var(--bg-hover); }
-    .send-btn { background: var(--primary-gradient); color: white; }
+    .icon-btn:hover {
+      background: var(--bg-hover);
+    }
+
+    .send-btn {
+      background: var(--primary-gradient);
+      color: white;
+    }
 
     .overlay {
       position: fixed;
@@ -496,7 +587,9 @@
       visibility: visible;
     }
 
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 
@@ -510,7 +603,8 @@
             <div class="avatar avatar-md">
               <i class="fa-regular fa-comment"></i>
             </div>
-            <h1 class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1
+              class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
               WaveChat
             </h1>
           </div>
@@ -552,7 +646,8 @@
     <!-- MAIN CHAT -->
     <main class="chat">
       <!-- chat header -->
-      <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
+      <div
+        class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
         style="border-color: var(--border-light); z-index: 10;">
         <div class="flex items-center gap-3">
           <button class="md:hidden icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
@@ -575,7 +670,8 @@
       <!-- messages -->
       <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4" id="messagesContainer">
         <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full">
-          <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6">
+          <div
+            class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6">
             <i class="fas fa-comments text-4xl text-white"></i>
           </div>
           <h3 class="text-2xl font-bold mb-2">Welcome to WaveChat</h3>
@@ -649,9 +745,12 @@
 
       <div class="device-selector hidden md:block">
         <div class="flex gap-4 flex-wrap">
-          <select id="audioInputSelect" class="flex-1 p-2 rounded-xl bg-surface border" onchange="switchAudioInput(this.value)"></select>
-          <select id="videoInputSelect" class="flex-1 p-2 rounded-xl bg-surface border" onchange="switchVideoInput(this.value)"></select>
-          <select id="audioOutputSelect" class="flex-1 p-2 rounded-xl bg-surface border" onchange="switchAudioOutput(this.value)"></select>
+          <select id="audioInputSelect" class="flex-1 p-2 rounded-xl bg-surface border"
+            onchange="switchAudioInput(this.value)"></select>
+          <select id="videoInputSelect" class="flex-1 p-2 rounded-xl bg-surface border"
+            onchange="switchVideoInput(this.value)"></select>
+          <select id="audioOutputSelect" class="flex-1 p-2 rounded-xl bg-surface border"
+            onchange="switchAudioOutput(this.value)"></select>
         </div>
       </div>
 
@@ -755,7 +854,7 @@
   <input type="file" id="fileInput" class="hidden" accept="*/*" multiple>
 
   <script>
-    (function() {
+    (function () {
       // ==================== WEBRTC CONFIGURATION ====================
       const configuration = {
         iceServers: [
@@ -788,7 +887,7 @@
       let peerConnection = null;
       let currentCallType = null;
       let isCallActive = false;
-      
+
       // Call timer
       let callTimer = null;
       let callSeconds = 0;
@@ -934,8 +1033,8 @@
           if (peerConnection.connectionState === 'connected') {
             els.callStatus.innerText = 'Connected';
             isCallActive = true;
-          } else if (peerConnection.connectionState === 'disconnected' || 
-                     peerConnection.connectionState === 'failed') {
+          } else if (peerConnection.connectionState === 'disconnected' ||
+            peerConnection.connectionState === 'failed') {
             if (isCallActive) {
               showToast('❌ Call disconnected');
               endCall();
@@ -951,11 +1050,11 @@
           event.streams[0].getTracks().forEach(track => {
             remoteStream.addTrack(track);
           });
-          
+
           if (els.remoteVideo) {
             els.remoteVideo.srcObject = remoteStream;
           }
-          
+
           // Update quality indicator (simulated)
           updateVideoQuality();
         };
@@ -970,18 +1069,18 @@
         }
 
         try {
-          localStream = await navigator.mediaDevices.getUserMedia({ 
+          localStream = await navigator.mediaDevices.getUserMedia({
             audio: {
               echoCancellation: true,
               noiseSuppression: true,
               autoGainControl: true
-            }, 
-            video: false 
+            },
+            video: false
           });
-          
+
           currentCallType = 'audio';
           await initializeCall('audio');
-          
+
         } catch (err) {
           alert('Microphone access denied. Please check permissions.');
           console.error(err);
@@ -995,22 +1094,22 @@
         }
 
         try {
-          localStream = await navigator.mediaDevices.getUserMedia({ 
+          localStream = await navigator.mediaDevices.getUserMedia({
             audio: {
               echoCancellation: true,
               noiseSuppression: true,
               autoGainControl: true
-            }, 
+            },
             video: {
               width: { ideal: 1280 },
               height: { ideal: 720 },
               frameRate: { ideal: 30 }
             }
           });
-          
+
           currentCallType = 'video';
           await initializeCall('video');
-          
+
         } catch (err) {
           alert('Camera/microphone access denied. Please check permissions.');
           console.error(err);
@@ -1019,10 +1118,10 @@
 
       async function initializeCall(type) {
         await createPeerConnection();
-        
+
         // Show incoming call modal to simulate receiving call
         showIncomingCall(currentUser, type);
-        
+
         // In real app, you would send offer to remote peer
         setTimeout(() => {
           // Simulate accepting call after 3 seconds
@@ -1039,7 +1138,7 @@
         els.incomingCallName.innerText = user.name;
         els.incomingCallType.innerText = `Incoming ${type} call...`;
         els.incomingCallModal.classList.add('active');
-        
+
         // Play ringtone (simulated)
         playRingtone();
       }
@@ -1048,12 +1147,12 @@
         // Simulate ringtone with beep
         const audio = new Audio();
         audio.src = 'data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-        audio.play().catch(() => {});
+        audio.play().catch(() => { });
       }
 
       async function acceptCall() {
         els.incomingCallModal.classList.remove('active');
-        
+
         try {
           // Create offer
           const offer = await peerConnection.createOffer({
@@ -1061,13 +1160,13 @@
             offerToReceiveVideo: currentCallType === 'video'
           });
           await peerConnection.setLocalDescription(offer);
-          
+
           // In real app, send offer to remote peer
           simulateSignaling('offer', offer);
-          
+
           showCallModal(currentCallType);
           setupLocalStream();
-          
+
         } catch (err) {
           console.error('Error accepting call:', err);
         }
@@ -1076,7 +1175,7 @@
       function declineCall() {
         els.incomingCallModal.classList.remove('active');
         showToast('❌ Call declined');
-        
+
         if (localStream) {
           localStream.getTracks().forEach(track => track.stop());
           localStream = null;
@@ -1090,11 +1189,11 @@
             // Simulate receiving answer
             const answer = await peerConnection.createAnswer();
             await peerConnection.setLocalDescription(answer);
-            
+
             // Simulate remote description set
             const remoteDesc = new RTCSessionDescription(offer);
             await peerConnection.setRemoteDescription(remoteDesc);
-            
+
           } else if (type === 'candidate') {
             // Simulate receiving remote ICE candidate
             await peerConnection.addIceCandidate(data);
@@ -1146,7 +1245,7 @@
       function setupLocalStream() {
         if (els.localVideo && localStream) {
           els.localVideo.srcObject = localStream;
-          
+
           // Update quality indicator
           const videoTrack = localStream.getVideoTracks()[0];
           if (videoTrack) {
@@ -1215,13 +1314,13 @@
 
       function toggleCallSpeaker() {
         isSpeakerMuted = !isSpeakerMuted;
-        
+
         const icon = els.callSpeakerBtn.querySelector('i');
         if (isSpeakerMuted) {
           icon.className = 'fas fa-volume-mute';
           els.callSpeakerBtn.classList.add('muted');
           els.callSpeakerBtn.title = 'Unmute speaker';
-          
+
           // Mute remote audio
           if (els.remoteVideo) {
             els.remoteVideo.volume = 0;
@@ -1230,7 +1329,7 @@
           icon.className = 'fas fa-volume-up';
           els.callSpeakerBtn.classList.remove('muted');
           els.callSpeakerBtn.title = 'Mute speaker';
-          
+
           // Unmute remote audio
           if (els.remoteVideo) {
             els.remoteVideo.volume = 1;
@@ -1248,7 +1347,7 @@
             const newFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
 
             const constraints = {
-              video: { 
+              video: {
                 facingMode: newFacingMode,
                 width: { ideal: 1280 },
                 height: { ideal: 720 }
@@ -1257,7 +1356,7 @@
 
             const newStream = await navigator.mediaDevices.getUserMedia(constraints);
             const newVideoTrack = newStream.getVideoTracks()[0];
-            
+
             // Replace track in peer connection
             if (peerConnection) {
               const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
@@ -1265,11 +1364,11 @@
                 sender.replaceTrack(newVideoTrack);
               }
             }
-            
+
             videoTracks[0].stop();
             localStream.removeTrack(videoTracks[0]);
             localStream.addTrack(newVideoTrack);
-            
+
             els.localVideo.srcObject = localStream;
             showToast('📷 Camera switched');
           }
@@ -1281,7 +1380,7 @@
 
       async function shareScreen() {
         try {
-          const screenStream = await navigator.mediaDevices.getDisplayMedia({ 
+          const screenStream = await navigator.mediaDevices.getDisplayMedia({
             video: true,
             audio: true
           });
@@ -1289,13 +1388,13 @@
           if (localStream && peerConnection) {
             const videoTrack = screenStream.getVideoTracks()[0];
             const audioTrack = screenStream.getAudioTracks()[0];
-            
+
             // Replace video track in peer connection
             const videoSender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
             if (videoSender) {
               videoSender.replaceTrack(videoTrack);
             }
-            
+
             // Add audio track if present
             if (audioTrack) {
               const audioSender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'audio');
@@ -1303,7 +1402,7 @@
                 audioSender.replaceTrack(audioTrack);
               }
             }
-            
+
             // Update local video
             els.localVideo.srcObject = screenStream;
             currentCallType = 'screen';
@@ -1351,7 +1450,7 @@
 
           mediaRecorder.start();
           isRecording = true;
-          
+
           const icon = els.recordBtn.querySelector('i');
           icon.className = 'fas fa-stop';
           els.recordBtn.classList.add('danger');
@@ -1360,7 +1459,7 @@
           // Stop recording
           mediaRecorder.stop();
           isRecording = false;
-          
+
           const icon = els.recordBtn.querySelector('i');
           icon.className = 'fas fa-circle';
           els.recordBtn.classList.remove('danger');
@@ -1387,7 +1486,7 @@
         // Hide modals
         els.callModal.classList.remove('active');
         els.incomingCallModal.classList.remove('active');
-        
+
         stopCallTimer();
         currentCallType = null;
         isCallActive = false;
@@ -1397,7 +1496,7 @@
       function minimizeCall() {
         els.callModal.classList.remove('active');
         showToast('📱 Call minimized');
-        
+
         // Show picture-in-picture (simulated)
         if (els.remoteVideo && currentCallType === 'video') {
           // In real app, implement PiP
@@ -1436,26 +1535,26 @@
 
       async function switchAudioInput(deviceId) {
         if (!localStream) return;
-        
+
         try {
           const newStream = await navigator.mediaDevices.getUserMedia({
             audio: { deviceId: { exact: deviceId } }
           });
-          
+
           const newAudioTrack = newStream.getAudioTracks()[0];
           const oldAudioTrack = localStream.getAudioTracks()[0];
-          
+
           if (peerConnection) {
             const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'audio');
             if (sender) {
               sender.replaceTrack(newAudioTrack);
             }
           }
-          
+
           localStream.removeTrack(oldAudioTrack);
           oldAudioTrack.stop();
           localStream.addTrack(newAudioTrack);
-          
+
           showToast('🎤 Audio input switched');
         } catch (err) {
           console.error('Failed to switch audio input:', err);
@@ -1464,26 +1563,26 @@
 
       async function switchVideoInput(deviceId) {
         if (!localStream || currentCallType !== 'video') return;
-        
+
         try {
           const newStream = await navigator.mediaDevices.getUserMedia({
             video: { deviceId: { exact: deviceId } }
           });
-          
+
           const newVideoTrack = newStream.getVideoTracks()[0];
           const oldVideoTrack = localStream.getVideoTracks()[0];
-          
+
           if (peerConnection) {
             const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
             if (sender) {
               sender.replaceTrack(newVideoTrack);
             }
           }
-          
+
           localStream.removeTrack(oldVideoTrack);
           oldVideoTrack.stop();
           localStream.addTrack(newVideoTrack);
-          
+
           els.localVideo.srcObject = localStream;
           showToast('📷 Camera switched');
         } catch (err) {
@@ -1805,4 +1904,5 @@
     })();
   </script>
 </body>
+
 </html>
