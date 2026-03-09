@@ -1,4 +1,4 @@
-<script>
+
     (function () {
       // ==================== WEBRTC CONFIGURATION ====================
       const configuration = {
@@ -1047,4 +1047,4 @@
       // Initialize
       init();
     })();
-  </script>
+  
