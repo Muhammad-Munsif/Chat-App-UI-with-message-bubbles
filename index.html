@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
@@ -7,7 +8,8 @@
   <!-- Tailwind + Font Awesome + Google Fonts + Firebase -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -100,7 +102,10 @@
         width: min(90%, 360px);
         transform: translateX(-100%);
       }
-      .sidebar.active { transform: translateX(0); }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
     }
 
     /* Avatars */
@@ -117,9 +122,24 @@
       box-shadow: 0 6px 12px -4px rgba(37, 99, 235, 0.3);
     }
 
-    .avatar-sm { width: 48px; height: 48px; font-size: 1.3rem; }
-    .avatar-md { width: 56px; height: 56px; font-size: 1.5rem; }
-    .avatar-lg { width: 80px; height: 80px; font-size: 2rem; border-radius: 24px; }
+    .avatar-sm {
+      width: 48px;
+      height: 48px;
+      font-size: 1.3rem;
+    }
+
+    .avatar-md {
+      width: 56px;
+      height: 56px;
+      font-size: 1.5rem;
+    }
+
+    .avatar-lg {
+      width: 80px;
+      height: 80px;
+      font-size: 2rem;
+      border-radius: 24px;
+    }
 
     .avatar:hover {
       transform: scale(1.05) rotate(2deg);
@@ -137,10 +157,24 @@
       transition: all 0.3s;
     }
 
-    .online { background: var(--success); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
-    .away { background: var(--warning); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
-    .dnd { background: var(--danger); box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
-    .offline { background: var(--text-secondary); }
+    .online {
+      background: var(--success);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .away {
+      background: var(--warning);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+
+    .dnd {
+      background: var(--danger);
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
+    .offline {
+      background: var(--text-secondary);
+    }
 
     /* Conversation items */
     .conv-item {
@@ -189,7 +223,7 @@
       color: rgba(255, 255, 255, 0.8);
     }
 
-    .conv-item > * {
+    .conv-item>* {
       position: relative;
       z-index: 1;
     }
@@ -269,13 +303,27 @@
     }
 
     @keyframes bubblePop {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .bubble.in {
@@ -414,8 +462,15 @@
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .attach-item {
@@ -453,7 +508,9 @@
       justify-content: center;
     }
 
-    .call-modal.active { display: flex; }
+    .call-modal.active {
+      display: flex;
+    }
 
     .call-container {
       width: 95%;
@@ -494,8 +551,14 @@
       background: #1a1f2e;
     }
 
-    .video-container.remote-video { flex: 3; }
-    .video-container.local-video { flex: 1; max-width: 300px; }
+    .video-container.remote-video {
+      flex: 3;
+    }
+
+    .video-container.local-video {
+      flex: 1;
+      max-width: 300px;
+    }
 
     @media (max-width: 768px) {
       .video-container.local-video {
@@ -551,10 +614,24 @@
       color: var(--text-primary);
     }
 
-    .call-btn:hover { transform: scale(1.15); }
-    .call-btn.danger { background: var(--danger); color: white; }
-    .call-btn.success { background: var(--success); color: white; }
-    .call-btn.muted { background: #6b7280; color: white; }
+    .call-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .call-btn.danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .call-btn.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .call-btn.muted {
+      background: #6b7280;
+      color: white;
+    }
 
     .call-timer {
       font-size: 1.2rem;
@@ -653,7 +730,9 @@
       box-shadow: var(--shadow-lg);
     }
 
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
 
     /* Toast */
     .toast {
@@ -690,12 +769,27 @@
       animation: typing 1.4s infinite;
     }
 
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
 
     @keyframes typing {
-      0%,60%,100% { transform: translateY(0); opacity: 0.4; }
-      30% { transform: translateY(-6px); opacity: 1; }
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.4;
+      }
+
+      30% {
+        transform: translateY(-6px);
+        opacity: 1;
+      }
     }
 
     /* Unread badge */
@@ -722,7 +816,8 @@
             <div class="avatar avatar-md">
               <i class="fa-regular fa-comment"></i>
             </div>
-            <h1 class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1
+              class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
               WaveChat
             </h1>
           </div>
@@ -751,7 +846,8 @@
         <div class="text-center text-secondary py-8">Loading conversations...</div>
       </div>
 
-      <div class="border-t p-4 flex items-center gap-3 cursor-pointer hover:bg-hover transition" onclick="showProfile()">
+      <div class="border-t p-4 flex items-center gap-3 cursor-pointer hover:bg-hover transition"
+        onclick="showProfile()">
         <div class="relative">
           <div class="avatar avatar-sm" id="currentUserAvatar"><i class="fas fa-user"></i></div>
           <span class="status-badge online" id="currentUserStatus"></span>
@@ -770,7 +866,8 @@
     <!-- MAIN CHAT -->
     <main class="chat">
       <!-- chat header -->
-      <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
+      <div
+        class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
         style="border-color: var(--border-light); z-index: 10;">
         <div class="flex items-center gap-3 min-w-0">
           <button class="md:hidden icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
@@ -784,8 +881,10 @@
           </div>
         </div>
         <div class="flex gap-1 flex-shrink-0">
-          <button class="icon-btn" onclick="startAudioCall()" id="audioCallBtn" disabled><i class="fas fa-phone"></i></button>
-          <button class="icon-btn" onclick="startVideoCall()" id="videoCallBtn" disabled><i class="fas fa-video"></i></button>
+          <button class="icon-btn" onclick="startAudioCall()" id="audioCallBtn" disabled><i
+              class="fas fa-phone"></i></button>
+          <button class="icon-btn" onclick="startVideoCall()" id="videoCallBtn" disabled><i
+              class="fas fa-video"></i></button>
           <button class="icon-btn" onclick="toggleChatMenu()"><i class="fas fa-ellipsis-v"></i></button>
         </div>
       </div>
@@ -793,14 +892,17 @@
       <!-- messages -->
       <div class="msg-panel" id="messagesContainer">
         <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-6">
-          <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl">
+          <div
+            class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl">
             <i class="fas fa-comments text-5xl text-white"></i>
           </div>
-          <h3 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">
+          <h3
+            class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">
             Welcome to WaveChat
           </h3>
           <p class="text-secondary max-w-sm mb-8">Sign in to start messaging with friends</p>
-          <button onclick="showAuthModal()" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-pink-600 text-white rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+          <button onclick="showAuthModal()"
+            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-pink-600 text-white rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
             <i class="fas fa-sign-in-alt mr-2"></i>Sign In
           </button>
         </div>
@@ -810,7 +912,8 @@
       <!-- input area -->
       <div class="input-area relative">
         <div class="input-wrapper">
-          <button class="icon-btn" onclick="toggleAttachmentMenu()" id="attachBtn" disabled><i class="fas fa-plus"></i></button>
+          <button class="icon-btn" onclick="toggleAttachmentMenu()" id="attachBtn" disabled><i
+              class="fas fa-plus"></i></button>
           <input type="text" class="msg-input" placeholder="Type a message..." id="messageInput" disabled>
           <button class="icon-btn send-btn" onclick="sendMessage()" id="sendButton" disabled>
             <i class="fas fa-paper-plane"></i>
@@ -819,7 +922,8 @@
         <div id="attachmentMenu" class="attach-menu hidden">
           <div class="attach-item" onclick="handlePhotoUpload()"><i class="fas fa-image"></i><span>Photo</span></div>
           <div class="attach-item" onclick="handleFileUpload()"><i class="fas fa-file"></i><span>File</span></div>
-          <div class="attach-item" onclick="handleLocation()"><i class="fas fa-map-marker-alt"></i><span>Location</span></div>
+          <div class="attach-item" onclick="handleLocation()"><i class="fas fa-map-marker-alt"></i><span>Location</span>
+          </div>
         </div>
       </div>
     </main>
@@ -832,7 +936,7 @@
         <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
         <div class="auth-tab" onclick="switchAuthTab('register')">Register</div>
       </div>
-      
+
       <!-- Login Form -->
       <div class="auth-form active" id="loginForm">
         <input type="email" class="auth-input" placeholder="Email" id="loginEmail">
@@ -968,7 +1072,7 @@
       attachmentMenu: document.getElementById('attachmentMenu'),
       searchInput: document.getElementById('searchInput'),
       onlineCount: document.getElementById('onlineCount'),
-      
+
       // Auth modal
       authModal: document.getElementById('authModal'),
       loginForm: document.getElementById('loginForm'),
@@ -1041,7 +1145,7 @@
       els.attachBtn.disabled = !enabled;
       els.audioCallBtn.disabled = !enabled;
       els.videoCallBtn.disabled = !enabled;
-      
+
       if (!enabled) {
         els.messageInput.placeholder = 'Sign in to chat';
       }
@@ -1058,7 +1162,7 @@
     function switchAuthTab(tab) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-      
+
       if (tab === 'login') {
         document.querySelector('.auth-tab[onclick="switchAuthTab(\'login\')"]').classList.add('active');
         els.loginForm.classList.add('active');
@@ -1071,7 +1175,7 @@
     async function login() {
       const email = els.loginEmail.value;
       const password = els.loginPassword.value;
-      
+
       try {
         await auth.signInWithEmailAndPassword(email, password);
         hideAuthModal();
@@ -1096,7 +1200,7 @@
       const name = els.registerName.value;
       const email = els.registerEmail.value;
       const password = els.registerPassword.value;
-      
+
       try {
         const result = await auth.createUserWithEmailAndPassword(email, password);
         await result.user.updateProfile({ displayName: name });
@@ -1115,20 +1219,20 @@
     // ==================== CONVERSATIONS ====================
     async function loadConversations() {
       if (!currentUser) return;
-      
+
       const conversationsRef = db.collection('conversations')
         .where('participants', 'array-contains', currentUser.uid)
         .orderBy('lastMessageTime', 'desc');
-      
+
       const snapshot = await conversationsRef.get();
       els.conversationsList.innerHTML = '';
-      
+
       if (snapshot.empty) {
         // Create demo conversations
         createDemoConversations();
         return;
       }
-      
+
       snapshot.forEach(doc => {
         const data = doc.data();
         const otherUserId = data.participants.find(id => id !== currentUser.uid);
@@ -1172,15 +1276,15 @@
 
     function addConversationToList(convId, userId, data) {
       const user = data.user || {
-        name: userId === 'user1' ? 'John Doe' : 
-              userId === 'user2' ? 'Alice Smith' :
-              userId === 'user3' ? 'Mike Johnson' : 'Sarah Brown',
+        name: userId === 'user1' ? 'John Doe' :
+          userId === 'user2' ? 'Alice Smith' :
+            userId === 'user3' ? 'Mike Johnson' : 'Sarah Brown',
         avatar: userId === 'user1' ? 'user-tie' :
-                userId === 'user2' ? 'user-graduate' :
-                userId === 'user3' ? 'user-ninja' : 'user-astronaut',
+          userId === 'user2' ? 'user-graduate' :
+            userId === 'user3' ? 'user-ninja' : 'user-astronaut',
         status: userId === 'user1' ? 'online' :
-                userId === 'user2' ? 'online' :
-                userId === 'user3' ? 'away' : 'offline'
+          userId === 'user2' ? 'online' :
+            userId === 'user3' ? 'away' : 'offline'
       };
 
       const div = document.createElement('div');
@@ -1188,7 +1292,7 @@
       div.setAttribute('data-convid', convId);
       div.setAttribute('data-userid', userId);
       div.onclick = () => selectChat(convId, userId, user);
-      
+
       div.innerHTML = `
         <div class="relative">
           <div class="avatar avatar-sm"><i class="fas fa-${user.avatar}"></i></div>
@@ -1203,32 +1307,32 @@
         </div>
         ${data.unreadCount ? '<span class="unread-badge">' + data.unreadCount + '</span>' : ''}
       `;
-      
+
       els.conversationsList.appendChild(div);
     }
 
     async function selectChat(convId, userId, user) {
       currentChatId = convId;
       currentChatUser = user;
-      
+
       els.chatUserName.textContent = user.name;
       els.chatUserAvatar.innerHTML = `<i class="fas fa-${user.avatar}"></i>`;
       els.chatUserStatus.className = `status-badge ${user.status}`;
       els.chatUserStatusText.textContent = user.status === 'online' ? 'Online' : 'Offline';
-      
+
       els.welcomeScreen.classList.add('hidden');
       els.chatMessages.classList.remove('hidden');
       els.messageInput.disabled = false;
       els.messageInput.placeholder = `Message ${user.name}`;
-      
+
       // Load messages
       loadMessages(convId);
-      
+
       // Update active state
       document.querySelectorAll('.conv-item').forEach(el => {
         el.classList.toggle('active', el.getAttribute('data-convid') === convId);
       });
-      
+
       if (isMobile) closeSidebar();
     }
 
@@ -1237,18 +1341,18 @@
       if (messageListener) {
         messageListener();
       }
-      
+
       const messagesRef = db.collection('conversations').doc(convId).collection('messages')
         .orderBy('timestamp', 'asc');
-      
+
       messageListener = messagesRef.onSnapshot((snapshot) => {
         els.chatMessages.innerHTML = '';
-        
+
         snapshot.forEach(doc => {
           const msg = doc.data();
           displayMessage(msg);
         });
-        
+
         els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
       });
     }
@@ -1257,16 +1361,16 @@
       const isOutgoing = msg.senderId === currentUser?.uid;
       const row = document.createElement('div');
       row.className = `msg-row ${isOutgoing ? 'out' : ''}`;
-      
+
       let content = msg.text;
       if (msg.type === 'image') {
         content = `<img src="${msg.url}" class="max-w-full rounded-lg max-h-64 cursor-pointer" onclick="window.open('${msg.url}')">`;
       } else if (msg.type === 'file') {
         content = `<a href="${msg.url}" target="_blank" class="flex items-center gap-2 bg-surface p-2 rounded-lg"><i class="fas fa-file"></i> ${msg.fileName}</a>`;
       }
-      
+
       const time = msg.timestamp?.toDate().toLocaleTimeString() || new Date().toLocaleTimeString();
-      
+
       if (!isOutgoing && currentChatUser) {
         row.innerHTML = `
           <div class="avatar avatar-sm mr-2"><i class="fas fa-${currentChatUser.avatar}"></i></div>
@@ -1275,37 +1379,37 @@
       } else {
         row.innerHTML = `<div class="bubble out">${content}<div class="message-time">${time}</div></div>`;
       }
-      
+
       els.chatMessages.appendChild(row);
     }
 
     async function sendMessage() {
       const text = els.messageInput.value.trim();
       if (!text || !currentChatId || !currentUser) return;
-      
+
       const messagesRef = db.collection('conversations').doc(currentChatId).collection('messages');
-      
+
       await messagesRef.add({
         text: text,
         senderId: currentUser.uid,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         type: 'text'
       });
-      
+
       // Update last message in conversation
       await db.collection('conversations').doc(currentChatId).update({
         lastMessage: text,
         lastMessageTime: firebase.firestore.FieldValue.serverTimestamp()
       });
-      
+
       els.messageInput.value = '';
       els.sendButton.disabled = true;
-      
+
       // Simulate typing and reply
       showTypingIndicator();
       setTimeout(async () => {
         hideTypingIndicator();
-        
+
         await messagesRef.add({
           text: 'Got it! Thanks for the message 👍',
           senderId: currentChatUser.id,
@@ -1339,10 +1443,10 @@
         { id: 'user2', name: 'Alice', avatar: 'user-graduate' },
         { id: 'user3', name: 'Mike', avatar: 'user-ninja' }
       ];
-      
+
       els.onlineCount.textContent = online.length;
       els.onlineUsers.innerHTML = '';
-      
+
       online.forEach(user => {
         const div = document.createElement('div');
         div.className = 'online-item';
@@ -1411,7 +1515,7 @@
 
     async function sendMediaMessage(url, type, fileName) {
       const messagesRef = db.collection('conversations').doc(currentChatId).collection('messages');
-      
+
       await messagesRef.add({
         url: url,
         fileName: fileName,
@@ -1423,7 +1527,7 @@
 
     async function sendLocation(mapUrl) {
       const messagesRef = db.collection('conversations').doc(currentChatId).collection('messages');
-      
+
       await messagesRef.add({
         text: `📍 Location: ${mapUrl}`,
         senderId: currentUser.uid,
@@ -1435,7 +1539,7 @@
     // ==================== CALL FUNCTIONS ====================
     async function startAudioCall() {
       if (!currentUser || !currentChatUser) return;
-      
+
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         showIncomingCall('audio');
@@ -1446,11 +1550,11 @@
 
     async function startVideoCall() {
       if (!currentUser || !currentChatUser) return;
-      
+
       try {
-        localStream = await navigator.mediaDevices.getUserMedia({ 
-          audio: true, 
-          video: { width: 1280, height: 720 } 
+        localStream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: { width: 1280, height: 720 }
         });
         showIncomingCall('video');
       } catch (err) {
@@ -1463,7 +1567,7 @@
       els.incomingCallName.textContent = currentChatUser.name;
       els.incomingCallType.textContent = `Incoming ${type} call...`;
       els.incomingCallModal.classList.add('active');
-      
+
       // Auto accept after 3 seconds for demo
       setTimeout(() => {
         if (els.incomingCallModal.classList.contains('active')) {
@@ -1474,15 +1578,15 @@
 
     function acceptCall() {
       els.incomingCallModal.classList.remove('active');
-      
+
       els.callUserName.textContent = currentChatUser.name;
       els.callUserAvatar.innerHTML = `<i class="fas fa-${currentChatUser.avatar}"></i>`;
       els.callStatus.textContent = 'Connected';
-      
+
       if (els.localVideo && localStream) {
         els.localVideo.srcObject = localStream;
       }
-      
+
       // Simulate remote video
       setTimeout(() => {
         const canvas = document.createElement('canvas');
@@ -1498,11 +1602,11 @@
         ctx.fillStyle = 'white';
         ctx.font = 'bold 80px "Inter"';
         ctx.fillText(currentChatUser.name.charAt(0), 280, 280);
-        
+
         const remoteStream = canvas.captureStream(30);
         els.remoteVideo.srcObject = remoteStream;
       }, 1000);
-      
+
       els.callModal.classList.add('active');
       startCallTimer();
     }
@@ -1516,7 +1620,7 @@
       if (localStream) {
         isCallMuted = !isCallMuted;
         localStream.getAudioTracks().forEach(track => track.enabled = !isCallMuted);
-        
+
         const icon = els.callMuteBtn.querySelector('i');
         icon.className = isCallMuted ? 'fas fa-microphone-slash' : 'fas fa-microphone';
         els.callMuteBtn.classList.toggle('muted', isCallMuted);
@@ -1527,7 +1631,7 @@
       if (localStream) {
         isVideoEnabled = !isVideoEnabled;
         localStream.getVideoTracks().forEach(track => track.enabled = isVideoEnabled);
-        
+
         const icon = els.callVideoBtn.querySelector('i');
         icon.className = isVideoEnabled ? 'fas fa-video' : 'fas fa-video-slash';
         els.callVideoBtn.classList.toggle('muted', !isVideoEnabled);
@@ -1551,7 +1655,7 @@
         localStream.getTracks().forEach(track => track.stop());
       }
       if (peerConnection) peerConnection.close();
-      
+
       els.callModal.classList.remove('active');
       els.incomingCallModal.classList.remove('active');
       stopCallTimer();
@@ -1629,7 +1733,7 @@
     els.messageInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && els.messageInput.value.trim()) sendMessage();
     });
-    
+
     els.searchInput.addEventListener('input', (e) => {
       const term = e.target.value.toLowerCase();
       document.querySelectorAll('.conv-item').forEach(item => {
@@ -1685,4 +1789,5 @@
     window.logout = logout;
   </script>
 </body>
+
 </html>
