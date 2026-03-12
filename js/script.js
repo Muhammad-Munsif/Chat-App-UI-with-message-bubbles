@@ -1,4 +1,4 @@
-  <script>
+
     (function () {
       // ==================== STATE MANAGEMENT ====================
       let currentUser = null;
@@ -735,4 +735,4 @@
       window.handleFileUpload = handleFileUpload;
       window.handleLocation = handleLocation;
     })();
-  </script>
+  
