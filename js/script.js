@@ -1,4 +1,4 @@
-<script>
+
     // Main application namespace
     window.app = {};
 
@@ -544,4 +544,4 @@
         sendMessage, handlePhotoUpload, handleFileUpload, handleLocation
       });
     })();
-  </script>
+  
