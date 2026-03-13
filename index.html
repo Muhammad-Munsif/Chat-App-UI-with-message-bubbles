@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
@@ -7,7 +8,8 @@
   <!-- Tailwind + Font Awesome + Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -94,7 +96,10 @@
         width: min(90%, 360px);
         transform: translateX(-100%);
       }
-      .sidebar.active { transform: translateX(0); }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
     }
 
     /* Avatars */
@@ -111,9 +116,24 @@
       box-shadow: 0 6px 12px -4px rgba(37, 99, 235, 0.3);
     }
 
-    .avatar-sm { width: 48px; height: 48px; font-size: 1.3rem; }
-    .avatar-md { width: 56px; height: 56px; font-size: 1.5rem; }
-    .avatar-lg { width: 80px; height: 80px; font-size: 2rem; border-radius: 24px; }
+    .avatar-sm {
+      width: 48px;
+      height: 48px;
+      font-size: 1.3rem;
+    }
+
+    .avatar-md {
+      width: 56px;
+      height: 56px;
+      font-size: 1.5rem;
+    }
+
+    .avatar-lg {
+      width: 80px;
+      height: 80px;
+      font-size: 2rem;
+      border-radius: 24px;
+    }
 
     .avatar:hover {
       transform: scale(1.05) rotate(2deg);
@@ -131,10 +151,24 @@
       transition: all 0.3s;
     }
 
-    .online { background: var(--success); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
-    .away { background: var(--warning); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
-    .dnd { background: var(--danger); box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); }
-    .offline { background: var(--text-secondary); }
+    .online {
+      background: var(--success);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .away {
+      background: var(--warning);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+
+    .dnd {
+      background: var(--danger);
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+
+    .offline {
+      background: var(--text-secondary);
+    }
 
     /* Conversation items */
     .conv-item {
@@ -160,12 +194,33 @@
       z-index: 0;
     }
 
-    .conv-item:hover::before { opacity: 1; }
-    .conv-item:hover { transform: translateX(4px); box-shadow: var(--shadow-sm); }
-    .conv-item.active { background: var(--primary-gradient); color: white; box-shadow: var(--shadow-md); }
-    .conv-item.active .status-badge { border-color: transparent; }
-    .conv-item.active .text-secondary { color: rgba(255, 255, 255, 0.8); }
-    .conv-item > * { position: relative; z-index: 1; }
+    .conv-item:hover::before {
+      opacity: 1;
+    }
+
+    .conv-item:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .conv-item.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .conv-item.active .status-badge {
+      border-color: transparent;
+    }
+
+    .conv-item.active .text-secondary {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .conv-item>* {
+      position: relative;
+      z-index: 1;
+    }
 
     /* Online strip */
     .online-strip {
@@ -178,8 +233,14 @@
       border-bottom: 1px solid var(--border-light);
     }
 
-    .online-strip::-webkit-scrollbar { height: 4px; }
-    .online-strip::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 20px; }
+    .online-strip::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .online-strip::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 20px;
+    }
 
     .online-item {
       display: flex;
@@ -191,8 +252,15 @@
       min-width: 64px;
     }
 
-    .online-item:hover { transform: translateY(-4px); }
-    .online-item .avatar { width: 56px; height: 56px; font-size: 1.4rem; }
+    .online-item:hover {
+      transform: translateY(-4px);
+    }
+
+    .online-item .avatar {
+      width: 56px;
+      height: 56px;
+      font-size: 1.4rem;
+    }
 
     /* Messages panel */
     .msg-panel {
@@ -212,7 +280,9 @@
       animation: slideIn 0.3s ease;
     }
 
-    .msg-row.out { justify-content: flex-end; }
+    .msg-row.out {
+      justify-content: flex-end;
+    }
 
     .bubble {
       max-width: 70%;
@@ -227,13 +297,27 @@
     }
 
     @keyframes bubblePop {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .bubble.in {
@@ -250,7 +334,10 @@
       box-shadow: var(--shadow-md);
     }
 
-    .bubble:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .bubble:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
 
     .message-time {
       font-size: 0.7rem;
@@ -311,7 +398,9 @@
       outline: none;
     }
 
-    .msg-input::placeholder { color: var(--text-secondary); }
+    .msg-input::placeholder {
+      color: var(--text-secondary);
+    }
 
     .icon-btn {
       width: 48px;
@@ -327,7 +416,11 @@
       background: transparent;
     }
 
-    .icon-btn:hover { background: var(--bg-hover); transform: scale(1.1); color: var(--primary); }
+    .icon-btn:hover {
+      background: var(--bg-hover);
+      transform: scale(1.1);
+      color: var(--primary);
+    }
 
     .send-btn {
       background: var(--primary-gradient);
@@ -335,8 +428,15 @@
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
     }
 
-    .send-btn:hover { transform: scale(1.15) rotate(5deg); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5); }
-    .send-btn:disabled { opacity: 0.4; pointer-events: none; }
+    .send-btn:hover {
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
 
     /* Attachment menu */
     .attach-menu {
@@ -356,8 +456,15 @@
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .attach-item {
@@ -372,7 +479,9 @@
       transition: all 0.3s;
     }
 
-    .attach-item:hover { transform: translateY(-6px); }
+    .attach-item:hover {
+      transform: translateY(-6px);
+    }
 
     .attach-item i {
       font-size: 2rem;
@@ -393,7 +502,9 @@
       justify-content: center;
     }
 
-    .call-modal.active { display: flex; }
+    .call-modal.active {
+      display: flex;
+    }
 
     .call-container {
       width: 95%;
@@ -434,8 +545,14 @@
       background: #1a1f2e;
     }
 
-    .video-container.remote-video { flex: 3; }
-    .video-container.local-video { flex: 1; max-width: 300px; }
+    .video-container.remote-video {
+      flex: 3;
+    }
+
+    .video-container.local-video {
+      flex: 1;
+      max-width: 300px;
+    }
 
     @media (max-width: 768px) {
       .video-container.local-video {
@@ -491,10 +608,24 @@
       color: var(--text-primary);
     }
 
-    .call-btn:hover { transform: scale(1.15); }
-    .call-btn.danger { background: var(--danger); color: white; }
-    .call-btn.success { background: var(--success); color: white; }
-    .call-btn.muted { background: #6b7280; color: white; }
+    .call-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .call-btn.danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .call-btn.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .call-btn.muted {
+      background: #6b7280;
+      color: white;
+    }
 
     .call-timer {
       font-size: 1.2rem;
@@ -516,7 +647,9 @@
       justify-content: center;
     }
 
-    .auth-modal.active { display: flex; }
+    .auth-modal.active {
+      display: flex;
+    }
 
     .auth-container {
       width: 90%;
@@ -546,10 +679,18 @@
       transition: all 0.3s;
     }
 
-    .auth-tab.active { background: var(--primary-gradient); color: white; }
+    .auth-tab.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
 
-    .auth-form { display: none; }
-    .auth-form.active { display: block; }
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
 
     .auth-input {
       width: 100%;
@@ -582,9 +723,14 @@
       transition: all 0.3s;
     }
 
-    .auth-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
 
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
 
     /* Toast */
     .toast {
@@ -621,12 +767,27 @@
       animation: typing 1.4s infinite;
     }
 
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
 
     @keyframes typing {
-      0%,60%,100% { transform: translateY(0); opacity: 0.4; }
-      30% { transform: translateY(-6px); opacity: 1; }
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.4;
+      }
+
+      30% {
+        transform: translateY(-6px);
+        opacity: 1;
+      }
     }
 
     /* Unread badge */
@@ -653,13 +814,15 @@
             <div class="avatar avatar-md">
               <i class="fa-regular fa-comment"></i>
             </div>
-            <h1 class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1
+              class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
               WaveChat
             </h1>
           </div>
           <div class="flex gap-2">
             <button class="icon-btn" id="themeToggle"><i class="fas fa-sun"></i></button>
-            <button class="icon-btn" onclick="window.app.showAuthModal()" id="authBtn"><i class="fas fa-sign-in-alt"></i></button>
+            <button class="icon-btn" onclick="window.app.showAuthModal()" id="authBtn"><i
+                class="fas fa-sign-in-alt"></i></button>
           </div>
         </div>
         <div class="relative">
@@ -682,7 +845,8 @@
         <div class="text-center text-secondary py-8">Loading conversations...</div>
       </div>
 
-      <div class="border-t p-4 flex items-center gap-3 cursor-pointer hover:bg-hover transition" onclick="window.app.showProfile()">
+      <div class="border-t p-4 flex items-center gap-3 cursor-pointer hover:bg-hover transition"
+        onclick="window.app.showProfile()">
         <div class="relative">
           <div class="avatar avatar-sm" id="currentUserAvatar"><i class="fas fa-user"></i></div>
           <span class="status-badge online" id="currentUserStatus"></span>
@@ -701,7 +865,8 @@
     <!-- MAIN CHAT -->
     <main class="chat">
       <!-- chat header -->
-      <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
+      <div
+        class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0"
         style="border-color: var(--border-light); z-index: 10;">
         <div class="flex items-center gap-3 min-w-0">
           <button class="md:hidden icon-btn" onclick="window.app.toggleSidebar()"><i class="fas fa-bars"></i></button>
@@ -715,8 +880,10 @@
           </div>
         </div>
         <div class="flex gap-1 flex-shrink-0">
-          <button class="icon-btn" onclick="window.app.startAudioCall()" id="audioCallBtn" disabled><i class="fas fa-phone"></i></button>
-          <button class="icon-btn" onclick="window.app.startVideoCall()" id="videoCallBtn" disabled><i class="fas fa-video"></i></button>
+          <button class="icon-btn" onclick="window.app.startAudioCall()" id="audioCallBtn" disabled><i
+              class="fas fa-phone"></i></button>
+          <button class="icon-btn" onclick="window.app.startVideoCall()" id="videoCallBtn" disabled><i
+              class="fas fa-video"></i></button>
           <button class="icon-btn" onclick="window.app.toggleChatMenu()"><i class="fas fa-ellipsis-v"></i></button>
         </div>
       </div>
@@ -724,14 +891,17 @@
       <!-- messages -->
       <div class="msg-panel" id="messagesContainer">
         <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-6">
-          <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl">
+          <div
+            class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl">
             <i class="fas fa-comments text-5xl text-white"></i>
           </div>
-          <h3 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">
+          <h3
+            class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">
             Welcome to WaveChat
           </h3>
           <p class="text-secondary max-w-sm mb-8">Sign in to start messaging with friends</p>
-          <button onclick="window.app.showAuthModal()" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-pink-600 text-white rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+          <button onclick="window.app.showAuthModal()"
+            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-pink-600 text-white rounded-full font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
             <i class="fas fa-sign-in-alt mr-2"></i>Sign In
           </button>
         </div>
@@ -741,16 +911,20 @@
       <!-- input area -->
       <div class="input-area relative">
         <div class="input-wrapper">
-          <button class="icon-btn" onclick="window.app.toggleAttachmentMenu()" id="attachBtn" disabled><i class="fas fa-plus"></i></button>
+          <button class="icon-btn" onclick="window.app.toggleAttachmentMenu()" id="attachBtn" disabled><i
+              class="fas fa-plus"></i></button>
           <input type="text" class="msg-input" placeholder="Type a message..." id="messageInput" disabled>
           <button class="icon-btn send-btn" onclick="window.app.sendMessage()" id="sendButton" disabled>
             <i class="fas fa-paper-plane"></i>
           </button>
         </div>
         <div id="attachmentMenu" class="attach-menu hidden">
-          <div class="attach-item" onclick="window.app.handlePhotoUpload()"><i class="fas fa-image"></i><span>Photo</span></div>
-          <div class="attach-item" onclick="window.app.handleFileUpload()"><i class="fas fa-file"></i><span>File</span></div>
-          <div class="attach-item" onclick="window.app.handleLocation()"><i class="fas fa-map-marker-alt"></i><span>Location</span></div>
+          <div class="attach-item" onclick="window.app.handlePhotoUpload()"><i
+              class="fas fa-image"></i><span>Photo</span></div>
+          <div class="attach-item" onclick="window.app.handleFileUpload()"><i class="fas fa-file"></i><span>File</span>
+          </div>
+          <div class="attach-item" onclick="window.app.handleLocation()"><i
+              class="fas fa-map-marker-alt"></i><span>Location</span></div>
         </div>
       </div>
     </main>
@@ -827,8 +1001,10 @@
       </div>
 
       <div class="call-controls">
-        <button class="call-btn" onclick="window.app.toggleCallMute()" id="callMuteBtn"><i class="fas fa-microphone"></i></button>
-        <button class="call-btn" onclick="window.app.toggleCallVideo()" id="callVideoBtn"><i class="fas fa-video"></i></button>
+        <button class="call-btn" onclick="window.app.toggleCallMute()" id="callMuteBtn"><i
+            class="fas fa-microphone"></i></button>
+        <button class="call-btn" onclick="window.app.toggleCallVideo()" id="callVideoBtn"><i
+            class="fas fa-video"></i></button>
         <button class="call-btn success" onclick="window.app.shareScreen()"><i class="fas fa-desktop"></i></button>
         <button class="call-btn danger" onclick="window.app.endCall()"><i class="fas fa-phone-slash"></i></button>
         <div class="call-timer" id="callTimer">00:00</div>
@@ -844,7 +1020,7 @@
     // Main application namespace
     window.app = {};
 
-    (function() {
+    (function () {
       // ==================== STATE MANAGEMENT ====================
       let currentUser = null;
       let currentChatId = null;
@@ -1388,4 +1564,5 @@
     })();
   </script>
 </body>
+
 </html>
