@@ -1,264 +1,264 @@
 
-    // Main application namespace
-    const app = {};
+// Main application namespace
+const app = {};
 
-    (function() {
-      // ==================== STATE MANAGEMENT WITH LOCAL STORAGE ====================
-      let currentUser = null;
-      let currentChatId = null;
-      let currentChatUser = null;
-      let isMobile = window.innerWidth < 768;
-      let isDark = localStorage.getItem('theme') === 'dark';
-      let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      let isCallMuted = false;
-      let isVideoEnabled = true;
-      let localStream = null;
-      let callTimer = null;
-      let callSeconds = 0;
+(function () {
+  // ==================== STATE MANAGEMENT WITH LOCAL STORAGE ====================
+  let currentUser = null;
+  let currentChatId = null;
+  let currentChatUser = null;
+  let isMobile = window.innerWidth < 768;
+  let isDark = localStorage.getItem('theme') === 'dark';
+  let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  let isCallMuted = false;
+  let isVideoEnabled = true;
+  let localStream = null;
+  let callTimer = null;
+  let callSeconds = 0;
 
-      // Load messages from localStorage or use defaults
-      let messages = JSON.parse(localStorage.getItem('wavechat_messages')) || {};
+  // Load messages from localStorage or use defaults
+  let messages = JSON.parse(localStorage.getItem('wavechat_messages')) || {};
 
-      // Default demo messages if none exist
-      if (Object.keys(messages).length === 0) {
-        messages = {
-          'conv_user1': [
-            { id: 1, text: 'Hey! How are you?', sender: 'user1', time: '10:30 AM', type: 'text' },
-            { id: 2, text: 'I\'m doing great! Working on the new project.', sender: 'current', time: '10:32 AM', type: 'text' },
-            { id: 3, text: 'Awesome! Can you share the files?', sender: 'user1', time: '10:35 AM', type: 'text' }
-          ],
-          'conv_user2': [
-            { id: 1, text: 'Hi Alice! How\'s your day?', sender: 'current', time: '9:15 AM', type: 'text' },
-            { id: 2, text: 'Going well! Can we meet tomorrow for coffee?', sender: 'user2', time: '9:20 AM', type: 'text' }
-          ],
-          'conv_user3': [
-            { id: 1, text: 'Project files are ready for review', sender: 'user3', time: 'Yesterday', type: 'text' },
-            { id: 2, text: 'Great! I\'ll check them out', sender: 'current', time: 'Yesterday', type: 'text' }
-          ]
-        };
-        localStorage.setItem('wavechat_messages', JSON.stringify(messages));
-      }
+  // Default demo messages if none exist
+  if (Object.keys(messages).length === 0) {
+    messages = {
+      'conv_user1': [
+        { id: 1, text: 'Hey! How are you?', sender: 'user1', time: '10:30 AM', type: 'text' },
+        { id: 2, text: 'I\'m doing great! Working on the new project.', sender: 'current', time: '10:32 AM', type: 'text' },
+        { id: 3, text: 'Awesome! Can you share the files?', sender: 'user1', time: '10:35 AM', type: 'text' }
+      ],
+      'conv_user2': [
+        { id: 1, text: 'Hi Alice! How\'s your day?', sender: 'current', time: '9:15 AM', type: 'text' },
+        { id: 2, text: 'Going well! Can we meet tomorrow for coffee?', sender: 'user2', time: '9:20 AM', type: 'text' }
+      ],
+      'conv_user3': [
+        { id: 1, text: 'Project files are ready for review', sender: 'user3', time: 'Yesterday', type: 'text' },
+        { id: 2, text: 'Great! I\'ll check them out', sender: 'current', time: 'Yesterday', type: 'text' }
+      ]
+    };
+    localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+  }
 
-      // Load conversations from localStorage or use defaults
-      let conversations = JSON.parse(localStorage.getItem('wavechat_conversations')) || {};
+  // Load conversations from localStorage or use defaults
+  let conversations = JSON.parse(localStorage.getItem('wavechat_conversations')) || {};
 
-      if (Object.keys(conversations).length === 0) {
-        conversations = {
-          'conv_user1': { userId: 'user1', lastMessage: 'Hey! How are you?', lastMessageTime: new Date().toISOString(), unreadCount: 2 },
-          'conv_user2': { userId: 'user2', lastMessage: 'Meeting at 3pm?', lastMessageTime: new Date().toISOString(), unreadCount: 0 },
-          'conv_user3': { userId: 'user3', lastMessage: 'Project files ready', lastMessageTime: new Date().toISOString(), unreadCount: 1 }
-        };
-        localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
-      }
+  if (Object.keys(conversations).length === 0) {
+    conversations = {
+      'conv_user1': { userId: 'user1', lastMessage: 'Hey! How are you?', lastMessageTime: new Date().toISOString(), unreadCount: 2 },
+      'conv_user2': { userId: 'user2', lastMessage: 'Meeting at 3pm?', lastMessageTime: new Date().toISOString(), unreadCount: 0 },
+      'conv_user3': { userId: 'user3', lastMessage: 'Project files ready', lastMessageTime: new Date().toISOString(), unreadCount: 1 }
+    };
+    localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+  }
 
-      // Demo users data
-      const users = [
-        { id: 'user1', name: 'John Doe', avatar: 'user-tie', status: 'online', lastSeen: 'now', email: 'john@example.com' },
-        { id: 'user2', name: 'Alice Smith', avatar: 'user-graduate', status: 'online', lastSeen: '2m', email: 'alice@example.com' },
-        { id: 'user3', name: 'Mike Johnson', avatar: 'user-ninja', status: 'away', lastSeen: '30m', email: 'mike@example.com' },
-        { id: 'user4', name: 'Sarah Brown', avatar: 'user-astronaut', status: 'offline', lastSeen: '2h', email: 'sarah@example.com' }
-      ];
+  // Demo users data
+  const users = [
+    { id: 'user1', name: 'John Doe', avatar: 'user-tie', status: 'online', lastSeen: 'now', email: 'john@example.com' },
+    { id: 'user2', name: 'Alice Smith', avatar: 'user-graduate', status: 'online', lastSeen: '2m', email: 'alice@example.com' },
+    { id: 'user3', name: 'Mike Johnson', avatar: 'user-ninja', status: 'away', lastSeen: '30m', email: 'mike@example.com' },
+    { id: 'user4', name: 'Sarah Brown', avatar: 'user-astronaut', status: 'offline', lastSeen: '2h', email: 'sarah@example.com' }
+  ];
 
-      // DOM elements
-      const els = {
-        body: document.body,
-        sidebar: document.getElementById('sidebar'),
-        overlay: document.getElementById('overlay'),
-        themeToggle: document.getElementById('themeToggle'),
-        authBtn: document.getElementById('authBtn'),
-        onlineUsers: document.getElementById('onlineUsers'),
-        conversationsList: document.getElementById('conversationsList'),
-        welcomeScreen: document.getElementById('welcomeScreen'),
-        chatMessages: document.getElementById('chatMessages'),
-        messagesContainer: document.getElementById('messagesContainer'),
-        currentUserAvatar: document.getElementById('currentUserAvatar'),
-        currentUserDisplayName: document.getElementById('currentUserDisplayName'),
-        currentUserEmail: document.getElementById('currentUserEmail'),
-        currentUserStatus: document.getElementById('currentUserStatus'),
-        chatUserName: document.getElementById('chatUserName'),
-        chatUserAvatar: document.getElementById('chatUserAvatar'),
-        chatUserStatus: document.getElementById('chatUserStatus'),
-        chatUserStatusText: document.getElementById('chatUserStatusText'),
-        messageInput: document.getElementById('messageInput'),
-        sendButton: document.getElementById('sendButton'),
-        attachBtn: document.getElementById('attachBtn'),
-        audioCallBtn: document.getElementById('audioCallBtn'),
-        videoCallBtn: document.getElementById('videoCallBtn'),
-        attachmentMenu: document.getElementById('attachmentMenu'),
-        searchInput: document.getElementById('searchInput'),
-        onlineCount: document.getElementById('onlineCount'),
-        authModal: document.getElementById('authModal'),
-        loginForm: document.getElementById('loginForm'),
-        registerForm: document.getElementById('registerForm'),
-        loginEmail: document.getElementById('loginEmail'),
-        loginPassword: document.getElementById('loginPassword'),
-        registerName: document.getElementById('registerName'),
-        registerEmail: document.getElementById('registerEmail'),
-        registerPassword: document.getElementById('registerPassword'),
-        incomingCallModal: document.getElementById('incomingCallModal'),
-        incomingCallAvatar: document.getElementById('incomingCallAvatar'),
-        incomingCallName: document.getElementById('incomingCallName'),
-        incomingCallType: document.getElementById('incomingCallType'),
-        callModal: document.getElementById('callModal'),
-        callUserName: document.getElementById('callUserName'),
-        callUserAvatar: document.getElementById('callUserAvatar'),
-        callStatus: document.getElementById('callStatus'),
-        localVideo: document.getElementById('localVideo'),
-        remoteVideo: document.getElementById('remoteVideo'),
-        callMuteBtn: document.getElementById('callMuteBtn'),
-        callVideoBtn: document.getElementById('callVideoBtn'),
-        callTimer: document.getElementById('callTimer'),
-        photoInput: document.getElementById('photoInput'),
-        fileInput: document.getElementById('fileInput')
+  // DOM elements
+  const els = {
+    body: document.body,
+    sidebar: document.getElementById('sidebar'),
+    overlay: document.getElementById('overlay'),
+    themeToggle: document.getElementById('themeToggle'),
+    authBtn: document.getElementById('authBtn'),
+    onlineUsers: document.getElementById('onlineUsers'),
+    conversationsList: document.getElementById('conversationsList'),
+    welcomeScreen: document.getElementById('welcomeScreen'),
+    chatMessages: document.getElementById('chatMessages'),
+    messagesContainer: document.getElementById('messagesContainer'),
+    currentUserAvatar: document.getElementById('currentUserAvatar'),
+    currentUserDisplayName: document.getElementById('currentUserDisplayName'),
+    currentUserEmail: document.getElementById('currentUserEmail'),
+    currentUserStatus: document.getElementById('currentUserStatus'),
+    chatUserName: document.getElementById('chatUserName'),
+    chatUserAvatar: document.getElementById('chatUserAvatar'),
+    chatUserStatus: document.getElementById('chatUserStatus'),
+    chatUserStatusText: document.getElementById('chatUserStatusText'),
+    messageInput: document.getElementById('messageInput'),
+    sendButton: document.getElementById('sendButton'),
+    attachBtn: document.getElementById('attachBtn'),
+    audioCallBtn: document.getElementById('audioCallBtn'),
+    videoCallBtn: document.getElementById('videoCallBtn'),
+    attachmentMenu: document.getElementById('attachmentMenu'),
+    searchInput: document.getElementById('searchInput'),
+    onlineCount: document.getElementById('onlineCount'),
+    authModal: document.getElementById('authModal'),
+    loginForm: document.getElementById('loginForm'),
+    registerForm: document.getElementById('registerForm'),
+    loginEmail: document.getElementById('loginEmail'),
+    loginPassword: document.getElementById('loginPassword'),
+    registerName: document.getElementById('registerName'),
+    registerEmail: document.getElementById('registerEmail'),
+    registerPassword: document.getElementById('registerPassword'),
+    incomingCallModal: document.getElementById('incomingCallModal'),
+    incomingCallAvatar: document.getElementById('incomingCallAvatar'),
+    incomingCallName: document.getElementById('incomingCallName'),
+    incomingCallType: document.getElementById('incomingCallType'),
+    callModal: document.getElementById('callModal'),
+    callUserName: document.getElementById('callUserName'),
+    callUserAvatar: document.getElementById('callUserAvatar'),
+    callStatus: document.getElementById('callStatus'),
+    localVideo: document.getElementById('localVideo'),
+    remoteVideo: document.getElementById('remoteVideo'),
+    callMuteBtn: document.getElementById('callMuteBtn'),
+    callVideoBtn: document.getElementById('callVideoBtn'),
+    callTimer: document.getElementById('callTimer'),
+    photoInput: document.getElementById('photoInput'),
+    fileInput: document.getElementById('fileInput')
+  };
+
+  // ==================== AUTHENTICATION WITH LOCAL STORAGE ====================
+  function checkLoginStatus() {
+    if (isLoggedIn) {
+      currentUser = {
+        uid: 'currentUser',
+        displayName: localStorage.getItem('userName') || 'Demo User',
+        email: localStorage.getItem('userEmail') || 'demo@wavechat.com'
       };
+      updateUserUI(currentUser);
+      loadConversations();
+      loadOnlineUsers();
+      enableChatFeatures(true);
+      showToast('👋 Welcome back, ' + currentUser.displayName + '!');
+    } else {
+      currentUser = null;
+      updateUserUI(null);
+      enableChatFeatures(false);
+      els.welcomeScreen.classList.remove('hidden');
+      els.chatMessages.classList.add('hidden');
+    }
+  }
 
-      // ==================== AUTHENTICATION WITH LOCAL STORAGE ====================
-      function checkLoginStatus() {
-        if (isLoggedIn) {
-          currentUser = {
-            uid: 'currentUser',
-            displayName: localStorage.getItem('userName') || 'Demo User',
-            email: localStorage.getItem('userEmail') || 'demo@wavechat.com'
-          };
-          updateUserUI(currentUser);
-          loadConversations();
-          loadOnlineUsers();
-          enableChatFeatures(true);
-          showToast('👋 Welcome back, ' + currentUser.displayName + '!');
-        } else {
-          currentUser = null;
-          updateUserUI(null);
-          enableChatFeatures(false);
-          els.welcomeScreen.classList.remove('hidden');
-          els.chatMessages.classList.add('hidden');
-        }
-      }
+  function updateUserUI(user) {
+    if (user) {
+      els.currentUserAvatar.innerHTML = `<i class="fas fa-user"></i>`;
+      els.currentUserDisplayName.textContent = user.displayName || 'User';
+      els.currentUserEmail.textContent = user.email || '';
+      els.currentUserStatus.className = 'status-badge online';
+      els.authBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+      els.authBtn.onclick = logout;
+    } else {
+      els.currentUserAvatar.innerHTML = '<i class="fas fa-user"></i>';
+      els.currentUserDisplayName.textContent = 'Guest User';
+      els.currentUserEmail.textContent = 'Click to login';
+      els.currentUserStatus.className = 'status-badge offline';
+      els.authBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i>';
+      els.authBtn.onclick = showAuthModal;
+    }
+  }
 
-      function updateUserUI(user) {
-        if (user) {
-          els.currentUserAvatar.innerHTML = `<i class="fas fa-user"></i>`;
-          els.currentUserDisplayName.textContent = user.displayName || 'User';
-          els.currentUserEmail.textContent = user.email || '';
-          els.currentUserStatus.className = 'status-badge online';
-          els.authBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
-          els.authBtn.onclick = logout;
-        } else {
-          els.currentUserAvatar.innerHTML = '<i class="fas fa-user"></i>';
-          els.currentUserDisplayName.textContent = 'Guest User';
-          els.currentUserEmail.textContent = 'Click to login';
-          els.currentUserStatus.className = 'status-badge offline';
-          els.authBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i>';
-          els.authBtn.onclick = showAuthModal;
-        }
-      }
+  function enableChatFeatures(enabled) {
+    els.messageInput.disabled = !enabled;
+    els.sendButton.disabled = !enabled;
+    els.attachBtn.disabled = !enabled;
+    els.audioCallBtn.disabled = !enabled;
+    els.videoCallBtn.disabled = !enabled;
+    if (!enabled) els.messageInput.placeholder = 'Sign in to chat';
+  }
 
-      function enableChatFeatures(enabled) {
-        els.messageInput.disabled = !enabled;
-        els.sendButton.disabled = !enabled;
-        els.attachBtn.disabled = !enabled;
-        els.audioCallBtn.disabled = !enabled;
-        els.videoCallBtn.disabled = !enabled;
-        if (!enabled) els.messageInput.placeholder = 'Sign in to chat';
-      }
+  function showAuthModal() { els.authModal.classList.add('active'); }
+  function hideAuthModal() { els.authModal.classList.remove('active'); }
 
-      function showAuthModal() { els.authModal.classList.add('active'); }
-      function hideAuthModal() { els.authModal.classList.remove('active'); }
+  function switchAuthTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    if (tab === 'login') {
+      document.querySelectorAll('.auth-tab')[0].classList.add('active');
+      els.loginForm.classList.add('active');
+    } else {
+      document.querySelectorAll('.auth-tab')[1].classList.add('active');
+      els.registerForm.classList.add('active');
+    }
+  }
 
-      function switchAuthTab(tab) {
-        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-        if (tab === 'login') {
-          document.querySelectorAll('.auth-tab')[0].classList.add('active');
-          els.loginForm.classList.add('active');
-        } else {
-          document.querySelectorAll('.auth-tab')[1].classList.add('active');
-          els.registerForm.classList.add('active');
-        }
-      }
+  function login() {
+    const email = els.loginEmail.value || 'demo@wavechat.com';
+    const password = els.loginPassword.value || 'demo123';
 
-      function login() {
-        const email = els.loginEmail.value || 'demo@wavechat.com';
-        const password = els.loginPassword.value || 'demo123';
-        
-        // In a real app, you'd validate credentials
-        // For demo, we accept any credentials
-        isLoggedIn = true;
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userName', email.split('@')[0]);
-        localStorage.setItem('userEmail', email);
-        
-        currentUser = { uid: 'currentUser', displayName: email.split('@')[0], email: email };
-        updateUserUI(currentUser);
-        loadConversations();
-        loadOnlineUsers();
-        enableChatFeatures(true);
-        hideAuthModal();
-        showToast('✅ Login successful! Welcome ' + currentUser.displayName);
-      }
+    // In a real app, you'd validate credentials
+    // For demo, we accept any credentials
+    isLoggedIn = true;
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userName', email.split('@')[0]);
+    localStorage.setItem('userEmail', email);
 
-      function register() {
-        const name = els.registerName.value || 'Demo User';
-        const email = els.registerEmail.value || 'demo@wavechat.com';
-        const password = els.registerPassword.value || 'demo123';
-        
-        // Store user data
-        isLoggedIn = true;
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userName', name);
-        localStorage.setItem('userEmail', email);
-        
-        currentUser = { uid: 'currentUser', displayName: name, email: email };
-        updateUserUI(currentUser);
-        loadConversations();
-        loadOnlineUsers();
-        enableChatFeatures(true);
-        hideAuthModal();
-        showToast('✅ Registration successful! Welcome ' + name);
-      }
+    currentUser = { uid: 'currentUser', displayName: email.split('@')[0], email: email };
+    updateUserUI(currentUser);
+    loadConversations();
+    loadOnlineUsers();
+    enableChatFeatures(true);
+    hideAuthModal();
+    showToast('✅ Login successful! Welcome ' + currentUser.displayName);
+  }
 
-      function logout() {
-        isLoggedIn = false;
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userEmail');
-        
-        currentUser = null;
-        currentChatId = null;
-        currentChatUser = null;
-        
-        updateUserUI(null);
-        enableChatFeatures(false);
-        els.welcomeScreen.classList.remove('hidden');
-        els.chatMessages.classList.add('hidden');
-        els.chatUserName.textContent = 'Select a chat';
-        els.chatUserStatusText.textContent = 'Click to start messaging';
-        showToast('👋 Logged out successfully');
-      }
+  function register() {
+    const name = els.registerName.value || 'Demo User';
+    const email = els.registerEmail.value || 'demo@wavechat.com';
+    const password = els.registerPassword.value || 'demo123';
 
-      // ==================== CONVERSATIONS ====================
-      function loadConversations() {
-        els.conversationsList.innerHTML = '';
-        
-        if (!currentUser) return;
-        
-        Object.entries(conversations).forEach(([convId, data]) => {
-          const user = users.find(u => u.id === data.userId);
-          if (user) addConversationToList(convId, user, data);
-        });
-      }
+    // Store user data
+    isLoggedIn = true;
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userEmail', email);
 
-      function addConversationToList(convId, user, data) {
-        const div = document.createElement('div');
-        div.className = `conv-item ${currentChatId === convId ? 'active' : ''}`;
-        div.setAttribute('data-convid', convId);
-        div.setAttribute('data-userid', user.id);
-        div.onclick = () => selectChat(convId, user);
-        
-        const lastMessage = data.lastMessage || 'No messages';
-        const lastSeen = data.lastSeen || user.lastSeen;
-        const unreadCount = data.unreadCount || 0;
-        
-        div.innerHTML = `
+    currentUser = { uid: 'currentUser', displayName: name, email: email };
+    updateUserUI(currentUser);
+    loadConversations();
+    loadOnlineUsers();
+    enableChatFeatures(true);
+    hideAuthModal();
+    showToast('✅ Registration successful! Welcome ' + name);
+  }
+
+  function logout() {
+    isLoggedIn = false;
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+
+    currentUser = null;
+    currentChatId = null;
+    currentChatUser = null;
+
+    updateUserUI(null);
+    enableChatFeatures(false);
+    els.welcomeScreen.classList.remove('hidden');
+    els.chatMessages.classList.add('hidden');
+    els.chatUserName.textContent = 'Select a chat';
+    els.chatUserStatusText.textContent = 'Click to start messaging';
+    showToast('👋 Logged out successfully');
+  }
+
+  // ==================== CONVERSATIONS ====================
+  function loadConversations() {
+    els.conversationsList.innerHTML = '';
+
+    if (!currentUser) return;
+
+    Object.entries(conversations).forEach(([convId, data]) => {
+      const user = users.find(u => u.id === data.userId);
+      if (user) addConversationToList(convId, user, data);
+    });
+  }
+
+  function addConversationToList(convId, user, data) {
+    const div = document.createElement('div');
+    div.className = `conv-item ${currentChatId === convId ? 'active' : ''}`;
+    div.setAttribute('data-convid', convId);
+    div.setAttribute('data-userid', user.id);
+    div.onclick = () => selectChat(convId, user);
+
+    const lastMessage = data.lastMessage || 'No messages';
+    const lastSeen = data.lastSeen || user.lastSeen;
+    const unreadCount = data.unreadCount || 0;
+
+    div.innerHTML = `
           <div class="relative">
             <div class="avatar avatar-sm"><i class="fas fa-${user.avatar}"></i></div>
             <span class="status-badge ${user.status}"></span>
@@ -272,443 +272,442 @@
           </div>
           ${unreadCount > 0 ? '<span class="unread-badge">' + unreadCount + '</span>' : ''}
         `;
-        
-        els.conversationsList.appendChild(div);
-      }
 
-      function selectChat(convId, user) {
-        currentChatId = convId;
-        currentChatUser = user;
-        
-        els.chatUserName.textContent = user.name;
-        els.chatUserAvatar.innerHTML = `<i class="fas fa-${user.avatar}"></i>`;
-        els.chatUserStatus.className = `status-badge ${user.status}`;
-        els.chatUserStatusText.textContent = user.status === 'online' ? 'Online' : 'Offline';
-        
-        els.welcomeScreen.classList.add('hidden');
-        els.chatMessages.classList.remove('hidden');
-        els.messageInput.disabled = false;
-        els.messageInput.placeholder = `Message ${user.name}`;
-        
-        // Clear unread count for this conversation
-        if (conversations[convId] && conversations[convId].unreadCount > 0) {
-          conversations[convId].unreadCount = 0;
-          localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
-        }
-        
-        loadMessages(convId);
-        
-        // Update active state
-        document.querySelectorAll('.conv-item').forEach(el => {
-          el.classList.toggle('active', el.getAttribute('data-convid') === convId);
-        });
-        
-        if (isMobile) closeSidebar();
-      }
+    els.conversationsList.appendChild(div);
+  }
 
-      // ==================== MESSAGES ====================
-      function loadMessages(convId) {
-        els.chatMessages.innerHTML = '';
-        const msgs = messages[convId] || [];
-        msgs.forEach(msg => displayMessage(msg));
-        els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
-      }
+  function selectChat(convId, user) {
+    currentChatId = convId;
+    currentChatUser = user;
 
-      function displayMessage(msg) {
-        const isOutgoing = msg.sender === 'current';
-        const row = document.createElement('div');
-        row.className = `msg-row ${isOutgoing ? 'out' : ''}`;
-        
-        let content = msg.text;
-        
-        if (!isOutgoing && currentChatUser) {
-          row.innerHTML = `
+    els.chatUserName.textContent = user.name;
+    els.chatUserAvatar.innerHTML = `<i class="fas fa-${user.avatar}"></i>`;
+    els.chatUserStatus.className = `status-badge ${user.status}`;
+    els.chatUserStatusText.textContent = user.status === 'online' ? 'Online' : 'Offline';
+
+    els.welcomeScreen.classList.add('hidden');
+    els.chatMessages.classList.remove('hidden');
+    els.messageInput.disabled = false;
+    els.messageInput.placeholder = `Message ${user.name}`;
+
+    // Clear unread count for this conversation
+    if (conversations[convId] && conversations[convId].unreadCount > 0) {
+      conversations[convId].unreadCount = 0;
+      localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+    }
+
+    loadMessages(convId);
+
+    // Update active state
+    document.querySelectorAll('.conv-item').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('data-convid') === convId);
+    });
+
+    if (isMobile) closeSidebar();
+  }
+
+  // ==================== MESSAGES ====================
+  function loadMessages(convId) {
+    els.chatMessages.innerHTML = '';
+    const msgs = messages[convId] || [];
+    msgs.forEach(msg => displayMessage(msg));
+    els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+  }
+
+  function displayMessage(msg) {
+    const isOutgoing = msg.sender === 'current';
+    const row = document.createElement('div');
+    row.className = `msg-row ${isOutgoing ? 'out' : ''}`;
+
+    let content = msg.text;
+
+    if (!isOutgoing && currentChatUser) {
+      row.innerHTML = `
             <div class="avatar avatar-sm mr-2"><i class="fas fa-${currentChatUser.avatar}"></i></div>
             <div class="bubble in">${content}<div class="message-time">${msg.time}</div></div>
           `;
-        } else {
-          row.innerHTML = `<div class="bubble out">${content}<div class="message-time">${msg.time}</div></div>`;
-        }
-        
-        els.chatMessages.appendChild(row);
-      }
+    } else {
+      row.innerHTML = `<div class="bubble out">${content}<div class="message-time">${msg.time}</div></div>`;
+    }
 
-      function saveMessage(convId, newMsg) {
-        if (!messages[convId]) {
-          messages[convId] = [];
-        }
-        messages[convId].push(newMsg);
-        localStorage.setItem('wavechat_messages', JSON.stringify(messages));
-        
-        // Update conversation last message
-        if (conversations[convId]) {
-          conversations[convId].lastMessage = newMsg.text;
-          conversations[convId].lastMessageTime = new Date().toISOString();
-          localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
-        }
-      }
+    els.chatMessages.appendChild(row);
+  }
 
-      function sendMessage() {
-        const text = els.messageInput.value.trim();
-        if (!text || !currentChatId || !currentUser) return;
-        
-        const newMsg = {
-          id: Date.now(),
-          text: text,
-          sender: 'current',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          type: 'text'
-        };
-        
-        displayMessage(newMsg);
-        saveMessage(currentChatId, newMsg);
-        
-        els.messageInput.value = '';
-        els.sendButton.disabled = true;
-        els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
-        
-        // Simulate reply
-        showTypingIndicator();
-        setTimeout(() => {
-          hideTypingIndicator();
-          
-          const replyMsg = {
-            id: Date.now() + 1,
-            text: 'Thanks for your message! 👍',
-            sender: currentChatUser.id,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            type: 'text'
-          };
-          
-          displayMessage(replyMsg);
-          saveMessage(currentChatId, replyMsg);
-          
-          // Update unread count for reply
-          if (currentChatId && conversations[currentChatId]) {
-            conversations[currentChatId].unreadCount = (conversations[currentChatId].unreadCount || 0) + 1;
-            localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
-            loadConversations(); // Refresh conversations list
-          }
-        }, 2000);
-      }
+  function saveMessage(convId, newMsg) {
+    if (!messages[convId]) {
+      messages[convId] = [];
+    }
+    messages[convId].push(newMsg);
+    localStorage.setItem('wavechat_messages', JSON.stringify(messages));
 
-      function showTypingIndicator() {
-        const indicator = document.createElement('div');
-        indicator.className = 'msg-row';
-        indicator.id = 'typingIndicator';
-        indicator.innerHTML = `
+    // Update conversation last message
+    if (conversations[convId]) {
+      conversations[convId].lastMessage = newMsg.text;
+      conversations[convId].lastMessageTime = new Date().toISOString();
+      localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+    }
+  }
+
+  function sendMessage() {
+    const text = els.messageInput.value.trim();
+    if (!text || !currentChatId || !currentUser) return;
+
+    const newMsg = {
+      id: Date.now(),
+      text: text,
+      sender: 'current',
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      type: 'text'
+    };
+
+    displayMessage(newMsg);
+    saveMessage(currentChatId, newMsg);
+
+    els.messageInput.value = '';
+    els.sendButton.disabled = true;
+    els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+
+    // Simulate reply
+    showTypingIndicator();
+    setTimeout(() => {
+      hideTypingIndicator();
+
+      const replyMsg = {
+        id: Date.now() + 1,
+        text: 'Thanks for your message! 👍',
+        sender: currentChatUser.id,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        type: 'text'
+      };
+
+      displayMessage(replyMsg);
+      saveMessage(currentChatId, replyMsg);
+
+      // Update unread count for reply
+      if (currentChatId && conversations[currentChatId]) {
+        conversations[currentChatId].unreadCount = (conversations[currentChatId].unreadCount || 0) + 1;
+        localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+        loadConversations(); // Refresh conversations list
+      }
+    }, 2000);
+  }
+
+  function showTypingIndicator() {
+    const indicator = document.createElement('div');
+    indicator.className = 'msg-row';
+    indicator.id = 'typingIndicator';
+    indicator.innerHTML = `
           <div class="avatar avatar-sm mr-2"><i class="fas fa-${currentChatUser.avatar}"></i></div>
           <div class="typing-indicator"><span></span><span></span><span></span></div>
         `;
-        els.chatMessages.appendChild(indicator);
-        els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
-      }
+    els.chatMessages.appendChild(indicator);
+    els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
+  }
 
-      function hideTypingIndicator() {
-        document.getElementById('typingIndicator')?.remove();
-      }
+  function hideTypingIndicator() {
+    document.getElementById('typingIndicator')?.remove();
+  }
 
-      // ==================== ONLINE USERS ====================
-      function loadOnlineUsers() {
-        const online = users.filter(u => u.status === 'online');
-        els.onlineCount.textContent = online.length;
-        els.onlineUsers.innerHTML = '';
-        
-        online.forEach(user => {
-          const div = document.createElement('div');
-          div.className = 'online-item';
-          div.onclick = () => {
-            const convId = 'conv_' + user.id;
-            selectChat(convId, user);
-          };
-          div.innerHTML = `
+  // ==================== ONLINE USERS ====================
+  function loadOnlineUsers() {
+    const online = users.filter(u => u.status === 'online');
+    els.onlineCount.textContent = online.length;
+    els.onlineUsers.innerHTML = '';
+
+    online.forEach(user => {
+      const div = document.createElement('div');
+      div.className = 'online-item';
+      div.onclick = () => {
+        const convId = 'conv_' + user.id;
+        selectChat(convId, user);
+      };
+      div.innerHTML = `
             <div class="relative">
               <div class="avatar avatar-sm"><i class="fas fa-${user.avatar}"></i></div>
               <span class="status-badge online"></span>
             </div>
             <span class="text-xs font-medium">${user.name.split(' ')[0]}</span>
           `;
-          els.onlineUsers.appendChild(div);
-        });
-      }
+      els.onlineUsers.appendChild(div);
+    });
+  }
 
-      // ==================== FILE UPLOADS ====================
-      function handlePhotoUpload() {
-        els.attachmentMenu.classList.add('hidden');
-        els.photoInput.click();
-      }
+  // ==================== FILE UPLOADS ====================
+  function handlePhotoUpload() {
+    els.attachmentMenu.classList.add('hidden');
+    els.photoInput.click();
+  }
 
-      function handleFileUpload() {
-        els.attachmentMenu.classList.add('hidden');
-        els.fileInput.click();
-      }
+  function handleFileUpload() {
+    els.attachmentMenu.classList.add('hidden');
+    els.fileInput.click();
+  }
 
-      function handleLocation() {
-        els.attachmentMenu.classList.add('hidden');
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const mapUrl = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
-            const newMsg = {
-              id: Date.now(),
-              text: `📍 My location: ${mapUrl}`,
-              sender: 'current',
-              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-              type: 'location'
-            };
-            displayMessage(newMsg);
-            saveMessage(currentChatId, newMsg);
-            showToast('📍 Location shared');
-          });
-        }
-      }
-
-      els.photoInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file && currentChatId) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const newMsg = {
-              id: Date.now(),
-              text: `<img src="${event.target.result}" class="max-w-full rounded-lg max-h-64 cursor-pointer" onclick="window.open(this.src)">`,
-              sender: 'current',
-              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-              type: 'image'
-            };
-            displayMessage(newMsg);
-            saveMessage(currentChatId, newMsg);
-            showToast('📷 Photo uploaded');
-          };
-          reader.readAsDataURL(file);
-        }
+  function handleLocation() {
+    els.attachmentMenu.classList.add('hidden');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const mapUrl = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
+        const newMsg = {
+          id: Date.now(),
+          text: `📍 My location: ${mapUrl}`,
+          sender: 'current',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: 'location'
+        };
+        displayMessage(newMsg);
+        saveMessage(currentChatId, newMsg);
+        showToast('📍 Location shared');
       });
+    }
+  }
 
-      els.fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file && currentChatId) {
-          const newMsg = {
-            id: Date.now(),
-            text: `📎 File: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
-            sender: 'current',
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            type: 'file'
-          };
-          displayMessage(newMsg);
-          saveMessage(currentChatId, newMsg);
-          showToast('📎 File uploaded');
-        }
-      });
+  els.photoInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file && currentChatId) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const newMsg = {
+          id: Date.now(),
+          text: `<img src="${event.target.result}" class="max-w-full rounded-lg max-h-64 cursor-pointer" onclick="window.open(this.src)">`,
+          sender: 'current',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: 'image'
+        };
+        displayMessage(newMsg);
+        saveMessage(currentChatId, newMsg);
+        showToast('📷 Photo uploaded');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 
-      // ==================== CALL FUNCTIONS ====================
-      async function startAudioCall() {
-        if (!currentUser || !currentChatUser) { showToast('Please select a chat first'); return; }
-        try {
-          localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          showIncomingCall('audio');
-        } catch (err) { showToast('❌ Microphone access denied'); }
-      }
+  els.fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file && currentChatId) {
+      const newMsg = {
+        id: Date.now(),
+        text: `📎 File: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+        sender: 'current',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        type: 'file'
+      };
+      displayMessage(newMsg);
+      saveMessage(currentChatId, newMsg);
+      showToast('📎 File uploaded');
+    }
+  });
 
-      async function startVideoCall() {
-        if (!currentUser || !currentChatUser) { showToast('Please select a chat first'); return; }
-        try {
-          localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { width: 1280, height: 720 } });
-          showIncomingCall('video');
-        } catch (err) { showToast('❌ Camera access denied'); }
-      }
+  // ==================== CALL FUNCTIONS ====================
+  async function startAudioCall() {
+    if (!currentUser || !currentChatUser) { showToast('Please select a chat first'); return; }
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      showIncomingCall('audio');
+    } catch (err) { showToast('❌ Microphone access denied'); }
+  }
 
-      function showIncomingCall(type) {
-        els.incomingCallAvatar.innerHTML = `<i class="fas fa-${currentChatUser.avatar}"></i>`;
-        els.incomingCallName.textContent = currentChatUser.name;
-        els.incomingCallType.textContent = `Incoming ${type} call...`;
-        els.incomingCallModal.classList.add('active');
-      }
+  async function startVideoCall() {
+    if (!currentUser || !currentChatUser) { showToast('Please select a chat first'); return; }
+    try {
+      localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: { width: 1280, height: 720 } });
+      showIncomingCall('video');
+    } catch (err) { showToast('❌ Camera access denied'); }
+  }
 
-      function acceptCall() {
-        els.incomingCallModal.classList.remove('active');
-        els.callUserName.textContent = currentChatUser.name;
-        els.callUserAvatar.innerHTML = `<i class="fas fa-${currentChatUser.avatar}"></i>`;
-        els.callStatus.textContent = 'Connected';
-        
-        if (els.localVideo && localStream) {
-          els.localVideo.srcObject = localStream;
-        }
-        
-        // Simulate remote video
-        setTimeout(() => {
-          const canvas = document.createElement('canvas');
-          canvas.width = 640; canvas.height = 480;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#2a2f40'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.arc(320, 240, 100, 0, 2 * Math.PI); ctx.fill();
-          ctx.fillStyle = 'white'; ctx.font = 'bold 80px "Inter"'; 
-          ctx.fillText(currentChatUser.name.charAt(0), 280, 280);
-          const remoteStream = canvas.captureStream(30);
-          els.remoteVideo.srcObject = remoteStream;
-        }, 1000);
-        
-        els.callModal.classList.add('active');
-        startCallTimer();
-      }
+  function showIncomingCall(type) {
+    els.incomingCallAvatar.innerHTML = `<i class="fas fa-${currentChatUser.avatar}"></i>`;
+    els.incomingCallName.textContent = currentChatUser.name;
+    els.incomingCallType.textContent = `Incoming ${type} call...`;
+    els.incomingCallModal.classList.add('active');
+  }
 
-      function declineCall() { 
-        els.incomingCallModal.classList.remove('active'); 
-        if (localStream) {
-          localStream.getTracks().forEach(track => track.stop());
-          localStream = null;
-        }
-        showToast('❌ Call declined'); 
-      }
-      
-      function minimizeCall() { 
-        els.callModal.classList.remove('active'); 
-        showToast('📱 Call minimized'); 
-      }
+  function acceptCall() {
+    els.incomingCallModal.classList.remove('active');
+    els.callUserName.textContent = currentChatUser.name;
+    els.callUserAvatar.innerHTML = `<i class="fas fa-${currentChatUser.avatar}"></i>`;
+    els.callStatus.textContent = 'Connected';
 
-      function toggleCallMute() {
-        if (localStream) {
-          isCallMuted = !isCallMuted;
-          localStream.getAudioTracks().forEach(track => track.enabled = !isCallMuted);
-          const icon = els.callMuteBtn.querySelector('i');
-          icon.className = isCallMuted ? 'fas fa-microphone-slash' : 'fas fa-microphone';
-          els.callMuteBtn.classList.toggle('muted', isCallMuted);
-          showToast(isCallMuted ? '🎤 Microphone muted' : '🎤 Microphone unmuted');
-        }
-      }
+    if (els.localVideo && localStream) {
+      els.localVideo.srcObject = localStream;
+    }
 
-      function toggleCallVideo() {
-        if (localStream) {
-          isVideoEnabled = !isVideoEnabled;
-          localStream.getVideoTracks().forEach(track => track.enabled = isVideoEnabled);
-          const icon = els.callVideoBtn.querySelector('i');
-          icon.className = isVideoEnabled ? 'fas fa-video' : 'fas fa-video-slash';
-          els.callVideoBtn.classList.toggle('muted', !isVideoEnabled);
-        }
-      }
+    // Simulate remote video
+    setTimeout(() => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 640; canvas.height = 480;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#2a2f40'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.arc(320, 240, 100, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = 'white'; ctx.font = 'bold 80px "Inter"';
+      ctx.fillText(currentChatUser.name.charAt(0), 280, 280);
+      const remoteStream = canvas.captureStream(30);
+      els.remoteVideo.srcObject = remoteStream;
+    }, 1000);
 
-      async function shareScreen() {
-        try {
-          const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-          els.localVideo.srcObject = screenStream;
-          showToast('🖥️ Screen sharing started');
-        } catch (err) { showToast('❌ Screen share failed'); }
-      }
+    els.callModal.classList.add('active');
+    startCallTimer();
+  }
 
-      function endCall() {
-        if (localStream) {
-          localStream.getTracks().forEach(track => track.stop());
-          localStream = null;
-        }
-        els.callModal.classList.remove('active');
-        els.incomingCallModal.classList.remove('active');
-        stopCallTimer();
-        showToast('📞 Call ended');
-      }
+  function declineCall() {
+    els.incomingCallModal.classList.remove('active');
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      localStream = null;
+    }
+    showToast('❌ Call declined');
+  }
 
-      function startCallTimer() { 
-        callSeconds = 0; 
-        updateCallTimer(); 
-        callTimer = setInterval(updateCallTimer, 1000); 
-      }
-      
-      function updateCallTimer() { 
-        callSeconds++; 
-        const mins = Math.floor(callSeconds / 60); 
-        const secs = callSeconds % 60; 
-        els.callTimer.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`; 
-      }
-      
-      function stopCallTimer() { 
-        if (callTimer) clearInterval(callTimer); 
-      }
+  function minimizeCall() {
+    els.callModal.classList.remove('active');
+    showToast('📱 Call minimized');
+  }
 
-      // ==================== UTILITIES ====================
-      function toggleSidebar() { 
-        els.sidebar.classList.toggle('active'); 
-        els.overlay.classList.toggle('hidden'); 
-      }
-      
-      function closeSidebar() { 
-        els.sidebar.classList.remove('active'); 
-        els.overlay.classList.add('hidden'); 
-      }
+  function toggleCallMute() {
+    if (localStream) {
+      isCallMuted = !isCallMuted;
+      localStream.getAudioTracks().forEach(track => track.enabled = !isCallMuted);
+      const icon = els.callMuteBtn.querySelector('i');
+      icon.className = isCallMuted ? 'fas fa-microphone-slash' : 'fas fa-microphone';
+      els.callMuteBtn.classList.toggle('muted', isCallMuted);
+      showToast(isCallMuted ? '🎤 Microphone muted' : '🎤 Microphone unmuted');
+    }
+  }
 
-      function toggleTheme() {
-        isDark = !isDark;
-        els.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-        els.themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      }
+  function toggleCallVideo() {
+    if (localStream) {
+      isVideoEnabled = !isVideoEnabled;
+      localStream.getVideoTracks().forEach(track => track.enabled = isVideoEnabled);
+      const icon = els.callVideoBtn.querySelector('i');
+      icon.className = isVideoEnabled ? 'fas fa-video' : 'fas fa-video-slash';
+      els.callVideoBtn.classList.toggle('muted', !isVideoEnabled);
+    }
+  }
 
-      function toggleAttachmentMenu() { 
-        els.attachmentMenu.classList.toggle('hidden'); 
-      }
-      
-      function toggleChatMenu() { 
-        showToast('Menu options coming soon'); 
-      }
-      
-      function showProfile() { 
-        if (!currentUser) showAuthModal(); 
-        else showToast('👤 Profile: ' + currentUser.displayName); 
-      }
+  async function shareScreen() {
+    try {
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      els.localVideo.srcObject = screenStream;
+      showToast('🖥️ Screen sharing started');
+    } catch (err) { showToast('❌ Screen share failed'); }
+  }
 
-      function showToast(message) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
-      }
+  function endCall() {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      localStream = null;
+    }
+    els.callModal.classList.remove('active');
+    els.incomingCallModal.classList.remove('active');
+    stopCallTimer();
+    showToast('📞 Call ended');
+  }
 
-      // ==================== EVENT LISTENERS ====================
-      els.themeToggle.addEventListener('click', toggleTheme);
-      
-      els.messageInput.addEventListener('input', () => { 
-        els.sendButton.disabled = !els.messageInput.value.trim(); 
-      });
-      
-      els.messageInput.addEventListener('keypress', (e) => { 
-        if (e.key === 'Enter' && els.messageInput.value.trim()) sendMessage(); 
-      });
-      
-      els.searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('.conv-item').forEach(item => {
-          const name = item.querySelector('.font-bold')?.textContent.toLowerCase() || '';
-          item.style.display = name.includes(term) ? 'flex' : 'none';
-        });
-      });
+  function startCallTimer() {
+    callSeconds = 0;
+    updateCallTimer();
+    callTimer = setInterval(updateCallTimer, 1000);
+  }
 
-      window.addEventListener('resize', () => { 
-        isMobile = window.innerWidth < 768; 
-        if (!isMobile) closeSidebar(); 
-      });
-      
-      document.addEventListener('click', (e) => {
-        if (!els.attachmentMenu.contains(e.target) && !e.target.closest('[onclick*="toggleAttachmentMenu"]')) {
-          els.attachmentMenu.classList.add('hidden');
-        }
-      });
+  function updateCallTimer() {
+    callSeconds++;
+    const mins = Math.floor(callSeconds / 60);
+    const secs = callSeconds % 60;
+    els.callTimer.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
 
-      // Initialize theme
-      if (isDark) { 
-        els.body.setAttribute('data-theme', 'dark'); 
-        els.themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; 
-      }
+  function stopCallTimer() {
+    if (callTimer) clearInterval(callTimer);
+  }
 
-      // Check login status
-      checkLoginStatus();
+  // ==================== UTILITIES ====================
+  function toggleSidebar() {
+    els.sidebar.classList.toggle('active');
+    els.overlay.classList.toggle('hidden');
+  }
 
-      // ==================== EXPOSE PUBLIC METHODS ====================
-      Object.assign(app, {
-        switchAuthTab, login, register, logout, showAuthModal, selectChat,
-        toggleSidebar, closeSidebar, startAudioCall, startVideoCall,
-        acceptCall, declineCall, minimizeCall, endCall,
-        toggleCallMute, toggleCallVideo, shareScreen,
-        toggleChatMenu, toggleAttachmentMenu, showProfile,
-        sendMessage, handlePhotoUpload, handleFileUpload, handleLocation
-      });
+  function closeSidebar() {
+    els.sidebar.classList.remove('active');
+    els.overlay.classList.add('hidden');
+  }
 
-      // Make app globally available
-      window.app = app;
-    })();
-  
+  function toggleTheme() {
+    isDark = !isDark;
+    els.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    els.themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }
+
+  function toggleAttachmentMenu() {
+    els.attachmentMenu.classList.toggle('hidden');
+  }
+
+  function toggleChatMenu() {
+    showToast('Menu options coming soon');
+  }
+
+  function showProfile() {
+    if (!currentUser) showAuthModal();
+    else showToast('👤 Profile: ' + currentUser.displayName);
+  }
+
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // ==================== EVENT LISTENERS ====================
+  els.themeToggle.addEventListener('click', toggleTheme);
+
+  els.messageInput.addEventListener('input', () => {
+    els.sendButton.disabled = !els.messageInput.value.trim();
+  });
+
+  els.messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && els.messageInput.value.trim()) sendMessage();
+  });
+
+  els.searchInput.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('.conv-item').forEach(item => {
+      const name = item.querySelector('.font-bold')?.textContent.toLowerCase() || '';
+      item.style.display = name.includes(term) ? 'flex' : 'none';
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    isMobile = window.innerWidth < 768;
+    if (!isMobile) closeSidebar();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!els.attachmentMenu.contains(e.target) && !e.target.closest('[onclick*="toggleAttachmentMenu"]')) {
+      els.attachmentMenu.classList.add('hidden');
+    }
+  });
+
+  // Initialize theme
+  if (isDark) {
+    els.body.setAttribute('data-theme', 'dark');
+    els.themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+  }
+
+  // Check login status
+  checkLoginStatus();
+
+  // ==================== EXPOSE PUBLIC METHODS ====================
+  Object.assign(app, {
+    switchAuthTab, login, register, logout, showAuthModal, selectChat,
+    toggleSidebar, closeSidebar, startAudioCall, startVideoCall,
+    acceptCall, declineCall, minimizeCall, endCall,
+    toggleCallMute, toggleCallVideo, shareScreen,
+    toggleChatMenu, toggleAttachmentMenu, showProfile,
+    sendMessage, handlePhotoUpload, handleFileUpload, handleLocation
+  });
+
+  // Make app globally available
+  window.app = app;
+})();
