@@ -1,4 +1,4 @@
-<script>
+
     // Main application namespace
     const app = {};
 
@@ -711,4 +711,4 @@
       // Make app globally available
       window.app = app;
     })();
-  </script>
+  
