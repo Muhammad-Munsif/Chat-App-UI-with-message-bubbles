@@ -712,113 +712,113 @@ const app = {};
   // Make app globally available
   window.app = app;
   function login() {
-  const email = els.loginEmail.value || 'demo@wavechat.com';
-  const password = els.loginPassword.value || 'demo123';
+    const email = els.loginEmail.value || 'demo@wavechat.com';
+    const password = els.loginPassword.value || 'demo123';
 
-  // In a real app, you'd validate credentials
-  // For demo, we accept any credentials
-  isLoggedIn = true;
-  localStorage.setItem('isLoggedIn', 'true');
-  localStorage.setItem('userName', email.split('@')[0]);
-  localStorage.setItem('userEmail', email);
+    // In a real app, you'd validate credentials
+    // For demo, we accept any credentials
+    isLoggedIn = true;
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userName', email.split('@')[0]);
+    localStorage.setItem('userEmail', email);
 
-  currentUser = { uid: 'currentUser', displayName: email.split('@')[0], email: email };
-  updateUserUI(currentUser);
-  loadConversations();
-  loadOnlineUsers();
-  enableChatFeatures(true);
-  hideAuthModal();
-  showToast('✅ Login successful! Welcome ' + currentUser.displayName);
-  
-  // FIX: Automatically select the first conversation after login
-  setTimeout(() => {
-    selectFirstConversation();
-  }, 100);
-}
-
-function register() {
-  const name = els.registerName.value || 'Demo User';
-  const email = els.registerEmail.value || 'demo@wavechat.com';
-  const password = els.registerPassword.value || 'demo123';
-
-  // Store user data
-  isLoggedIn = true;
-  localStorage.setItem('isLoggedIn', 'true');
-  localStorage.setItem('userName', name);
-  localStorage.setItem('userEmail', email);
-
-  currentUser = { uid: 'currentUser', displayName: name, email: email };
-  updateUserUI(currentUser);
-  loadConversations();
-  loadOnlineUsers();
-  enableChatFeatures(true);
-  hideAuthModal();
-  showToast('✅ Registration successful! Welcome ' + name);
-  
-  // FIX: Automatically select the first conversation after registration
-  setTimeout(() => {
-    selectFirstConversation();
-  }, 100);
-}
-
-// Add this new function to select the first conversation
-function selectFirstConversation() {
-  const conversationItems = document.querySelectorAll('.conv-item');
-  if (conversationItems.length > 0) {
-    // Click the first conversation item
-    conversationItems[0].click();
-  } else {
-    // If no conversations exist, create a default one
-    createDefaultConversation();
-  }
-}
-
-// Add this helper function to create a default conversation if none exist
-function createDefaultConversation() {
-  // Get the first user from the users array
-  const defaultUser = users[0];
-  const convId = 'conv_' + defaultUser.id;
-  
-  // Create the conversation if it doesn't exist
-  if (!conversations[convId]) {
-    conversations[convId] = {
-      userId: defaultUser.id,
-      lastMessage: 'Hey! How are you?',
-      lastMessageTime: new Date().toISOString(),
-      unreadCount: 1
-    };
-    localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
-    
-    // Create default messages
-    if (!messages[convId]) {
-      messages[convId] = [
-        { id: 1, text: 'Hey! How are you?', sender: defaultUser.id, time: '10:30 AM', type: 'text' },
-        { id: 2, text: 'Welcome to WaveChat! 👋', sender: 'current', time: '10:32 AM', type: 'text' }
-      ];
-      localStorage.setItem('wavechat_messages', JSON.stringify(messages));
-    }
-    
-    // Reload conversations and select
+    currentUser = { uid: 'currentUser', displayName: email.split('@')[0], email: email };
+    updateUserUI(currentUser);
     loadConversations();
-    setTimeout(() => {
-      const newConversation = document.querySelector('.conv-item');
-      if (newConversation) newConversation.click();
-    }, 100);
-  }
-}
-// Add this after checkLoginStatus() in your initialization code
-function initializeChat() {
-  checkLoginStatus();
-  
-  // If user is logged in but no chat is selected, select first conversation
-  if (isLoggedIn && !currentChatId) {
+    loadOnlineUsers();
+    enableChatFeatures(true);
+    hideAuthModal();
+    showToast('✅ Login successful! Welcome ' + currentUser.displayName);
+
+    // FIX: Automatically select the first conversation after login
     setTimeout(() => {
       selectFirstConversation();
-    }, 200);
+    }, 100);
   }
-}
 
-// Replace checkLoginStatus() call with initializeChat()
-initializeChat();
+  function register() {
+    const name = els.registerName.value || 'Demo User';
+    const email = els.registerEmail.value || 'demo@wavechat.com';
+    const password = els.registerPassword.value || 'demo123';
+
+    // Store user data
+    isLoggedIn = true;
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userEmail', email);
+
+    currentUser = { uid: 'currentUser', displayName: name, email: email };
+    updateUserUI(currentUser);
+    loadConversations();
+    loadOnlineUsers();
+    enableChatFeatures(true);
+    hideAuthModal();
+    showToast('✅ Registration successful! Welcome ' + name);
+
+    // FIX: Automatically select the first conversation after registration
+    setTimeout(() => {
+      selectFirstConversation();
+    }, 100);
+  }
+
+  // Add this new function to select the first conversation
+  function selectFirstConversation() {
+    const conversationItems = document.querySelectorAll('.conv-item');
+    if (conversationItems.length > 0) {
+      // Click the first conversation item
+      conversationItems[0].click();
+    } else {
+      // If no conversations exist, create a default one
+      createDefaultConversation();
+    }
+  }
+
+  // Add this helper function to create a default conversation if none exist
+  function createDefaultConversation() {
+    // Get the first user from the users array
+    const defaultUser = users[0];
+    const convId = 'conv_' + defaultUser.id;
+
+    // Create the conversation if it doesn't exist
+    if (!conversations[convId]) {
+      conversations[convId] = {
+        userId: defaultUser.id,
+        lastMessage: 'Hey! How are you?',
+        lastMessageTime: new Date().toISOString(),
+        unreadCount: 1
+      };
+      localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+
+      // Create default messages
+      if (!messages[convId]) {
+        messages[convId] = [
+          { id: 1, text: 'Hey! How are you?', sender: defaultUser.id, time: '10:30 AM', type: 'text' },
+          { id: 2, text: 'Welcome to WaveChat! 👋', sender: 'current', time: '10:32 AM', type: 'text' }
+        ];
+        localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+      }
+
+      // Reload conversations and select
+      loadConversations();
+      setTimeout(() => {
+        const newConversation = document.querySelector('.conv-item');
+        if (newConversation) newConversation.click();
+      }, 100);
+    }
+  }
+  // Add this after checkLoginStatus() in your initialization code
+  function initializeChat() {
+    checkLoginStatus();
+
+    // If user is logged in but no chat is selected, select first conversation
+    if (isLoggedIn && !currentChatId) {
+      setTimeout(() => {
+        selectFirstConversation();
+      }, 200);
+    }
+  }
+
+  // Replace checkLoginStatus() call with initializeChat()
+  initializeChat();
 })();
 
