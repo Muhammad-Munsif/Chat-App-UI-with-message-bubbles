@@ -1,4 +1,4 @@
-  <script>
+  
     (function () {
       // ---------- STATE ----------
       let currentUser = null, currentChatId = null, currentChatUser = null, isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -93,4 +93,4 @@
       initTheme();
       if (isLoggedIn) { currentUser = { uid: 'currentUser', displayName: localStorage.getItem('userName') || 'Demo', email: localStorage.getItem('userEmail') || 'demo@wavechat.com' }; updateUI(); loadConversations(); loadOnlineUsers(); enableChat(true); setTimeout(() => { if (document.querySelector('.conv-item')) document.querySelector('.conv-item').click(); }, 300); } else { enableChat(false); loadOnlineUsers(); updateUI(); }
     })();
-  </script>
+  
