@@ -127,4 +127,32 @@ async function initializeNotifications() {
     }
   }
 }
+
+// Add message reactions
+function addMessageReactions(messageId) {
+  const reactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+  
+  reactions.forEach(reaction => {
+    const reactionBtn = createReactionButton(reaction);
+    reactionBtn.onclick = () => {
+      db.collection('messages').doc(messageId).update({
+        [`reactions.${reaction}`]: firebase.firestore.FieldValue.increment(1)
+      });
+    };
+  });
+}
+
+// Reply to specific messages
+function replyToMessage(originalMessage) {
+  const replyInput = document.createElement('div');
+  replyInput.className = 'reply-preview';
+  replyInput.innerHTML = `
+    <div class="flex items-center gap-2 p-2 bg-gray-100 rounded-lg">
+      <i class="fas fa-reply"></i>
+      <span class="text-sm truncate">Replying to: ${originalMessage.text.substring(0, 50)}</span>
+      <button onclick="cancelReply()" class="ml-auto"><i class="fas fa-times"></i></button>
+    </div>
+  `;
+  messageInput.parentNode.insertBefore(replyInput, messageInput);
+}
 })();
