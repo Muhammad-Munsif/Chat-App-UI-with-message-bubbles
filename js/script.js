@@ -411,11 +411,11 @@ class SmartReplies {
       method: 'POST',
       body: JSON.stringify({ message: message, context: this.getConversationContext() })
     });
-    
+
     const replies = await response.json();
     this.showSuggestedReplies(replies);
   }
-  
+
   showSuggestedReplies(replies) {
     const suggestionsBar = document.createElement('div');
     suggestionsBar.className = 'suggested-replies';
@@ -438,9 +438,9 @@ async function translateMessage(messageText, targetLanguage) {
       target: targetLanguage
     })
   });
-  
+
   const { translatedText } = await response.json();
-  
+
   // Show translation option
   const translationBadge = `
     <div class="translation-badge">
