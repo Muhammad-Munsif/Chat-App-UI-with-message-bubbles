@@ -1,4 +1,20 @@
+// Current: LocalStorage only
+// Improvement: Add Firebase/Supabase backend
 
+// Add real-time database
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, onSnapshot, addDoc } from 'firebase/firestore';
+
+// Real-time message sync
+const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`), 
+  (snapshot) => {
+    snapshot.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        displayNewMessage(change.doc.data());
+      }
+    });
+  }
+);
 (function () {
   // ---------- STATE ----------
   let currentUser = null, currentChatId = null, currentChatUser = null, isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
