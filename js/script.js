@@ -459,21 +459,21 @@ class ChatAnalytics {
       activeContacts: new Set()
     };
   }
-  
+
   trackMessageSent() {
     this.metrics.messagesSent++;
     this.updateAnalytics();
   }
-  
+
   calculateResponseTime(lastMessageTime, replyTime) {
     const responseTime = replyTime - lastMessageTime;
     this.metrics.responseTime.push(responseTime);
     this.updateAnalytics();
   }
-  
+
   generateReport() {
-    const avgResponseTime = this.metrics.responseTime.reduce((a,b) => a+b, 0) / this.metrics.responseTime.length;
-    
+    const avgResponseTime = this.metrics.responseTime.reduce((a, b) => a + b, 0) / this.metrics.responseTime.length;
+
     return {
       totalMessages: this.metrics.messagesSent,
       averageResponseTime: `${Math.floor(avgResponseTime / 60000)} minutes`,
@@ -482,7 +482,7 @@ class ChatAnalytics {
       preferredMessageType: this.getPreferredMessageType()
     };
   }
-  
+
   displayDashboard() {
     const report = this.generateReport();
     // Show beautiful chart using Chart.js
