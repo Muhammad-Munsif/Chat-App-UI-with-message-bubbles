@@ -499,3 +499,44 @@ class ChatAnalytics {
     });
   }
 }
+
+class VirtualScroller {
+  constructor(container, itemHeight, renderCallback) {
+    this.container = container;
+    this.itemHeight = itemHeight;
+    this.renderCallback = renderCallback;
+    this.items = [];
+    this.visibleRange = { start: 0, end: 0 };
+    
+    this.container.addEventListener('scroll', () => this.updateVisibleRange());
+  }
+  
+  updateVisibleRange() {
+    const scrollTop = this.container.scrollTop;
+    const containerHeight = this.container.clientHeight;
+    
+    const startIndex = Math.floor(scrollTop / this.itemHeight);
+    const endIndex = Math.min(
+      startIndex + Math.ceil(containerHeight / this.itemHeight) + 5,
+      this.items.length
+    );
+    
+    if (startIndex !== this.visibleRange.start || endIndex !== this.visibleRange.end) {
+      this.visibleRange = { start: startIndex, end: endIndex };
+      this.render();
+    }
+  }
+  
+  render() {
+    // Only render visible messages
+    const visibleItems = this.items.slice(this.visibleRange.start, this.visibleRange.end);
+    const topPadding = this.visibleRange.start * this.itemHeight;
+    const bottomPadding = (this.items.length - this.visibleRange.end) * this.itemHeight;
+    
+    this.container.innerHTML = `
+      <div style="height: ${topPadding}px"></div>
+      ${visibleItems.map(item => this.renderCallback(item)).join('')}
+      <div style="height: ${bottomPadding}px"></div>
+    `;
+  }
+}
