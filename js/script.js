@@ -639,3 +639,39 @@ class ThemeManager {
     return selector;
   }
 }
+
+class CustomEmojiPicker {
+  constructor() {
+    this.emojis = [
+      { name: 'smile', icon: '😊', code: ':smile:' },
+      { name: 'heart', icon: '❤️', code: ':heart:' },
+      { name: 'thumbs_up', icon: '👍', code: ':thumbs_up:' },
+      // Use Font Awesome icons as fallback
+      { name: 'laugh', icon: '😂', code: ':laugh:' },
+      { name: 'cry', icon: '😢', code: ':cry:' }
+    ];
+  }
+  
+  showPicker(inputElement) {
+    const picker = document.createElement('div');
+    picker.className = 'emoji-picker';
+    picker.innerHTML = `
+      <div class="emoji-grid">
+        ${this.emojis.map(emoji => `
+          <button class="emoji-btn" data-emoji="${emoji.icon}">
+            ${emoji.icon}
+          </button>
+        `).join('')}
+      </div>
+    `;
+    
+    picker.querySelectorAll('.emoji-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        inputElement.value += btn.dataset.emoji;
+        picker.remove();
+      });
+    });
+    
+    inputElement.parentNode.appendChild(picker);
+  }
+}
