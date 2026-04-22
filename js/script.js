@@ -651,7 +651,7 @@ class CustomEmojiPicker {
       { name: 'cry', icon: '😢', code: ':cry:' }
     ];
   }
-  
+
   showPicker(inputElement) {
     const picker = document.createElement('div');
     picker.className = 'emoji-picker';
@@ -664,14 +664,14 @@ class CustomEmojiPicker {
         `).join('')}
       </div>
     `;
-    
+
     picker.querySelectorAll('.emoji-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         inputElement.value += btn.dataset.emoji;
         picker.remove();
       });
     });
-    
+
     inputElement.parentNode.appendChild(picker);
   }
 }
@@ -680,10 +680,10 @@ class TwoFactorAuth {
   async setup2FA() {
     const secret = await this.generateSecret();
     const qrCode = await this.generateQRCode(secret);
-    
+
     // Show QR code for Google Authenticator
     this.showQRCode(qrCode);
-    
+
     // Verify token
     const userToken = await this.promptForToken();
     if (this.verifyToken(secret, userToken)) {
@@ -692,20 +692,20 @@ class TwoFactorAuth {
       showToast('2FA enabled successfully');
     }
   }
-  
+
   async generateSecret() {
     const array = new Uint8Array(20);
     crypto.getRandomValues(array);
     return base32.encode(array);
   }
-  
+
   async verifyLoginWith2FA(email, password, token) {
     const isValidPassword = await this.verifyPassword(email, password);
     if (!isValidPassword) return false;
-    
+
     const secret = localStorage.getItem('2fa_secret');
     const isValidToken = this.verifyToken(secret, token);
-    
+
     return isValidToken;
   }
 }
