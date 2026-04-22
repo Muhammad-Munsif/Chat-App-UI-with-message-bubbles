@@ -109,78 +109,78 @@ const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`)
   initTheme();
   if (isLoggedIn) { currentUser = { uid: 'currentUser', displayName: localStorage.getItem('userName') || 'Demo', email: localStorage.getItem('userEmail') || 'demo@wavechat.com' }; updateUI(); loadConversations(); loadOnlineUsers(); enableChat(true); setTimeout(() => { if (document.querySelector('.conv-item')) document.querySelector('.conv-item').click(); }, 300); } else { enableChat(false); loadOnlineUsers(); updateUI(); }
   // Implement Web Push Notifications
-async function initializeNotifications() {
-  const permission = await Notification.requestPermission();
-  if (permission === 'granted') {
-    const sw = await navigator.serviceWorker.register('/sw.js');
-    
-    // Send notification for new messages when app is in background
-    function notifyNewMessage(sender, message) {
-      if (!document.hasFocus()) {
-        new Notification(`New message from ${sender}`, {
-          body: message,
-          icon: '/icon-192.png',
-          badge: '/badge.png',
-          vibrate: [200, 100, 200]
-        });
+  async function initializeNotifications() {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      const sw = await navigator.serviceWorker.register('/sw.js');
+
+      // Send notification for new messages when app is in background
+      function notifyNewMessage(sender, message) {
+        if (!document.hasFocus()) {
+          new Notification(`New message from ${sender}`, {
+            body: message,
+            icon: '/icon-192.png',
+            badge: '/badge.png',
+            vibrate: [200, 100, 200]
+          });
+        }
       }
     }
   }
-}
 
-// Add message reactions
-function addMessageReactions(messageId) {
-  const reactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
-  
-  reactions.forEach(reaction => {
-    const reactionBtn = createReactionButton(reaction);
-    reactionBtn.onclick = () => {
-      db.collection('messages').doc(messageId).update({
-        [`reactions.${reaction}`]: firebase.firestore.FieldValue.increment(1)
-      });
-    };
-  });
-}
+  // Add message reactions
+  function addMessageReactions(messageId) {
+    const reactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 
-// Reply to specific messages
-function replyToMessage(originalMessage) {
-  const replyInput = document.createElement('div');
-  replyInput.className = 'reply-preview';
-  replyInput.innerHTML = `
+    reactions.forEach(reaction => {
+      const reactionBtn = createReactionButton(reaction);
+      reactionBtn.onclick = () => {
+        db.collection('messages').doc(messageId).update({
+          [`reactions.${reaction}`]: firebase.firestore.FieldValue.increment(1)
+        });
+      };
+    });
+  }
+
+  // Reply to specific messages
+  function replyToMessage(originalMessage) {
+    const replyInput = document.createElement('div');
+    replyInput.className = 'reply-preview';
+    replyInput.innerHTML = `
     <div class="flex items-center gap-2 p-2 bg-gray-100 rounded-lg">
       <i class="fas fa-reply"></i>
       <span class="text-sm truncate">Replying to: ${originalMessage.text.substring(0, 50)}</span>
       <button onclick="cancelReply()" class="ml-auto"><i class="fas fa-times"></i></button>
     </div>
   `;
-  messageInput.parentNode.insertBefore(replyInput, messageInput);
-}
+    messageInput.parentNode.insertBefore(replyInput, messageInput);
+  }
 
-// Add message reactions
-function addMessageReactions(messageId) {
-  const reactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
-  
-  reactions.forEach(reaction => {
-    const reactionBtn = createReactionButton(reaction);
-    reactionBtn.onclick = () => {
-      db.collection('messages').doc(messageId).update({
-        [`reactions.${reaction}`]: firebase.firestore.FieldValue.increment(1)
-      });
-    };
-  });
-}
+  // Add message reactions
+  function addMessageReactions(messageId) {
+    const reactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 
-// Reply to specific messages
-function replyToMessage(originalMessage) {
-  const replyInput = document.createElement('div');
-  replyInput.className = 'reply-preview';
-  replyInput.innerHTML = `
+    reactions.forEach(reaction => {
+      const reactionBtn = createReactionButton(reaction);
+      reactionBtn.onclick = () => {
+        db.collection('messages').doc(messageId).update({
+          [`reactions.${reaction}`]: firebase.firestore.FieldValue.increment(1)
+        });
+      };
+    });
+  }
+
+  // Reply to specific messages
+  function replyToMessage(originalMessage) {
+    const replyInput = document.createElement('div');
+    replyInput.className = 'reply-preview';
+    replyInput.innerHTML = `
     <div class="flex items-center gap-2 p-2 bg-gray-100 rounded-lg">
       <i class="fas fa-reply"></i>
       <span class="text-sm truncate">Replying to: ${originalMessage.text.substring(0, 50)}</span>
       <button onclick="cancelReply()" class="ml-auto"><i class="fas fa-times"></i></button>
     </div>
   `;
-  messageInput.parentNode.insertBefore(replyInput, messageInput);
-}
+    messageInput.parentNode.insertBefore(replyInput, messageInput);
+  }
 })();
