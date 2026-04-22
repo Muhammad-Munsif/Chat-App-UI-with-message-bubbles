@@ -402,3 +402,50 @@ self.addEventListener('sync', (event) => {
     event.waitUntil(sendPendingMessages());
   }
 });
+
+// Smart replies
+class SmartReplies {
+  async generateReplies(message) {
+    // Use TensorFlow.js or call AI API
+    const response = await fetch('/api/smart-replies', {
+      method: 'POST',
+      body: JSON.stringify({ message: message, context: this.getConversationContext() })
+    });
+    
+    const replies = await response.json();
+    this.showSuggestedReplies(replies);
+  }
+  
+  showSuggestedReplies(replies) {
+    const suggestionsBar = document.createElement('div');
+    suggestionsBar.className = 'suggested-replies';
+    suggestionsBar.innerHTML = replies.map(reply => `
+      <button class="suggested-reply-btn" onclick="insertSuggestedReply('${reply}')">
+        ${reply}
+      </button>
+    `).join('');
+    messageInput.parentNode.insertBefore(suggestionsBar, messageInput);
+  }
+}
+
+// Message translation
+async function translateMessage(messageText, targetLanguage) {
+  const response = await fetch('/api/translate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      text: messageText,
+      target: targetLanguage
+    })
+  });
+  
+  const { translatedText } = await response.json();
+  
+  // Show translation option
+  const translationBadge = `
+    <div class="translation-badge">
+      <span>${translatedText}</span>
+      <button onclick="showOriginal()">Show original</button>
+    </div>
+  `;
+}
