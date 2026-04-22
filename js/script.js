@@ -185,26 +185,26 @@ const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`)
   }
 
   function searchMessages(searchTerm) {
-  const results = [];
-  const messages = document.querySelectorAll('.message-text');
-  
-  messages.forEach(message => {
-    const text = message.textContent;
-    if (text.toLowerCase().includes(searchTerm.toLowerCase())) {
-      results.push(message);
-      // Highlight matching text
-      const regex = new RegExp(`(${searchTerm})`, 'gi');
-      message.innerHTML = message.textContent.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
+    const results = [];
+    const messages = document.querySelectorAll('.message-text');
+
+    messages.forEach(message => {
+      const text = message.textContent;
+      if (text.toLowerCase().includes(searchTerm.toLowerCase())) {
+        results.push(message);
+        // Highlight matching text
+        const regex = new RegExp(`(${searchTerm})`, 'gi');
+        message.innerHTML = message.textContent.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
+      }
+    });
+
+    // Scroll to first result
+    if (results.length > 0) {
+      results[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  });
-  
-  // Scroll to first result
-  if (results.length > 0) {
-    results[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    return results.length;
   }
-  
-  return results.length;
-}
 })();
 class VoiceRecorder {
   constructor() {
@@ -212,32 +212,32 @@ class VoiceRecorder {
     this.audioChunks = [];
     this.isRecording = false;
   }
-  
+
   async startRecording() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     this.mediaRecorder = new MediaRecorder(stream);
     this.audioChunks = [];
-    
+
     this.mediaRecorder.ondataavailable = (event) => {
       this.audioChunks.push(event.data);
     };
-    
+
     this.mediaRecorder.onstop = () => {
       const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
       this.sendVoiceMessage(audioBlob);
     };
-    
+
     this.mediaRecorder.start();
     this.isRecording = true;
   }
-  
+
   stopRecording() {
     if (this.mediaRecorder && this.isRecording) {
       this.mediaRecorder.stop();
       this.isRecording = false;
     }
   }
-  
+
   sendVoiceMessage(audioBlob) {
     const audioUrl = URL.createObjectURL(audioBlob);
     const audioElement = document.createElement('audio');
@@ -257,7 +257,7 @@ class GroupChat {
     this.groupMembers = [];
     this.groupAdmins = [];
   }
-  
+
   createGroup(name, members) {
     const groupId = generateUniqueId();
     const groupData = {
@@ -269,17 +269,17 @@ class GroupChat {
       createdAt: new Date(),
       avatar: this.generateGroupAvatar(members)
     };
-    
+
     db.collection('groups').doc(groupId).set(groupData);
     return groupId;
   }
-  
+
   addMember(groupId, userId) {
     db.collection('groups').doc(groupId).update({
       members: firebase.firestore.FieldValue.arrayUnion(userId)
     });
   }
-  
+
   showGroupInfo() {
     // Display group members, options to add/remove, change group name, etc.
     const groupPanel = `
