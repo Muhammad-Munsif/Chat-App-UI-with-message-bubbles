@@ -181,28 +181,28 @@
 
   <input type="file" id="photoInput" class="hidden" accept="image/*"><input type="file" id="fileInput" class="hidden"
     accept="*/*">
-<!-- Replace simple textarea with Quill or Trix editor -->
-<div id="editor-container"></div>
-<script>
-const quill = new Quill('#editor-container', {
-  theme: 'snow',
-  modules: {
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link', 'blockquote', 'code-block'],
-      ['clean']
-    ]
-  }
-});
+  <!-- Replace simple textarea with Quill or Trix editor -->
+  <div id="editor-container"></div>
+  <script>
+    const quill = new Quill('#editor-container', {
+      theme: 'snow',
+      modules: {
+        toolbar: [
+          [{ 'header': [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          ['link', 'blockquote', 'code-block'],
+          ['clean']
+        ]
+      }
+    });
 
-// Send formatted content
-quill.on('text-change', () => {
-  const content = quill.root.innerHTML;
-  sendButton.disabled = !content.trim();
-});
-</script>
+    // Send formatted content
+    quill.on('text-change', () => {
+      const content = quill.root.innerHTML;
+      sendButton.disabled = !content.trim();
+    });
+  </script>
   <script src="js/script.js"></script>
 </body>
 
