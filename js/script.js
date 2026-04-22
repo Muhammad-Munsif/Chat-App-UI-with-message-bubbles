@@ -300,3 +300,32 @@ class GroupChat {
     `;
   }
 }
+
+// Edit message
+function editMessage(messageId, newText) {
+  const messageRef = db.collection('messages').doc(messageId);
+  messageRef.update({
+    text: newText,
+    edited: true,
+    editedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  
+  // Show edit indicator
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  messageElement.classList.add('edited');
+  messageElement.querySelector('.message-time').innerHTML += ' (edited)';
+}
+
+// Delete for everyone
+function deleteMessage(messageId, deleteForEveryone = true) {
+  if (deleteForEveryone) {
+    db.collection('messages').doc(messageId).update({
+      deleted: true,
+      text: 'This message was deleted'
+    });
+  } else {
+    // Delete only for current user (hide locally)
+    localStorage.setItem(`deleted_${messageId}`, true);
+    document.querySelector(`[data-message-id="${messageId}"]`).remove();
+  }
+}
