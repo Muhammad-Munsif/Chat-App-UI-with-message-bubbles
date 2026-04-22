@@ -206,3 +206,97 @@ const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`)
   return results.length;
 }
 })();
+class VoiceRecorder {
+  constructor() {
+    this.mediaRecorder = null;
+    this.audioChunks = [];
+    this.isRecording = false;
+  }
+  
+  async startRecording() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    this.mediaRecorder = new MediaRecorder(stream);
+    this.audioChunks = [];
+    
+    this.mediaRecorder.ondataavailable = (event) => {
+      this.audioChunks.push(event.data);
+    };
+    
+    this.mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+      this.sendVoiceMessage(audioBlob);
+    };
+    
+    this.mediaRecorder.start();
+    this.isRecording = true;
+  }
+  
+  stopRecording() {
+    if (this.mediaRecorder && this.isRecording) {
+      this.mediaRecorder.stop();
+      this.isRecording = false;
+    }
+  }
+  
+  sendVoiceMessage(audioBlob) {
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audioElement = document.createElement('audio');
+    audioElement.controls = true;
+    audioElement.src = audioUrl;
+    // Send as message
+    this.sendMessage({
+      type: 'voice',
+      content: audioUrl,
+      duration: this.getDuration(audioBlob)
+    });
+  }
+}
+
+class GroupChat {
+  constructor() {
+    this.groupMembers = [];
+    this.groupAdmins = [];
+  }
+  
+  createGroup(name, members) {
+    const groupId = generateUniqueId();
+    const groupData = {
+      id: groupId,
+      name: name,
+      type: 'group',
+      members: members,
+      admins: [currentUser.id],
+      createdAt: new Date(),
+      avatar: this.generateGroupAvatar(members)
+    };
+    
+    db.collection('groups').doc(groupId).set(groupData);
+    return groupId;
+  }
+  
+  addMember(groupId, userId) {
+    db.collection('groups').doc(groupId).update({
+      members: firebase.firestore.FieldValue.arrayUnion(userId)
+    });
+  }
+  
+  showGroupInfo() {
+    // Display group members, options to add/remove, change group name, etc.
+    const groupPanel = `
+      <div class="group-info-panel">
+        <h3>Group Members (${this.groupMembers.length})</h3>
+        <div class="members-list">
+          ${this.groupMembers.map(member => `
+            <div class="member-item">
+              <img src="${member.avatar}" />
+              <span>${member.name}</span>
+              ${this.isAdmin ? '<button>Remove</button>' : ''}
+            </div>
+          `).join('')}
+        </div>
+        <button onclick="addMemberToGroup()">Add Member</button>
+        ${this.isAdmin ? '<button onclick="editGroup()">Edit Group</button>' : ''}
+      </div>
+    `;
+  }
+}
