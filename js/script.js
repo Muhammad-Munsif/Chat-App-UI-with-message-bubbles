@@ -183,4 +183,26 @@ const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`)
   `;
     messageInput.parentNode.insertBefore(replyInput, messageInput);
   }
+
+  function searchMessages(searchTerm) {
+  const results = [];
+  const messages = document.querySelectorAll('.message-text');
+  
+  messages.forEach(message => {
+    const text = message.textContent;
+    if (text.toLowerCase().includes(searchTerm.toLowerCase())) {
+      results.push(message);
+      // Highlight matching text
+      const regex = new RegExp(`(${searchTerm})`, 'gi');
+      message.innerHTML = message.textContent.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
+    }
+  });
+  
+  // Scroll to first result
+  if (results.length > 0) {
+    results[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  
+  return results.length;
+}
 })();
