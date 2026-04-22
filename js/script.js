@@ -675,3 +675,37 @@ class CustomEmojiPicker {
     inputElement.parentNode.appendChild(picker);
   }
 }
+
+class TwoFactorAuth {
+  async setup2FA() {
+    const secret = await this.generateSecret();
+    const qrCode = await this.generateQRCode(secret);
+    
+    // Show QR code for Google Authenticator
+    this.showQRCode(qrCode);
+    
+    // Verify token
+    const userToken = await this.promptForToken();
+    if (this.verifyToken(secret, userToken)) {
+      localStorage.setItem('2fa_enabled', true);
+      localStorage.setItem('2fa_secret', secret);
+      showToast('2FA enabled successfully');
+    }
+  }
+  
+  async generateSecret() {
+    const array = new Uint8Array(20);
+    crypto.getRandomValues(array);
+    return base32.encode(array);
+  }
+  
+  async verifyLoginWith2FA(email, password, token) {
+    const isValidPassword = await this.verifyPassword(email, password);
+    if (!isValidPassword) return false;
+    
+    const secret = localStorage.getItem('2fa_secret');
+    const isValidToken = this.verifyToken(secret, token);
+    
+    return isValidToken;
+  }
+}
