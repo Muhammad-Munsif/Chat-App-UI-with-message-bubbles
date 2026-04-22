@@ -108,4 +108,23 @@ const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`)
   window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeSidebar(); });
   initTheme();
   if (isLoggedIn) { currentUser = { uid: 'currentUser', displayName: localStorage.getItem('userName') || 'Demo', email: localStorage.getItem('userEmail') || 'demo@wavechat.com' }; updateUI(); loadConversations(); loadOnlineUsers(); enableChat(true); setTimeout(() => { if (document.querySelector('.conv-item')) document.querySelector('.conv-item').click(); }, 300); } else { enableChat(false); loadOnlineUsers(); updateUI(); }
+  // Implement Web Push Notifications
+async function initializeNotifications() {
+  const permission = await Notification.requestPermission();
+  if (permission === 'granted') {
+    const sw = await navigator.serviceWorker.register('/sw.js');
+    
+    // Send notification for new messages when app is in background
+    function notifyNewMessage(sender, message) {
+      if (!document.hasFocus()) {
+        new Notification(`New message from ${sender}`, {
+          body: message,
+          icon: '/icon-192.png',
+          badge: '/badge.png',
+          vibrate: [200, 100, 200]
+        });
+      }
+    }
+  }
+}
 })();
