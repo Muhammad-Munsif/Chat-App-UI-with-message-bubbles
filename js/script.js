@@ -507,32 +507,32 @@ class VirtualScroller {
     this.renderCallback = renderCallback;
     this.items = [];
     this.visibleRange = { start: 0, end: 0 };
-    
+
     this.container.addEventListener('scroll', () => this.updateVisibleRange());
   }
-  
+
   updateVisibleRange() {
     const scrollTop = this.container.scrollTop;
     const containerHeight = this.container.clientHeight;
-    
+
     const startIndex = Math.floor(scrollTop / this.itemHeight);
     const endIndex = Math.min(
       startIndex + Math.ceil(containerHeight / this.itemHeight) + 5,
       this.items.length
     );
-    
+
     if (startIndex !== this.visibleRange.start || endIndex !== this.visibleRange.end) {
       this.visibleRange = { start: startIndex, end: endIndex };
       this.render();
     }
   }
-  
+
   render() {
     // Only render visible messages
     const visibleItems = this.items.slice(this.visibleRange.start, this.visibleRange.end);
     const topPadding = this.visibleRange.start * this.itemHeight;
     const bottomPadding = (this.items.length - this.visibleRange.end) * this.itemHeight;
-    
+
     this.container.innerHTML = `
       <div style="height: ${topPadding}px"></div>
       ${visibleItems.map(item => this.renderCallback(item)).join('')}
@@ -550,17 +550,17 @@ class ImageOptimizer {
           const canvas = document.createElement('canvas');
           let width = img.width;
           let height = img.height;
-          
+
           if (width > maxWidth) {
             height = (height * maxWidth) / width;
             width = maxWidth;
           }
-          
+
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          
+
           canvas.toBlob((blob) => {
             resolve(blob);
           }, 'image/jpeg', quality);
@@ -570,7 +570,7 @@ class ImageOptimizer {
       reader.readAsDataURL(file);
     });
   }
-  
+
   lazyLoadImages() {
     const imageObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
@@ -582,7 +582,7 @@ class ImageOptimizer {
         }
       });
     });
-    
+
     document.querySelectorAll('img[data-src]').forEach(img => {
       imageObserver.observe(img);
     });
@@ -614,7 +614,7 @@ class ThemeManager {
       }
     };
   }
-  
+
   applyTheme(themeName) {
     const theme = this.themes[themeName];
     Object.entries(theme).forEach(([property, value]) => {
@@ -622,7 +622,7 @@ class ThemeManager {
     });
     localStorage.setItem('user-theme', themeName);
   }
-  
+
   createThemeSelector() {
     const selector = document.createElement('div');
     selector.className = 'theme-selector';
