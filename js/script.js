@@ -6,7 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, onSnapshot, addDoc } from 'firebase/firestore';
 
 // Real-time message sync
-const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`), 
+const unsubscribe = onSnapshot(collection(db, `messages/${chatId}/conversation`),
   (snapshot) => {
     snapshot.docChanges().forEach(change => {
       if (change.type === 'added') {
