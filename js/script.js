@@ -588,3 +588,54 @@ class ImageOptimizer {
     });
   }
 }
+
+class ThemeManager {
+  constructor() {
+    this.themes = {
+      light: {
+        '--bg-main': '#f8fafc',
+        '--text-primary': '#0f172a',
+        '--primary': '#2563eb'
+      },
+      dark: {
+        '--bg-main': '#0f172a',
+        '--text-primary': '#f1f5f9',
+        '--primary': '#3b82f6'
+      },
+      forest: {
+        '--bg-main': '#f0fdf4',
+        '--text-primary': '#14532d',
+        '--primary': '#16a34a'
+      },
+      sunset: {
+        '--bg-main': '#fff7ed',
+        '--text-primary': '#7c2d12',
+        '--primary': '#ea580c'
+      }
+    };
+  }
+  
+  applyTheme(themeName) {
+    const theme = this.themes[themeName];
+    Object.entries(theme).forEach(([property, value]) => {
+      document.documentElement.style.setProperty(property, value);
+    });
+    localStorage.setItem('user-theme', themeName);
+  }
+  
+  createThemeSelector() {
+    const selector = document.createElement('div');
+    selector.className = 'theme-selector';
+    selector.innerHTML = `
+      <div class="theme-options">
+        ${Object.keys(this.themes).map(theme => `
+          <button class="theme-option" data-theme="${theme}">
+            <div class="theme-preview ${theme}"></div>
+            <span>${theme.charAt(0).toUpperCase() + theme.slice(1)}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+    return selector;
+  }
+}
