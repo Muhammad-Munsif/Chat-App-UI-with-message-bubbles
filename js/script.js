@@ -329,3 +329,53 @@ function deleteMessage(messageId, deleteForEveryone = true) {
     document.querySelector(`[data-message-id="${messageId}"]`).remove();
   }
 }
+// Using Web Crypto API for E2EE
+class MessageEncryption {
+  constructor() {
+    this.encryptionKey = null;
+  }
+  
+  async generateKey() {
+    this.encryptionKey = await crypto.subtle.generateKey(
+      { name: "AES-GCM", length: 256 },
+      true,
+      ["encrypt", "decrypt"]
+    );
+    
+    // Store key securely or exchange via Diffie-Hellman
+    localStorage.setItem('encryption_key', 
+      JSON.stringify(await crypto.subtle.exportKey("jwk", this.encryptionKey))
+    );
+  }
+  
+  async encryptMessage(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    
+    const encrypted = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv: iv },
+      this.encryptionKey,
+      data
+    );
+    
+    return {
+      iv: Array.from(iv),
+      data: Array.from(new Uint8Array(encrypted))
+    };
+  }
+  
+  async decryptMessage(encryptedData) {
+    const iv = new Uint8Array(encryptedData.iv);
+    const data = new Uint8Array(encryptedData.data);
+    
+    const decrypted = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: iv },
+      this.encryptionKey,
+      data
+    );
+    
+    const decoder = new TextDecoder();
+    return decoder.decode(decrypted);
+  }
+}
