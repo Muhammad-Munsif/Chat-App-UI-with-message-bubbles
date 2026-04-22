@@ -379,3 +379,46 @@ class MessageEncryption {
     return decoder.decode(decrypted);
   }
 }
+// manifest.json
+{
+  "name": "WaveChat",
+  "short_name": "WaveChat",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
+// service-worker.js
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request).then((response) => {
+        const responseClone = response.clone();
+        caches.open('wavechat-v1').then((cache) => {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      });
+    })
+  );
+});
+
+// Enable offline support
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'send-messages') {
+    event.waitUntil(sendPendingMessages());
+  }
+});
