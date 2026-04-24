@@ -1,4 +1,4 @@
-<script>
+
 (function() {
   // ==================== STATE ====================
   let currentUser = null;
@@ -603,4 +603,3 @@
     loadConversations();
   }
 })();
-</script></script>
