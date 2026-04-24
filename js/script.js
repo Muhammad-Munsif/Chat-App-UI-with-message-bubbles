@@ -1,21 +1,21 @@
 
-(function() {
+(function () {
   // ==================== STATE ====================
   let currentUser = null;
   let currentChatId = null;
   let currentChatUser = null;
   let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  
+
   let messages = JSON.parse(localStorage.getItem('wavechat_messages')) || {};
   let conversations = JSON.parse(localStorage.getItem('wavechat_conversations')) || {};
-  
+
   const users = [
     { id: 'user1', name: 'John Doe', avatar: 'user-tie', status: 'online', lastSeen: 'now', email: 'john@example.com' },
     { id: 'user2', name: 'Alice Smith', avatar: 'user-graduate', status: 'online', lastSeen: '2m', email: 'alice@example.com' },
     { id: 'user3', name: 'Mike Johnson', avatar: 'user-ninja', status: 'away', lastSeen: '30m', email: 'mike@example.com' },
     { id: 'user4', name: 'Sarah Brown', avatar: 'user-astronaut', status: 'offline', lastSeen: '2h', email: 'sarah@example.com' }
   ];
-  
+
   // Initialize default data
   if (Object.keys(conversations).length === 0) {
     users.forEach(u => {
@@ -28,7 +28,7 @@
     });
     localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
   }
-  
+
   if (Object.keys(messages).length === 0) {
     messages['conv_user1'] = [
       { id: 1, text: 'Hey! How are you?', sender: 'user1', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), type: 'text' },
@@ -42,14 +42,14 @@
     ];
     localStorage.setItem('wavechat_messages', JSON.stringify(messages));
   }
-  
+
   // Call state
   let localStream = null;
   let callTimerInterval = null;
   let callSeconds = 0;
   let isCallMuted = false;
   let isVideoEnabled = true;
-  
+
   // DOM Elements
   const els = {
     sidebar: document.getElementById('sidebar'),
@@ -99,7 +99,7 @@
     photoInput: document.getElementById('photoInput'),
     fileInput: document.getElementById('fileInput')
   };
-  
+
   // Helper Functions
   function showToast(msg) {
     const t = document.createElement('div');
@@ -108,7 +108,7 @@
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2800);
   }
-  
+
   function scrollToBottom() {
     setTimeout(() => {
       if (els.messagesContainer) {
@@ -116,7 +116,7 @@
       }
     }, 100);
   }
-  
+
   function updateUI() {
     if (currentUser) {
       els.currentUserDisplayName.textContent = currentUser.displayName;
@@ -129,7 +129,7 @@
       els.authBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i>';
     }
   }
-  
+
   function enableChat(enabled) {
     els.messageInput.disabled = !enabled;
     els.sendButton.disabled = !enabled;
@@ -139,7 +139,7 @@
     if (!enabled) els.messageInput.placeholder = 'Sign in to chat';
     else els.messageInput.placeholder = 'Type a message...';
   }
-  
+
   function loadConversations() {
     if (!els.conversationsList) return;
     if (!currentUser && !isLoggedIn) {
@@ -152,7 +152,7 @@
       if (u) addConvItem(cid, u, data);
     });
   }
-  
+
   function addConvItem(cid, user, data) {
     const div = document.createElement('div');
     div.className = `conv-item ${currentChatId === cid ? 'active' : ''}`;
@@ -175,7 +175,7 @@
     `;
     els.conversationsList.appendChild(div);
   }
-  
+
   function selectChat(cid, user) {
     if (!user) return;
     currentChatId = cid;
@@ -187,20 +187,20 @@
     els.welcomeScreen.classList.add('hidden');
     els.chatMessages.classList.remove('hidden');
     els.messageInput.disabled = !currentUser;
-    
+
     if (conversations[cid]?.unreadCount) {
       conversations[cid].unreadCount = 0;
       localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
       loadConversations();
     }
     loadMessages(cid);
-    
+
     document.querySelectorAll('.conv-item').forEach(el => {
       el.classList.toggle('active', el.getAttribute('data-convid') === cid);
     });
     if (window.innerWidth < 768) closeSidebar();
   }
-  
+
   function loadMessages(cid) {
     if (!els.chatMessages) return;
     els.chatMessages.innerHTML = '';
@@ -208,7 +208,7 @@
     msgs.forEach(msg => displayMsg(msg));
     scrollToBottom();
   }
-  
+
   function displayMsg(msg) {
     const isOut = msg.sender === 'current';
     const row = document.createElement('div');
@@ -221,7 +221,7 @@
     } else if (msg.type === 'file') {
       content = `<i class="fas fa-paperclip mr-1"></i>${escapeHtml(msg.text)}`;
     }
-    
+
     if (!isOut && currentChatUser) {
       row.innerHTML = `<div class="avatar avatar-sm mr-2"><i class="fas fa-${currentChatUser.avatar}"></i></div><div class="bubble in">${content}<div class="message-time">${msg.time}</div></div>`;
     } else {
@@ -230,20 +230,20 @@
     els.chatMessages.appendChild(row);
     scrollToBottom();
   }
-  
+
   function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
+    return str.replace(/[&<>]/g, function (m) {
       if (m === '&') return '&amp;';
       if (m === '<') return '&lt;';
       if (m === '>') return '&gt;';
       return m;
     });
   }
-  
+
   function saveAndSend(text, type = 'text', rawUrl = null) {
     if (!text.trim() || !currentChatId || !currentUser) return false;
-    
+
     const newMsg = {
       id: Date.now(),
       text: rawUrl || text,
@@ -252,18 +252,18 @@
       type: type
     };
     displayMsg(newMsg);
-    
+
     if (!messages[currentChatId]) messages[currentChatId] = [];
     messages[currentChatId].push(newMsg);
     localStorage.setItem('wavechat_messages', JSON.stringify(messages));
-    
+
     if (conversations[currentChatId]) {
       conversations[currentChatId].lastMessage = text.substring(0, 40);
       conversations[currentChatId].lastMessageTime = new Date().toISOString();
       localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
       loadConversations();
     }
-    
+
     // Auto-reply simulation
     setTimeout(() => {
       const reply = {
@@ -282,10 +282,10 @@
         loadConversations();
       }
     }, 1500);
-    
+
     return true;
   }
-  
+
   function sendMessage() {
     const txt = els.messageInput.value.trim();
     if (txt && currentChatId && currentUser) {
@@ -294,7 +294,7 @@
       els.sendButton.disabled = true;
     }
   }
-  
+
   function loadOnlineUsers() {
     const online = users.filter(u => u.status === 'online');
     els.onlineCount.textContent = online.length;
@@ -307,7 +307,7 @@
       els.onlineUsers.appendChild(div);
     });
   }
-  
+
   // Auth Functions
   function login() {
     const email = els.loginEmail.value;
@@ -328,7 +328,7 @@
       if (firstConv) firstConv.click();
     }, 200);
   }
-  
+
   function register() {
     const name = els.registerName.value || 'User';
     const email = els.registerEmail.value;
@@ -348,7 +348,7 @@
       if (firstConv) firstConv.click();
     }, 200);
   }
-  
+
   function logout() {
     isLoggedIn = false;
     localStorage.removeItem('isLoggedIn');
@@ -364,7 +364,7 @@
     loadConversations();
     showToast('Logged out successfully');
   }
-  
+
   // Call Functions
   async function startAudioCall() {
     if (!currentUser || !currentChatUser) return showToast('Select a chat first');
@@ -373,7 +373,7 @@
       showIncomingCall('audio');
     } catch (e) { showToast('Microphone access needed'); }
   }
-  
+
   async function startVideoCall() {
     if (!currentUser || !currentChatUser) return showToast('Select a chat first');
     try {
@@ -381,21 +381,21 @@
       showIncomingCall('video');
     } catch (e) { showToast('Camera access needed'); }
   }
-  
+
   function showIncomingCall(type) {
     els.incomingCallAvatar.innerHTML = `<i class="fas fa-${currentChatUser.avatar}"></i>`;
     els.incomingCallName.textContent = currentChatUser.name;
     els.incomingCallType.textContent = `Incoming ${type} call...`;
     els.incomingCallModal.classList.add('active');
   }
-  
+
   function acceptCall() {
     els.incomingCallModal.classList.remove('active');
     if (localStream && els.localVideo) els.localVideo.srcObject = localStream;
     els.callUserName.textContent = currentChatUser.name;
     els.callUserAvatar.innerHTML = `<i class="fas fa-${currentChatUser.avatar}"></i>`;
     els.callStatus.textContent = 'Connected';
-    
+
     setTimeout(() => {
       const canvas = document.createElement('canvas');
       canvas.width = 640; canvas.height = 480;
@@ -406,24 +406,24 @@
       const stream = canvas.captureStream(10);
       if (els.remoteVideo) els.remoteVideo.srcObject = stream;
     }, 500);
-    
+
     els.callModal.classList.add('active');
     startCallTimer();
   }
-  
+
   function declineCall() {
     if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
     els.incomingCallModal.classList.remove('active');
     showToast('Call declined');
   }
-  
+
   function endCall() {
     if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
     els.callModal.classList.remove('active');
     if (callTimerInterval) clearInterval(callTimerInterval);
     showToast('Call ended');
   }
-  
+
   function startCallTimer() {
     callSeconds = 0;
     if (callTimerInterval) clearInterval(callTimerInterval);
@@ -433,7 +433,7 @@
       els.callTimer.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     }, 1000);
   }
-  
+
   function toggleCallMute() {
     if (localStream) {
       isCallMuted = !isCallMuted;
@@ -442,7 +442,7 @@
       if (icon) icon.className = isCallMuted ? 'fas fa-microphone-slash' : 'fas fa-microphone';
     }
   }
-  
+
   function toggleCallVideo() {
     if (localStream) {
       isVideoEnabled = !isVideoEnabled;
@@ -451,7 +451,7 @@
       if (icon) icon.className = isVideoEnabled ? 'fas fa-video' : 'fas fa-video-slash';
     }
   }
-  
+
   async function shareScreen() {
     try {
       const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
@@ -459,17 +459,17 @@
       showToast('Screen sharing started');
     } catch (e) { showToast('Screen share cancelled'); }
   }
-  
+
   // UI Functions
-  function toggleSidebar() { 
-    els.sidebar.classList.toggle('active'); 
-    els.overlay.classList.toggle('hidden'); 
+  function toggleSidebar() {
+    els.sidebar.classList.toggle('active');
+    els.overlay.classList.toggle('hidden');
   }
-  function closeSidebar() { 
-    els.sidebar.classList.remove('active'); 
-    els.overlay.classList.add('hidden'); 
+  function closeSidebar() {
+    els.sidebar.classList.remove('active');
+    els.overlay.classList.add('hidden');
   }
-  
+
   function toggleTheme() {
     const isDark = document.body.getAttribute('data-theme') === 'dark';
     document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
@@ -477,7 +477,7 @@
     const icon = els.themeToggle.querySelector('i');
     if (icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
   }
-  
+
   function initTheme() {
     const saved = localStorage.getItem('theme');
     if (saved === 'dark') {
@@ -486,14 +486,14 @@
       if (icon) icon.className = 'fas fa-moon';
     }
   }
-  
+
   // Event Bindings
   function bindEvents() {
     els.themeToggle.addEventListener('click', toggleTheme);
     els.authBtn.addEventListener('click', () => { if (currentUser) logout(); else els.authModal.classList.add('active'); });
     document.getElementById('doLogin')?.addEventListener('click', login);
     document.getElementById('doRegister')?.addEventListener('click', register);
-    
+
     document.querySelectorAll('.auth-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         const type = tab.getAttribute('data-tab');
@@ -503,7 +503,7 @@
         tab.classList.add('active');
       });
     });
-    
+
     els.sendButton.addEventListener('click', sendMessage);
     els.messageInput.addEventListener('input', () => { els.sendButton.disabled = !els.messageInput.value.trim(); });
     els.messageInput.addEventListener('keypress', e => { if (e.key === 'Enter' && els.messageInput.value.trim()) sendMessage(); });
@@ -521,7 +521,7 @@
     els.overlay?.addEventListener('click', closeSidebar);
     document.getElementById('profileBtn')?.addEventListener('click', () => { if (!currentUser) els.authModal.classList.add('active'); else showToast(`Profile: ${currentUser.displayName}`); });
     document.getElementById('welcomeSignIn')?.addEventListener('click', () => els.authModal.classList.add('active'));
-    
+
     els.searchInput.addEventListener('input', e => {
       const term = e.target.value.toLowerCase();
       document.querySelectorAll('.conv-item').forEach(i => {
@@ -529,28 +529,28 @@
         i.style.display = name.includes(term) ? 'flex' : 'none';
       });
     });
-    
+
     window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeSidebar(); });
-    
+
     document.addEventListener('click', (e) => {
-      if (els.attachmentMenu && els.attachBtn && 
-          !els.attachmentMenu.contains(e.target) && 
-          !els.attachBtn.contains(e.target)) {
+      if (els.attachmentMenu && els.attachBtn &&
+        !els.attachmentMenu.contains(e.target) &&
+        !els.attachBtn.contains(e.target)) {
         els.attachmentMenu.classList.add('hidden');
       }
     });
-    
+
     // Attachment handlers
     document.getElementById('photoAttach')?.addEventListener('click', () => {
       els.photoInput.click();
       els.attachmentMenu.classList.add('hidden');
     });
-    
+
     document.getElementById('fileAttach')?.addEventListener('click', () => {
       els.fileInput.click();
       els.attachmentMenu.classList.add('hidden');
     });
-    
+
     document.getElementById('locationAttach')?.addEventListener('click', () => {
       els.attachmentMenu.classList.add('hidden');
       if (navigator.geolocation) {
@@ -561,7 +561,7 @@
         }, () => showToast('Unable to get location'));
       } else showToast('Geolocation not supported');
     });
-    
+
     els.photoInput.addEventListener('change', e => {
       if (e.target.files && e.target.files[0]) {
         const reader = new FileReader();
@@ -569,7 +569,7 @@
         reader.readAsDataURL(e.target.files[0]);
       }
     });
-    
+
     els.fileInput.addEventListener('change', e => {
       if (e.target.files && e.target.files[0]) {
         const f = e.target.files[0];
@@ -577,24 +577,24 @@
       }
     });
   }
-  
+
   // Initialize
   initTheme();
   bindEvents();
-  
+
   if (isLoggedIn) {
-    currentUser = { 
-      uid: 'currentUser', 
-      displayName: localStorage.getItem('userName') || 'Demo', 
-      email: localStorage.getItem('userEmail') || 'demo@wavechat.com' 
+    currentUser = {
+      uid: 'currentUser',
+      displayName: localStorage.getItem('userName') || 'Demo',
+      email: localStorage.getItem('userEmail') || 'demo@wavechat.com'
     };
     updateUI();
     loadConversations();
     loadOnlineUsers();
     enableChat(true);
-    setTimeout(() => { 
+    setTimeout(() => {
       const firstConv = document.querySelector('.conv-item');
-      if (firstConv) firstConv.click(); 
+      if (firstConv) firstConv.click();
     }, 300);
   } else {
     enableChat(false);
