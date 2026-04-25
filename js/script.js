@@ -1,4 +1,4 @@
-<script>
+
     // WaveChat Application
     (function () {
       // ==================== STATE ====================
@@ -585,4 +585,4 @@
       bindEvents();
       checkLoginStatus();
     })();
-  </script></script>
+  
