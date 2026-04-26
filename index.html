@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
   <meta name="theme-color" content="#2563eb" />
   <title>WaveChat · Complete Messaging Solution</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -90,6 +93,7 @@
         opacity: 0;
         transform: translateY(30px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -143,9 +147,11 @@
         z-index: 1000;
         border-radius: 0 24px 24px 0;
       }
+
       .sidebar.active {
         transform: translateX(0);
       }
+
       .overlay {
         position: fixed;
         inset: 0;
@@ -154,6 +160,7 @@
         z-index: 999;
         transition: all 0.3s;
       }
+
       .overlay.hidden {
         display: none;
       }
@@ -182,9 +189,26 @@
       box-shadow: 0 6px 12px -4px rgba(37, 99, 235, 0.3);
     }
 
-    .avatar-sm { width: 44px; height: 44px; font-size: 1.2rem; border-radius: 14px; }
-    .avatar-md { width: 52px; height: 52px; font-size: 1.4rem; border-radius: 18px; }
-    .avatar-lg { width: 80px; height: 80px; font-size: 2rem; border-radius: 24px; }
+    .avatar-sm {
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+      border-radius: 14px;
+    }
+
+    .avatar-md {
+      width: 52px;
+      height: 52px;
+      font-size: 1.4rem;
+      border-radius: 18px;
+    }
+
+    .avatar-lg {
+      width: 80px;
+      height: 80px;
+      font-size: 2rem;
+      border-radius: 24px;
+    }
 
     .status-badge {
       position: absolute;
@@ -195,9 +219,18 @@
       border-radius: 50%;
       border: 3px solid var(--bg-sidebar);
     }
-    .online { background: var(--success); }
-    .away { background: var(--warning); }
-    .offline { background: var(--text-secondary); }
+
+    .online {
+      background: var(--success);
+    }
+
+    .away {
+      background: var(--warning);
+    }
+
+    .offline {
+      background: var(--text-secondary);
+    }
 
     .conv-item {
       display: flex;
@@ -210,8 +243,18 @@
       transition: all 0.25s;
       background: transparent;
     }
-    .conv-item:hover { background: var(--bg-hover); transform: translateX(2px); }
-    .conv-item.active { background: var(--primary-gradient); color: white; box-shadow: var(--shadow-md); }
+
+    .conv-item:hover {
+      background: var(--bg-hover);
+      transform: translateX(2px);
+    }
+
+    .conv-item.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
     .unread-badge {
       background: var(--primary-gradient);
       color: white;
@@ -231,7 +274,11 @@
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-light);
     }
-    .online-strip::-webkit-scrollbar { height: 3px; }
+
+    .online-strip::-webkit-scrollbar {
+      height: 3px;
+    }
+
     .online-item {
       display: flex;
       flex-direction: column;
@@ -241,8 +288,17 @@
       min-width: 70px;
       transition: transform 0.2s;
     }
-    .online-item:active { transform: scale(0.96); }
-    .online-item .avatar { width: 56px; height: 56px; font-size: 1.4rem; border-radius: 18px; }
+
+    .online-item:active {
+      transform: scale(0.96);
+    }
+
+    .online-item .avatar {
+      width: 56px;
+      height: 56px;
+      font-size: 1.4rem;
+      border-radius: 18px;
+    }
 
     .msg-panel {
       flex: 1;
@@ -253,8 +309,17 @@
       gap: 12px;
       scroll-behavior: smooth;
     }
-    .msg-row { display: flex; margin-bottom: 12px; animation: fadeSlide 0.25s ease; }
-    .msg-row.out { justify-content: flex-end; }
+
+    .msg-row {
+      display: flex;
+      margin-bottom: 12px;
+      animation: fadeSlide 0.25s ease;
+    }
+
+    .msg-row.out {
+      justify-content: flex-end;
+    }
+
     .bubble {
       max-width: 75%;
       padding: 12px 18px;
@@ -264,23 +329,32 @@
       word-wrap: break-word;
       box-shadow: var(--shadow-sm);
     }
+
     .bubble.in {
       background: var(--incoming-bubble);
       color: var(--text-primary);
       border-bottom-left-radius: 8px;
     }
+
     .bubble.out {
       background: var(--outgoing-bubble);
       color: white;
       border-bottom-right-radius: 8px;
     }
-    .message-time { font-size: 0.7rem; opacity: 0.7; margin-top: 6px; text-align: right; }
+
+    .message-time {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-top: 6px;
+      text-align: right;
+    }
 
     .input-area {
       background: var(--bg-surface);
       border-top: 1px solid var(--border-light);
       padding: 14px 18px;
     }
+
     .input-wrapper {
       display: flex;
       align-items: center;
@@ -291,10 +365,12 @@
       border: 1px solid var(--border-light);
       transition: all 0.2s;
     }
+
     .input-wrapper:focus-within {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
     }
+
     .msg-input {
       flex: 1;
       background: transparent;
@@ -304,6 +380,7 @@
       color: var(--text-primary);
       outline: none;
     }
+
     .icon-btn {
       width: 44px;
       height: 44px;
@@ -317,7 +394,12 @@
       color: var(--text-secondary);
       border: none;
     }
-    .icon-btn:hover { background: var(--bg-hover); transform: scale(1.05); }
+
+    .icon-btn:hover {
+      background: var(--bg-hover);
+      transform: scale(1.05);
+    }
+
     .send-btn {
       background: var(--primary-gradient);
       color: white;
@@ -338,6 +420,7 @@
       z-index: 60;
       border: 1px solid var(--border-light);
     }
+
     .attach-item {
       display: flex;
       flex-direction: column;
@@ -347,7 +430,13 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .attach-item i { font-size: 1.8rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .attach-item i {
+      font-size: 1.8rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
     .call-modal {
       position: fixed;
@@ -360,7 +449,11 @@
       justify-content: center;
       padding: 20px;
     }
-    .call-modal.active { display: flex; }
+
+    .call-modal.active {
+      display: flex;
+    }
+
     .call-container {
       width: 95%;
       max-width: 1100px;
@@ -368,6 +461,7 @@
       border-radius: 36px;
       overflow: hidden;
     }
+
     .call-videos {
       display: flex;
       gap: 16px;
@@ -376,13 +470,43 @@
       min-height: 380px;
       position: relative;
     }
+
     @media (max-width: 700px) {
-      .call-videos { flex-direction: column; min-height: 380px; }
-      .video-container.local-video { max-width: 140px; position: absolute; bottom: 20px; right: 20px; }
+      .call-videos {
+        flex-direction: column;
+        min-height: 380px;
+      }
+
+      .video-container.local-video {
+        max-width: 140px;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+      }
     }
-    .video-container { position: relative; border-radius: 24px; overflow: hidden; background: #111; flex: 1; }
-    .video-element { width: 100%; height: 100%; object-fit: cover; }
-    .call-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; padding: 20px; }
+
+    .video-container {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #111;
+      flex: 1;
+    }
+
+    .video-element {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .call-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      padding: 20px;
+    }
+
     .call-btn {
       width: 56px;
       height: 56px;
@@ -393,9 +517,24 @@
       font-size: 1.3rem;
       transition: 0.2s;
     }
-    .call-btn.danger { background: var(--danger); color: white; }
-    .call-btn.success { background: var(--success); color: white; }
-    .call-timer { font-size: 1.1rem; font-weight: 600; background: var(--bg-main); padding: 8px 20px; border-radius: 40px; }
+
+    .call-btn.danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .call-btn.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .call-timer {
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: var(--bg-main);
+      padding: 8px 20px;
+      border-radius: 40px;
+    }
 
     .toast {
       position: fixed;
@@ -412,10 +551,19 @@
       box-shadow: var(--shadow-lg);
       white-space: nowrap;
     }
+
     @media (max-width: 500px) {
-      .toast { white-space: normal; max-width: 85vw; text-align: center; font-size: 0.9rem; }
+      .toast {
+        white-space: normal;
+        max-width: 85vw;
+        text-align: center;
+        font-size: 0.9rem;
+      }
     }
-    .hidden { display: none; }
+
+    .hidden {
+      display: none;
+    }
 
     .auth-input {
       width: 100%;
@@ -428,33 +576,47 @@
       font-size: 1rem;
       transition: all 0.2s;
     }
+
     .auth-input:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
+
     .auth-tab {
       transition: all 0.2s;
       cursor: pointer;
       padding: 12px;
       border-radius: 16px;
     }
+
     .auth-tab.active {
       background: var(--primary-gradient);
       color: white;
     }
+
     @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body data-theme="light">
   <!-- Full Screen Auth Container -->
   <div class="auth-container-full" id="authContainer">
     <div class="auth-card">
       <div class="text-center mb-8">
         <div class="avatar avatar-lg mx-auto mb-4"><i class="fa-regular fa-comment text-3xl"></i></div>
-        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">WaveChat</h2>
+        <h2
+          class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          WaveChat</h2>
         <p class="text-secondary mt-2">Connect with friends around the world</p>
       </div>
 
@@ -464,17 +626,25 @@
       </div>
 
       <div id="loginForm">
-        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="loginEmail" value="demo@wavechat.com">
+        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="loginEmail"
+          value="demo@wavechat.com">
         <input type="password" class="auth-input w-full mb-4" placeholder="Password" id="loginPassword" value="demo123">
-        <button id="doLogin" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Sign In</button>
-        <p class="text-center mt-4 text-sm text-secondary"><i class="fas fa-info-circle"></i> Demo: Use any email/password</p>
+        <button id="doLogin"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Sign
+          In</button>
+        <p class="text-center mt-4 text-sm text-secondary"><i class="fas fa-info-circle"></i> Demo: Use any
+          email/password</p>
       </div>
 
       <div id="registerForm" class="hidden">
         <input type="text" class="auth-input w-full mb-3" placeholder="Full name" id="registerName" value="Demo User">
-        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="registerEmail" value="demo@wavechat.com">
-        <input type="password" class="auth-input w-full mb-4" placeholder="Password" id="registerPassword" value="demo123">
-        <button id="doRegister" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Create Account</button>
+        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="registerEmail"
+          value="demo@wavechat.com">
+        <input type="password" class="auth-input w-full mb-4" placeholder="Password" id="registerPassword"
+          value="demo123">
+        <button id="doRegister"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Create
+          Account</button>
       </div>
     </div>
   </div>
@@ -487,7 +657,9 @@
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
               <div class="avatar avatar-md"><i class="fa-regular fa-comment"></i></div>
-              <h1 class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">WaveChat</h1>
+              <h1
+                class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                WaveChat</h1>
             </div>
             <div class="flex gap-2">
               <button class="icon-btn" id="themeToggle"><i class="fas fa-sun"></i></button>
@@ -496,11 +668,14 @@
           </div>
           <div class="relative">
             <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-secondary"></i>
-            <input type="text" placeholder="Search conversations..." id="searchInput" class="w-full pl-12 pr-4 py-3 rounded-2xl outline-none focus:ring-2 focus:ring-primary/20 border border-light" style="background: var(--bg-surface);">
+            <input type="text" placeholder="Search conversations..." id="searchInput"
+              class="w-full pl-12 pr-4 py-3 rounded-2xl outline-none focus:ring-2 focus:ring-primary/20 border border-light"
+              style="background: var(--bg-surface);">
           </div>
         </div>
         <div class="py-2 border-b border-light">
-          <div class="flex justify-between px-4 mb-2"><span class="font-bold text-sm uppercase">Online</span><span class="text-sm font-bold text-primary" id="onlineCount">0</span></div>
+          <div class="flex justify-between px-4 mb-2"><span class="font-bold text-sm uppercase">Online</span><span
+              class="text-sm font-bold text-primary" id="onlineCount">0</span></div>
           <div class="online-strip" id="onlineUsers"></div>
         </div>
         <div class="flex-1 overflow-y-auto py-3" id="conversationsList"></div>
@@ -519,7 +694,9 @@
       <div class="overlay hidden" id="overlay"></div>
 
       <main class="chat">
-        <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0 z-10" style="border-color: var(--border-light);">
+        <div
+          class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0 z-10"
+          style="border-color: var(--border-light);">
           <div class="flex items-center gap-3 min-w-0">
             <button class="md:hidden icon-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
             <div class="relative">
@@ -539,10 +716,13 @@
 
         <div class="msg-panel" id="messagesContainer">
           <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-6">
-            <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl">
+            <div
+              class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl">
               <i class="fas fa-comments text-5xl text-white"></i>
             </div>
-            <h3 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">Welcome to WaveChat</h3>
+            <h3
+              class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">
+              Welcome to WaveChat</h3>
             <p class="text-secondary max-w-sm">Select a conversation to start messaging</p>
           </div>
           <div id="chatMessages" class="hidden w-full"></div>
@@ -557,7 +737,8 @@
           <div id="attachmentMenu" class="attach-menu hidden">
             <div class="attach-item" id="photoAttach"><i class="fas fa-image"></i><span>Photo</span></div>
             <div class="attach-item" id="fileAttach"><i class="fas fa-file"></i><span>File</span></div>
-            <div class="attach-item" id="locationAttach"><i class="fas fa-map-marker-alt"></i><span>Location</span></div>
+            <div class="attach-item" id="locationAttach"><i class="fas fa-map-marker-alt"></i><span>Location</span>
+            </div>
           </div>
         </div>
       </main>
@@ -592,8 +773,14 @@
         <button class="icon-btn" id="minimizeCallBtn"><i class="fas fa-minus"></i></button>
       </div>
       <div class="call-videos">
-        <div class="video-container remote-video"><video class="video-element" id="remoteVideo" autoplay playsinline></video><div class="video-label">Remote</div></div>
-        <div class="video-container local-video"><video class="video-element" id="localVideo" autoplay playsinline muted></video><div class="video-label">You</div></div>
+        <div class="video-container remote-video"><video class="video-element" id="remoteVideo" autoplay
+            playsinline></video>
+          <div class="video-label">Remote</div>
+        </div>
+        <div class="video-container local-video"><video class="video-element" id="localVideo" autoplay playsinline
+            muted></video>
+          <div class="video-label">You</div>
+        </div>
       </div>
       <div class="call-controls">
         <button class="call-btn" id="callMuteBtn"><i class="fas fa-microphone"></i></button>
@@ -610,7 +797,7 @@
 
   <script>
     // WaveChat Application - Fully Fixed Version
-    (function() {
+    (function () {
       // ==================== STATE ====================
       let currentUser = null;
       let currentChatId = null;
@@ -691,7 +878,7 @@
       const menuToggle = document.getElementById('menuToggle');
       const profileBtn = document.getElementById('profileBtn');
       const welcomeSignIn = document.getElementById('welcomeSignIn');
-      
+
       // Call modal elements
       const incomingCallModal = document.getElementById('incomingCallModal');
       const incomingCallAvatar = document.getElementById('incomingCallAvatar');
@@ -711,7 +898,7 @@
       const endCallBtn = document.getElementById('endCallBtn');
       const minimizeCallBtn = document.getElementById('minimizeCallBtn');
       const shareScreenBtn = document.getElementById('shareScreenBtn');
-      
+
       // File inputs
       const photoInput = document.getElementById('photoInput');
       const fileInput = document.getElementById('fileInput');
@@ -735,7 +922,7 @@
 
       function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
+        return str.replace(/[&<>]/g, function (m) {
           if (m === '&') return '&amp;';
           if (m === '<') return '&lt;';
           if (m === '>') return '&gt;';
@@ -806,7 +993,7 @@
         const row = document.createElement('div');
         row.className = `msg-row ${isOut ? 'out' : ''}`;
         let content = escapeHtml(msg.text);
-        
+
         if (msg.type === 'image') {
           content = `<img src="${msg.text}" class="max-w-full rounded-xl max-h-56 cursor-pointer" onclick="window.open(this.src)">`;
         } else if (msg.type === 'location') {
@@ -1107,11 +1294,11 @@
       function init() {
         initTheme();
         checkLoginStatus();
-        
+
         // Auth events
         document.getElementById('doLogin')?.addEventListener('click', login);
         document.getElementById('doRegister')?.addEventListener('click', register);
-        
+
         document.querySelectorAll('.auth-tab').forEach(tab => {
           tab.addEventListener('click', () => {
             const type = tab.getAttribute('data-tab');
@@ -1121,7 +1308,7 @@
             tab.classList.add('active');
           });
         });
-        
+
         // Main app events
         themeToggle?.addEventListener('click', toggleTheme);
         logoutBtn?.addEventListener('click', logout);
@@ -1140,11 +1327,11 @@
         menuToggle?.addEventListener('click', toggleSidebar);
         overlay?.addEventListener('click', closeSidebar);
         profileBtn?.addEventListener('click', () => showToast(`Profile: ${currentUser?.displayName || 'Guest'}`));
-        
+
         if (welcomeSignIn) {
           welcomeSignIn.addEventListener('click', () => authContainer.classList.remove('hidden'));
         }
-        
+
         searchInput?.addEventListener('input', e => {
           const term = e.target.value.toLowerCase();
           document.querySelectorAll('.conv-item').forEach(i => {
@@ -1152,26 +1339,26 @@
             i.style.display = name.includes(term) ? 'flex' : 'none';
           });
         });
-        
+
         window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeSidebar(); });
-        
+
         document.addEventListener('click', (e) => {
           if (attachmentMenu && attachBtn && !attachmentMenu.contains(e.target) && !attachBtn.contains(e.target)) {
             attachmentMenu.classList.add('hidden');
           }
         });
-        
+
         // Attachment handlers
         document.getElementById('photoAttach')?.addEventListener('click', () => {
           photoInput.click();
           attachmentMenu.classList.add('hidden');
         });
-        
+
         document.getElementById('fileAttach')?.addEventListener('click', () => {
           fileInput.click();
           attachmentMenu.classList.add('hidden');
         });
-        
+
         document.getElementById('locationAttach')?.addEventListener('click', () => {
           attachmentMenu.classList.add('hidden');
           if (navigator.geolocation) {
@@ -1182,7 +1369,7 @@
             }, () => showToast('Unable to get location'));
           } else showToast('Geolocation not supported');
         });
-        
+
         photoInput?.addEventListener('change', e => {
           if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
@@ -1190,7 +1377,7 @@
             reader.readAsDataURL(e.target.files[0]);
           }
         });
-        
+
         fileInput?.addEventListener('change', e => {
           if (e.target.files && e.target.files[0]) {
             const f = e.target.files[0];
@@ -1198,10 +1385,11 @@
           }
         });
       }
-      
+
       // Start the app
       init();
     })();
   </script>
 </body>
+
 </html>
