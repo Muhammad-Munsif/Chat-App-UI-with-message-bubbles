@@ -1,4 +1,5 @@
- <script>
+ 
+ 
     // WaveChat Application - Fully Fixed Version
     (function () {
       // ==================== STATE ====================
@@ -592,4 +593,4 @@
       // Start the app
       init();
     })();
-  </script></script>
+  
