@@ -877,4 +877,89 @@ class ImageOptimizer {
     reader.readAsDataURL(compressedBlob);
   }
 }
+class GroupChatManager {
+  createGroup(name, members) {
+    const groupId = 'group_' + Date.now();
+    const group = {
+      id: groupId,
+      name: name,
+      type: 'group',
+      members: [currentUser, ...members],
+      admins: [currentUser.id],
+      createdAt: new Date().toISOString(),
+      avatar: this.generateGroupAvatar(members)
+    };
+    
+    // Save group
+    const groups = JSON.parse(localStorage.getItem('wavechat_groups') || '[]');
+    groups.push(group);
+    localStorage.setItem('wavechat_groups', JSON.stringify(groups));
+    
+    // Add to conversations
+    conversations[groupId] = {
+      userId: groupId,
+      lastMessage: 'Group created',
+      lastMessageTime: new Date().toISOString(),
+      unreadCount: 0,
+      isGroup: true
+    };
+    localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+    
+    return groupId;
+  }
+  
+  addMemberToGroup(groupId, newMember) {
+    const groups = JSON.parse(localStorage.getItem('wavechat_groups') || '[]');
+    const group = groups.find(g => g.id === groupId);
+    if (group && !group.members.find(m => m.id === newMember.id)) {
+      group.members.push(newMember);
+      localStorage.setItem('wavechat_groups', JSON.stringify(groups));
+      
+      // Send system message
+      const systemMsg = {
+        id: Date.now(),
+        text: `${newMember.name} joined the group`,
+        sender: 'system',
+        time: new Date().toLocaleTimeString(),
+        type: 'system'
+      };
+      messages[groupId].push(systemMsg);
+      localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+    }
+  }
+  
+  showGroupInfo(groupId) {
+    const groups = JSON.parse(localStorage.getItem('wavechat_groups') || '[]');
+    const group = groups.find(g => g.id === groupId);
+    
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+      <div class="bg-surface rounded-2xl max-w-md w-full mx-4 p-6">
+        <h3 class="text-xl font-bold mb-4">${group.name}</h3>
+        <div class="mb-4">
+          <h4 class="font-semibold mb-2">Members (${group.members.length})</h4>
+          <div class="space-y-2">
+            ${group.members.map(member => `
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="avatar avatar-sm"><i class="fas fa-user"></i></div>
+                  <span>${member.displayName}</span>
+                  ${group.admins.includes(member.id) ? '<span class="text-xs text-primary">Admin</span>' : ''}
+                </div>
+                ${group.admins.includes(currentUser.id) && member.id !== currentUser.id ? 
+                  '<button onclick="removeMember(\'' + member.id + '\')" class="text-red-500">Remove</button>' : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="addMemberToGroup()" class="flex-1 py-2 bg-primary text-white rounded-lg">Add Member</button>
+          <button onclick="closeModal()" class="flex-1 py-2 border rounded-lg">Close</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+}
 })();
