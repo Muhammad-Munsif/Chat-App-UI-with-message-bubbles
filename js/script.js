@@ -1054,4 +1054,35 @@ class VirtualScroller {
     `;
   }
 }
+
+async function initNotifications() {
+  const permission = await Notification.requestPermission();
+  if (permission === 'granted') {
+    const registration = await navigator.serviceWorker.ready;
+    
+    // Subscribe to push
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: 'YOUR_VAPID_PUBLIC_KEY'
+    });
+    
+    // Send subscription to server
+    await fetch('/api/subscribe', {
+      method: 'POST',
+      body: JSON.stringify(subscription),
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
+
+function showNotification(title, body, icon) {
+  if (document.hidden && Notification.permission === 'granted') {
+    new Notification(title, {
+      body: body,
+      icon: icon || '/icon-192.png',
+      vibrate: [200, 100, 200],
+      badge: '/badge.png'
+    });
+  }
+}
 })();
