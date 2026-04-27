@@ -962,4 +962,49 @@ class GroupChatManager {
     document.body.appendChild(modal);
   }
 }
+
+function forwardMessage(message, text) {
+  // Show contact selector
+  const selector = document.createElement('div');
+  selector.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+  selector.innerHTML = `
+    <div class="bg-surface rounded-2xl max-w-md w-full mx-4 p-6">
+      <h3 class="text-xl font-bold mb-4">Forward to...</h3>
+      <div class="max-h-96 overflow-y-auto">
+        ${Object.entries(conversations).map(([cid, data]) => {
+          const user = demoUsers.find(u => u.id === data.userId);
+          if (user && cid !== currentChatId) {
+            return `
+              <div class="conv-item" onclick="confirmForward('${cid}', '${message}', '${text.replace(/'/g, "\\'")}')">
+                <div class="avatar avatar-sm"><i class="fas fa-${user.avatar}"></i></div>
+                <div>${user.name}</div>
+              </div>
+            `;
+          }
+          return '';
+        }).join('')}
+      </div>
+      <button onclick="this.parentElement.parentElement.remove()" class="mt-4 w-full py-2 border rounded-lg">Cancel</button>
+    </div>
+  `;
+  document.body.appendChild(selector);
+}
+
+function confirmForward(targetChatId, message, text) {
+  const forwardedMsg = {
+    id: Date.now(),
+    text: `📨 Forwarded: ${text}`,
+    sender: 'current',
+    time: new Date().toLocaleTimeString(),
+    type: 'text',
+    forwarded: true
+  };
+  
+  if (!messages[targetChatId]) messages[targetChatId] = [];
+  messages[targetChatId].push(forwardedMsg);
+  localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+  
+  showToast('Message forwarded!');
+  document.querySelector('.fixed.inset-0.bg-black\\/50')?.remove();
+}
 })();
