@@ -648,4 +648,33 @@ function addReactionPicker(messageElement, messageId) {
   messageElement.addEventListener('mouseenter', () => reactionBar.classList.remove('hidden'));
   messageElement.addEventListener('mouseleave', () => reactionBar.classList.add('hidden'));
 }
+
+  // Show when user is typing
+let typingTimeout;
+messageInput.addEventListener('input', () => {
+  if (currentChatUser) {
+    // Send typing event to other user
+    socket.emit('typing', { userId: currentChatUser.id, isTyping: true });
+    
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      socket.emit('typing', { userId: currentChatUser.id, isTyping: false });
+    }, 1000);
+  }
+});
+
+// Display typing indicator
+function showTypingIndicator(userName) {
+  const indicator = document.createElement('div');
+  indicator.className = 'typing-indicator-container';
+  indicator.innerHTML = `
+    <div class="flex items-center gap-2 text-sm text-secondary">
+      <div class="typing-indicator"><span></span><span></span><span></span></div>
+      <span>${userName} is typing...</span>
+    </div>
+  `;
+  messagesContainer.appendChild(indicator);
+  scrollToBottom();
+  setTimeout(() => indicator.remove(), 3000);
+}
 })();
