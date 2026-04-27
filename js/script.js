@@ -630,5 +630,22 @@ class MessageQueue {
     this.isProcessing = false;
   }
 }
-
+// Add reaction picker to messages
+function addReactionPicker(messageElement, messageId) {
+  const reactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+  const reactionBar = document.createElement('div');
+  reactionBar.className = 'reaction-bar hidden absolute -top-10 left-0 bg-surface rounded-full shadow-lg p-2 flex gap-2';
+  
+  reactions.forEach(emoji => {
+    const btn = document.createElement('button');
+    btn.textContent = emoji;
+    btn.className = 'w-8 h-8 hover:scale-125 transition';
+    btn.onclick = () => addReaction(messageId, emoji);
+    reactionBar.appendChild(btn);
+  });
+  
+  messageElement.appendChild(reactionBar);
+  messageElement.addEventListener('mouseenter', () => reactionBar.classList.remove('hidden'));
+  messageElement.addEventListener('mouseleave', () => reactionBar.classList.add('hidden'));
+}
 })();
