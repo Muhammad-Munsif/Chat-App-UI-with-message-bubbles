@@ -725,5 +725,47 @@ function showTypingIndicator(userName) {
   }
 }
 
+// Add context menu for messages
+function showMessageContextMenu(messageId, messageText, isOwnMessage) {
+  const menu = document.createElement('div');
+  menu.className = 'context-menu fixed bg-surface shadow-lg rounded-lg py-2 z-50';
+  menu.style.left = `${event.clientX}px`;
+  menu.style.top = `${event.clientY}px`;
+  
+  let options = '';
+  if (isOwnMessage) {
+    options += `
+      <button onclick="editMessage('${messageId}', '${messageText}')" class="w-full px-4 py-2 text-left hover:bg-hover">✏️ Edit</button>
+      <button onclick="deleteMessage('${messageId}')" class="w-full px-4 py-2 text-left hover:bg-hover text-red-500">🗑️ Delete</button>
+    `;
+  }
+  options += `<button onclick="copyMessage('${messageText}')" class="w-full px-4 py-2 text-left hover:bg-hover">📋 Copy</button>`;
+  options += `<button onclick="replyToMessage('${messageId}')" class="w-full px-4 py-2 text-left hover:bg-hover">↩️ Reply</button>`;
+  
+  menu.innerHTML = options;
+  document.body.appendChild(menu);
+  
+  // Close menu on click outside
+  setTimeout(() => {
+    document.addEventListener('click', () => menu.remove(), { once: true });
+  }, 0);
+}
 
+function editMessage(messageId, oldText) {
+  const newText = prompt('Edit your message:', oldText);
+  if (newText && newText !== oldText) {
+    // Update in localStorage
+    const message = findMessageById(messageId);
+    if (message) {
+      message.text = newText;
+      message.edited = true;
+      message.editedAt = new Date().toISOString();
+      localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+      
+      // Update UI
+      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+      messageElement.querySelector('.bubble').innerHTML = `${escapeHtml(newText)} <span class="edited-indicator text-xs opacity-50">(edited)</span>`;
+    }
+  }
+}
 })();
