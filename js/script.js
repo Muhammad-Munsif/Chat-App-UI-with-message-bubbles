@@ -677,4 +677,53 @@ function showTypingIndicator(userName) {
   scrollToBottom();
   setTimeout(() => indicator.remove(), 3000);
 }
+
+ class MessageSearch {
+  constructor() {
+    this.searchResults = [];
+    this.currentIndex = -1;
+  }
+  
+  search(query) {
+    this.searchResults = [];
+    const messages = document.querySelectorAll('.bubble');
+    
+    messages.forEach((msg, index) => {
+      const text = msg.textContent;
+      if (text.toLowerCase().includes(query.toLowerCase())) {
+        this.searchResults.push({ element: msg, index });
+        // Highlight the text
+        const regex = new RegExp(`(${query})`, 'gi');
+        msg.innerHTML = msg.innerHTML.replace(regex, '<mark class="bg-yellow-300 dark:bg-yellow-600 px-1 rounded">$1</mark>');
+      }
+    });
+    
+    this.showSearchNavigation();
+    if (this.searchResults.length > 0) this.navigateToResult(0);
+  }
+  
+  showSearchNavigation() {
+    const nav = document.createElement('div');
+    nav.className = 'search-nav fixed top-20 right-4 bg-surface shadow-lg rounded-lg p-2 flex gap-2 z-50';
+    nav.innerHTML = `
+      <span>${this.searchResults.length} results</span>
+      <button onclick="messageSearch.previous()"><i class="fas fa-chevron-up"></i></button>
+      <button onclick="messageSearch.next()"><i class="fas fa-chevron-down"></i></button>
+      <button onclick="messageSearch.close()"><i class="fas fa-times"></i></button>
+    `;
+    document.body.appendChild(nav);
+  }
+  
+  navigateToResult(index) {
+    if (this.currentIndex >= 0) {
+      this.searchResults[this.currentIndex].element.classList.remove('search-highlight');
+    }
+    this.currentIndex = index;
+    const result = this.searchResults[this.currentIndex];
+    result.element.classList.add('search-highlight', 'ring-2', 'ring-primary');
+    result.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+
 })();
