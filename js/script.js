@@ -768,4 +768,113 @@ function editMessage(messageId, oldText) {
     }
   }
 }
+class VoiceRecorder {
+  constructor() {
+    this.mediaRecorder = null;
+    this.audioChunks = [];
+    this.isRecording = false;
+    this.recordingStartTime = null;
+  }
+  
+  async startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.mediaRecorder = new MediaRecorder(stream);
+      this.audioChunks = [];
+      
+      this.mediaRecorder.ondataavailable = (event) => {
+        this.audioChunks.push(event.data);
+      };
+      
+      this.mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+        this.sendVoiceMessage(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+      
+      this.mediaRecorder.start();
+      this.isRecording = true;
+      this.recordingStartTime = Date.now();
+      this.showRecordingUI();
+    } catch (error) {
+      showToast('Microphone access denied');
+    }
+  }
+  
+  stopRecording() {
+    if (this.mediaRecorder && this.isRecording) {
+      this.mediaRecorder.stop();
+      this.isRecording = false;
+      this.hideRecordingUI();
+    }
+  }
+  
+  sendVoiceMessage(audioBlob) {
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const duration = Math.floor((Date.now() - this.recordingStartTime) / 1000);
+    
+    saveAndSend('🎤 Voice message', 'voice', audioUrl, duration);
+  }
+  
+  showRecordingUI() {
+    const recordingBar = document.createElement('div');
+    recordingBar.id = 'recordingBar';
+    recordingBar.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-3 z-50';
+    recordingBar.innerHTML = `
+      <i class="fas fa-microphone animate-pulse"></i>
+      <span>Recording... <span id="recordingTimer">0:00</span></span>
+      <button onclick="voiceRecorder.stopRecording()" class="ml-4 px-3 py-1 bg-white text-red-500 rounded-full">Stop</button>
+    `;
+    document.body.appendChild(recordingBar);
+    
+    // Update timer
+    this.timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - this.recordingStartTime) / 1000);
+      const minutes = Math.floor(elapsed / 60);
+      const seconds = elapsed % 60;
+      const timerElement = document.getElementById('recordingTimer');
+      if (timerElement) timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+  }
+}
+class ImageOptimizer {
+  async compressImage(file, maxWidth = 1200, quality = 0.7) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, 'image/jpeg', quality);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  async handleImageUpload(file) {
+    const compressedBlob = await this.compressImage(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      saveAndSend('📷 Photo', 'image', ev.target.result);
+    };
+    reader.readAsDataURL(compressedBlob);
+  }
+}
 })();
