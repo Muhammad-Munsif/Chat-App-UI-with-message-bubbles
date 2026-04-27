@@ -592,4 +592,43 @@
 
   // Start the app
   init();
+
+  // Add error boundaries and better error handling
+window.addEventListener('error', function(e) {
+  console.error('Global error:', e.error);
+  showToast('Something went wrong. Please refresh the page.');
+});
+
+// Add connection status monitoring
+window.addEventListener('online', () => showToast('Back online! 📶'));
+window.addEventListener('offline', () => showToast('No internet connection 🔴'));
+
+// Add message retry on failure
+class MessageQueue {
+  constructor() {
+    this.queue = [];
+    this.isProcessing = false;
+  }
+  
+  async addMessage(message) {
+    this.queue.push(message);
+    if (!this.isProcessing) this.processQueue();
+  }
+  
+  async processQueue() {
+    this.isProcessing = true;
+    while (this.queue.length > 0) {
+      const msg = this.queue[0];
+      try {
+        await this.sendMessage(msg);
+        this.queue.shift();
+      } catch (error) {
+        console.error('Failed to send:', error);
+        break;
+      }
+    }
+    this.isProcessing = false;
+  }
+}
+
 })();
