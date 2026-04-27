@@ -1085,4 +1085,76 @@ function showNotification(title, body, icon) {
     });
   }
 }
+
+class Analytics {
+  constructor() {
+    this.metrics = {
+      messagesSent: 0,
+      activeTime: 0,
+      wordsTyped: 0,
+      activeContacts: new Set(),
+      sessions: []
+    };
+    this.startTime = Date.now();
+    this.loadMetrics();
+  }
+  
+  trackMessageSent(text) {
+    this.metrics.messagesSent++;
+    this.metrics.wordsTyped += text.split(/\s+/).length;
+    this.saveMetrics();
+  }
+  
+  trackActiveContact(userId) {
+    this.metrics.activeContacts.add(userId);
+    this.saveMetrics();
+  }
+  
+  getSessionDuration() {
+    return Math.floor((Date.now() - this.startTime) / 1000);
+  }
+  
+  generateReport() {
+    return {
+      totalMessages: this.metrics.messagesSent,
+      activeContacts: this.metrics.activeContacts.size,
+      wordsTyped: this.metrics.wordsTyped,
+      sessionDuration: this.getSessionDuration(),
+      messagesPerDay: this.getMessagesPerDay(),
+      mostActiveHour: this.getMostActiveHour(),
+      responseRate: this.calculateResponseRate()
+    };
+  }
+  
+  displayDashboard() {
+    const report = this.generateReport();
+    const dashboard = document.createElement('div');
+    dashboard.className = 'analytics-dashboard fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+    dashboard.innerHTML = `
+      <div class="bg-surface rounded-2xl max-w-2xl w-full mx-4 p-6">
+        <h2 class="text-2xl font-bold mb-4">Your Chat Analytics</h2>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-4 bg-primary/10 rounded-xl text-center">
+            <div class="text-3xl font-bold">${report.totalMessages}</div>
+            <div class="text-sm text-secondary">Messages Sent</div>
+          </div>
+          <div class="p-4 bg-primary/10 rounded-xl text-center">
+            <div class="text-3xl font-bold">${report.activeContacts}</div>
+            <div class="text-sm text-secondary">Active Contacts</div>
+          </div>
+          <div class="p-4 bg-primary/10 rounded-xl text-center">
+            <div class="text-3xl font-bold">${Math.floor(report.sessionDuration / 60)}m</div>
+            <div class="text-sm text-secondary">Today's Activity</div>
+          </div>
+          <div class="p-4 bg-primary/10 rounded-xl text-center">
+            <div class="text-3xl font-bold">${report.wordsTyped}</div>
+            <div class="text-sm text-secondary">Words Typed</div>
+          </div>
+        </div>
+        <button onclick="this.parentElement.parentElement.remove()" class="w-full py-2 bg-primary text-white rounded-lg">Close</button>
+      </div>
+    `;
+    document.body.appendChild(dashboard);
+  }
+}
 })();
