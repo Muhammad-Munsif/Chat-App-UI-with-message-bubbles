@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
   <meta name="theme-color" content="#2563eb" />
   <title>WaveChat · Complete Messaging Solution</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body data-theme="light">
   <!-- Full Screen Auth Container -->
   <div class="auth-container-full" id="authContainer">
     <div class="auth-card">
       <div class="text-center mb-8">
         <div class="avatar avatar-lg mx-auto mb-4"><i class="fa-regular fa-comment text-3xl"></i></div>
-        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">WaveChat</h2>
+        <h2
+          class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          WaveChat</h2>
         <p class="text-secondary mt-2">Connect with friends around the world</p>
       </div>
       <div class="auth-tabs flex gap-2 mb-6">
@@ -24,16 +30,24 @@
         <div class="auth-tab flex-1 text-center font-semibold" data-tab="register">Register</div>
       </div>
       <div id="loginForm">
-        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="loginEmail" value="demo@wavechat.com">
+        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="loginEmail"
+          value="demo@wavechat.com">
         <input type="password" class="auth-input w-full mb-4" placeholder="Password" id="loginPassword" value="demo123">
-        <button id="doLogin" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Sign In</button>
-        <p class="text-center mt-4 text-sm text-secondary"><i class="fas fa-info-circle"></i> Demo: Use any email/password</p>
+        <button id="doLogin"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Sign
+          In</button>
+        <p class="text-center mt-4 text-sm text-secondary"><i class="fas fa-info-circle"></i> Demo: Use any
+          email/password</p>
       </div>
       <div id="registerForm" class="hidden">
         <input type="text" class="auth-input w-full mb-3" placeholder="Full name" id="registerName" value="Demo User">
-        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="registerEmail" value="demo@wavechat.com">
-        <input type="password" class="auth-input w-full mb-4" placeholder="Password" id="registerPassword" value="demo123">
-        <button id="doRegister" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Create Account</button>
+        <input type="email" class="auth-input w-full mb-3" placeholder="Email address" id="registerEmail"
+          value="demo@wavechat.com">
+        <input type="password" class="auth-input w-full mb-4" placeholder="Password" id="registerPassword"
+          value="demo123">
+        <button id="doRegister"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg transition hover:scale-105">Create
+          Account</button>
       </div>
     </div>
   </div>
@@ -46,7 +60,9 @@
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
               <div class="avatar avatar-md"><i class="fa-regular fa-comment"></i></div>
-              <h1 class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">WaveChat</h1>
+              <h1
+                class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                WaveChat</h1>
             </div>
             <div class="flex gap-2">
               <button class="icon-btn" id="themeToggle"><i class="fas fa-sun"></i></button>
@@ -55,36 +71,59 @@
           </div>
           <div class="relative">
             <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-secondary"></i>
-            <input type="text" placeholder="Search conversations..." id="searchInput" class="w-full pl-12 pr-4 py-3 rounded-2xl outline-none focus:ring-2 focus:ring-primary/20 border border-light" style="background: var(--bg-surface);">
+            <input type="text" placeholder="Search conversations..." id="searchInput"
+              class="w-full pl-12 pr-4 py-3 rounded-2xl outline-none focus:ring-2 focus:ring-primary/20 border border-light"
+              style="background: var(--bg-surface);">
           </div>
         </div>
         <div class="py-2 border-b border-light">
-          <div class="flex justify-between px-4 mb-2"><span class="font-bold text-sm uppercase">Online</span><span class="text-sm font-bold text-primary" id="onlineCount">0</span></div>
+          <div class="flex justify-between px-4 mb-2"><span class="font-bold text-sm uppercase">Online</span><span
+              class="text-sm font-bold text-primary" id="onlineCount">0</span></div>
           <div class="online-strip" id="onlineUsers"></div>
         </div>
         <div class="flex-1 overflow-y-auto py-3" id="conversationsList"></div>
         <div class="border-t p-4 flex items-center gap-3 cursor-pointer hover:bg-hover transition" id="profileBtn">
-          <div class="relative"><div class="avatar avatar-sm" id="currentUserAvatar"><i class="fas fa-user"></i></div><span class="status-badge online" id="currentUserStatus"></span></div>
-          <div class="flex-1 min-w-0"><div class="font-bold truncate" id="currentUserDisplayName">Guest User</div><div class="text-xs text-secondary truncate" id="currentUserEmail">user@example.com</div></div>
+          <div class="relative">
+            <div class="avatar avatar-sm" id="currentUserAvatar"><i class="fas fa-user"></i></div><span
+              class="status-badge online" id="currentUserStatus"></span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold truncate" id="currentUserDisplayName">Guest User</div>
+            <div class="text-xs text-secondary truncate" id="currentUserEmail">user@example.com</div>
+          </div>
           <i class="fas fa-chevron-right text-secondary"></i>
         </div>
       </aside>
       <div class="overlay hidden" id="overlay"></div>
 
       <main class="chat">
-        <div class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0 z-10" style="border-color: var(--border-light);">
+        <div
+          class="flex items-center justify-between px-4 md:px-6 py-4 border-b bg-surface/80 backdrop-blur-lg sticky top-0 z-10"
+          style="border-color: var(--border-light);">
           <div class="flex items-center gap-3 min-w-0">
             <button class="md:hidden icon-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
-            <div class="relative"><div class="avatar avatar-sm" id="chatUserAvatar"><i class="fas fa-user-friends"></i></div><span class="status-badge online" id="chatUserStatus"></span></div>
-            <div class="min-w-0"><h2 class="font-bold text-lg truncate" id="chatUserName">Select a chat</h2><p class="text-xs text-secondary truncate" id="chatUserStatusText">Click to start messaging</p></div>
+            <div class="relative">
+              <div class="avatar avatar-sm" id="chatUserAvatar"><i class="fas fa-user-friends"></i></div><span
+                class="status-badge online" id="chatUserStatus"></span>
+            </div>
+            <div class="min-w-0">
+              <h2 class="font-bold text-lg truncate" id="chatUserName">Select a chat</h2>
+              <p class="text-xs text-secondary truncate" id="chatUserStatusText">Click to start messaging</p>
+            </div>
           </div>
-          <div class="flex gap-1"><button class="icon-btn" id="audioCallBtn"><i class="fas fa-phone"></i></button><button class="icon-btn" id="videoCallBtn"><i class="fas fa-video"></i></button></div>
+          <div class="flex gap-1"><button class="icon-btn" id="audioCallBtn"><i
+                class="fas fa-phone"></i></button><button class="icon-btn" id="videoCallBtn"><i
+                class="fas fa-video"></i></button></div>
         </div>
 
         <div class="msg-panel" id="messagesContainer">
           <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-6">
-            <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl"><i class="fas fa-comments text-5xl text-white"></i></div>
-            <h3 class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">Welcome to WaveChat</h3>
+            <div
+              class="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl">
+              <i class="fas fa-comments text-5xl text-white"></i></div>
+            <h3
+              class="text-3xl font-extrabold mb-2 bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">
+              Welcome to WaveChat</h3>
             <p class="text-secondary max-w-sm">Select a conversation to start messaging</p>
           </div>
           <div id="chatMessages" class="hidden w-full"></div>
@@ -99,7 +138,8 @@
           <div id="attachmentMenu" class="attach-menu hidden">
             <div class="attach-item" id="photoAttach"><i class="fas fa-image"></i><span>Photo</span></div>
             <div class="attach-item" id="fileAttach"><i class="fas fa-file"></i><span>File</span></div>
-            <div class="attach-item" id="locationAttach"><i class="fas fa-map-marker-alt"></i><span>Location</span></div>
+            <div class="attach-item" id="locationAttach"><i class="fas fa-map-marker-alt"></i><span>Location</span>
+            </div>
           </div>
         </div>
       </main>
@@ -113,7 +153,9 @@
         <div class="avatar avatar-lg mx-auto mb-4" id="incomingCallAvatar"><i class="fas fa-user"></i></div>
         <h3 class="text-2xl font-bold mb-2" id="incomingCallName">John Doe</h3>
         <p class="text-secondary mb-6" id="incomingCallType">Incoming video call...</p>
-        <div class="flex gap-4 justify-center"><button class="call-btn success" id="acceptCallBtn"><i class="fas fa-phone"></i></button><button class="call-btn danger" id="declineCallBtn"><i class="fas fa-phone-slash"></i></button></div>
+        <div class="flex gap-4 justify-center"><button class="call-btn success" id="acceptCallBtn"><i
+              class="fas fa-phone"></i></button><button class="call-btn danger" id="declineCallBtn"><i
+              class="fas fa-phone-slash"></i></button></div>
       </div>
     </div>
   </div>
@@ -121,14 +163,32 @@
   <div class="call-modal" id="callModal">
     <div class="call-container">
       <div class="call-header flex justify-between p-4 border-b">
-        <div class="flex gap-3"><div class="avatar avatar-sm" id="callUserAvatar"><i class="fas fa-user"></i></div><div><h3 class="font-bold" id="callUserName">Calling...</h3><p class="text-sm" id="callStatus">Connecting</p></div></div>
+        <div class="flex gap-3">
+          <div class="avatar avatar-sm" id="callUserAvatar"><i class="fas fa-user"></i></div>
+          <div>
+            <h3 class="font-bold" id="callUserName">Calling...</h3>
+            <p class="text-sm" id="callStatus">Connecting</p>
+          </div>
+        </div>
         <button class="icon-btn" id="minimizeCallBtn"><i class="fas fa-minus"></i></button>
       </div>
       <div class="call-videos">
-        <div class="video-container remote-video"><video class="video-element" id="remoteVideo" autoplay playsinline></video><div class="video-label">Remote</div></div>
-        <div class="video-container local-video"><video class="video-element" id="localVideo" autoplay playsinline muted></video><div class="video-label">You</div></div>
+        <div class="video-container remote-video"><video class="video-element" id="remoteVideo" autoplay
+            playsinline></video>
+          <div class="video-label">Remote</div>
+        </div>
+        <div class="video-container local-video"><video class="video-element" id="localVideo" autoplay playsinline
+            muted></video>
+          <div class="video-label">You</div>
+        </div>
       </div>
-      <div class="call-controls"><button class="call-btn" id="callMuteBtn"><i class="fas fa-microphone"></i></button><button class="call-btn" id="callVideoBtn"><i class="fas fa-video"></i></button><button class="call-btn" id="shareScreenBtn"><i class="fas fa-desktop"></i></button><button class="call-btn danger" id="endCallBtn"><i class="fas fa-phone-slash"></i></button><div class="call-timer" id="callTimer">00:00</div></div>
+      <div class="call-controls"><button class="call-btn" id="callMuteBtn"><i
+            class="fas fa-microphone"></i></button><button class="call-btn" id="callVideoBtn"><i
+            class="fas fa-video"></i></button><button class="call-btn" id="shareScreenBtn"><i
+            class="fas fa-desktop"></i></button><button class="call-btn danger" id="endCallBtn"><i
+            class="fas fa-phone-slash"></i></button>
+        <div class="call-timer" id="callTimer">00:00</div>
+      </div>
     </div>
   </div>
 
@@ -137,4 +197,5 @@
 
   <script></script>
 </body>
+
 </html>
