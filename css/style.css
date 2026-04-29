@@ -418,6 +418,34 @@
     border: 1px solid var(--border-light);
   }
 
+  .scroll-bottom-btn {
+    position: absolute;
+    right: 18px;
+    bottom: 92px;
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    z-index: 20;
+    transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+  }
+
+  .scroll-bottom-btn:hover {
+    background: var(--bg-hover);
+    transform: translateY(-1px);
+  }
+
+  .scroll-bottom-btn:active {
+    transform: translateY(0);
+  }
+
   @media (max-width: 640px) {
     .auth-card {
       padding: 32px 22px;
@@ -435,6 +463,11 @@
     .input-area {
       padding-left: 12px;
       padding-right: 12px;
+    }
+
+    .scroll-bottom-btn {
+      right: 12px;
+      bottom: 88px;
     }
 
     .attach-menu {
