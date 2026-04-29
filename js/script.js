@@ -206,6 +206,7 @@
     const isOut = msg.sender === 'current';
     const row = document.createElement('div');
     row.className = `msg-row ${isOut ? 'out' : ''}`;
+    row.dataset.msgid = String(msg.id || '');
     let content = escapeHtml(msg.text);
 
     if (msg.type === 'image') {
@@ -217,13 +218,38 @@
     }
 
     if (!isOut && currentChatUser) {
-      row.innerHTML = `<div class="avatar avatar-sm mr-2"><i class="fas fa-${currentChatUser.avatar}"></i></div><div class="bubble in">${content}<div class="message-time">${msg.time}</div></div>`;
+      row.innerHTML = `<div class="avatar avatar-sm mr-2"><i class="fas fa-${currentChatUser.avatar}"></i></div><div class="bubble in">${content}<div class="message-meta"><div class="message-time">${msg.time}</div></div></div>`;
     } else {
-      row.innerHTML = `<div class="bubble out">${content}<div class="message-time">${msg.time}</div></div>`;
+      const status = msg.status || 'sent';
+      const isSeen = status === 'seen';
+      const icon = isSeen ? 'fa-check-double' : 'fa-check';
+      row.innerHTML = `<div class="bubble out">${content}<div class="message-meta"><div class="message-time">${msg.time}</div><div class="message-status ${isSeen ? 'seen' : ''}" data-status="${status}" aria-label="Message ${status}"><i class="fas ${icon}"></i></div></div></div>`;
     }
     chatMessages.appendChild(row);
     scrollToBottom();
     updateScrollBottomButton();
+  }
+
+  function setMessageStatus(cid, msgId, status) {
+    if (!cid || !msgId) return;
+    const list = messages[cid];
+    if (Array.isArray(list)) {
+      const m = list.find(x => String(x.id) === String(msgId));
+      if (m) {
+        m.status = status;
+        localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+      }
+    }
+
+    const row = chatMessages?.querySelector(`[data-msgid="${String(msgId)}"]`);
+    const statusEl = row?.querySelector('.message-status');
+    const iconEl = statusEl?.querySelector('i');
+    if (!statusEl || !iconEl) return;
+
+    statusEl.dataset.status = status;
+    statusEl.classList.toggle('seen', status === 'seen');
+    iconEl.className = status === 'seen' ? 'fas fa-check-double' : 'fas fa-check';
+    statusEl.setAttribute('aria-label', `Message ${status}`);
   }
 
   function saveAndSend(text, type = 'text', rawUrl = null) {
@@ -234,7 +260,8 @@
       text: rawUrl || text,
       sender: 'current',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      type: type
+      type: type,
+      status: 'sent'
     };
     displayMsg(newMsg);
 
@@ -252,6 +279,7 @@
     // Auto-reply simulation
     setTimeout(() => {
       if (currentChatUser) {
+        setMessageStatus(currentChatId, newMsg.id, 'seen');
         const reply = {
           id: Date.now() + 1,
           text: 'Thanks for your message! 👍',
