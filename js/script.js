@@ -63,6 +63,7 @@
   const welcomeScreen = document.getElementById('welcomeScreen');
   const chatMessages = document.getElementById('chatMessages');
   const messagesContainer = document.getElementById('messagesContainer');
+  const scrollBottomBtn = document.getElementById('scrollBottomBtn');
   const currentUserDisplayName = document.getElementById('currentUserDisplayName');
   const currentUserEmail = document.getElementById('currentUserEmail');
   const chatUserName = document.getElementById('chatUserName');
@@ -119,6 +120,17 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
       }
     }, 100);
+  }
+
+  function isNearBottom(el, thresholdPx = 80) {
+    if (!el) return true;
+    return el.scrollHeight - el.scrollTop - el.clientHeight <= thresholdPx;
+  }
+
+  function updateScrollBottomButton() {
+    if (!messagesContainer || !scrollBottomBtn) return;
+    const show = !isNearBottom(messagesContainer, 120);
+    scrollBottomBtn.classList.toggle('hidden', !show);
   }
 
   function escapeHtml(str) {
@@ -187,6 +199,7 @@
     const msgs = messages[cid] || [];
     msgs.forEach(msg => displayMsg(msg));
     scrollToBottom();
+    updateScrollBottomButton();
   }
 
   function displayMsg(msg) {
@@ -210,6 +223,7 @@
     }
     chatMessages.appendChild(row);
     scrollToBottom();
+    updateScrollBottomButton();
   }
 
   function saveAndSend(text, type = 'text', rawUrl = null) {
@@ -528,6 +542,8 @@
     menuToggle?.addEventListener('click', toggleSidebar);
     overlay?.addEventListener('click', closeSidebar);
     profileBtn?.addEventListener('click', () => showToast(`Profile: ${currentUser?.displayName || 'Guest'}`));
+    scrollBottomBtn?.addEventListener('click', () => scrollToBottom());
+    messagesContainer?.addEventListener('scroll', updateScrollBottomButton, { passive: true });
 
     searchInput?.addEventListener('input', e => {
       const term = e.target.value.toLowerCase();
@@ -538,6 +554,7 @@
     });
 
     window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeSidebar(); });
+    window.addEventListener('resize', updateScrollBottomButton);
 
     document.addEventListener('click', (e) => {
       if (attachmentMenu && attachBtn && !attachmentMenu.contains(e.target) && !attachBtn.contains(e.target)) {
