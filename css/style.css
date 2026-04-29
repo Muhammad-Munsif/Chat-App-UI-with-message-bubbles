@@ -5,6 +5,10 @@
     font-family: 'Inter', sans-serif;
   }
 
+  html {
+    height: 100%;
+  }
+
   :root {
     --primary: #2563eb;
     --primary-gradient: linear-gradient(135deg, #2563eb, #7c3aed, #db2777);
@@ -43,6 +47,8 @@
     background: var(--bg-main);
     color: var(--text-primary);
     height: 100vh;
+    height: 100dvh;
+    min-height: 100%;
     overflow: hidden;
     transition: all 0.3s ease;
   }
@@ -298,6 +304,7 @@
     display: flex;
     margin-bottom: 12px;
     animation: fadeSlide 0.25s ease;
+    min-width: 0;
   }
 
   .msg-row.out {
@@ -311,6 +318,8 @@
     font-size: 0.95rem;
     line-height: 1.45;
     word-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     box-shadow: var(--shadow-sm);
   }
 
@@ -337,6 +346,7 @@
     background: var(--bg-surface);
     border-top: 1px solid var(--border-light);
     padding: 14px 18px;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
   }
 
   .input-wrapper {
@@ -403,6 +413,35 @@
     gap: 32px;
     z-index: 60;
     border: 1px solid var(--border-light);
+  }
+
+  @media (max-width: 640px) {
+    .auth-card {
+      padding: 32px 22px;
+      border-radius: 32px;
+    }
+
+    .bubble {
+      max-width: 88%;
+    }
+
+    .msg-panel {
+      padding: 16px 12px;
+    }
+
+    .input-area {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .attach-menu {
+      left: 12px;
+      right: 12px;
+      width: auto;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 16px;
+    }
   }
 
   .attach-item {
