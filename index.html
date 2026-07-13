@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>WaveChat · Complete Messaging Solution</title>
+  <!-- Tailwind via CDN + minimal custom overrides -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons (used sparingly) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* minimal custom styles – everything else is Tailwind */
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #f8fafc; }
+    [data-theme="dark"] body { background: #0f172a; }
+    .auth-card { backdrop-filter: blur(4px); }
+    .conv-item.active { background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777); color: white; }
+    .conv-item.active .unread-badge { background: white; color: #1e293b; }
+    .bubble.in { background: #f1f5f9; }
+    [data-theme="dark"] .bubble.in { background: #1e293b; color: #e2e8f0; }
+    .bubble.out { background: #2563eb; color: white; }
+    [data-theme="dark"] .bubble.out { background: #3b82f6; }
+    .status-badge { width: 12px; height: 12px; border-radius: 999px; border: 2px solid white; position: absolute; bottom: 0; right: 0; }
+    .online { background: #10b981; }
+    .away { background: #f59e0b; }
+    .offline { background: #94a3b8; }
+    .scroll-bottom-btn { background: white; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.15); }
+    [data-theme="dark"] .scroll-bottom-btn { background: #1e293b; color: white; }
+    .toast { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+    /* responsive sidebar overlay */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      .sidebar.active { transform: translateX(0); }
+      .overlay { backdrop-filter: blur(3px); }
+    }
+    /* password toggle eye button */
+    .password-toggle { cursor: pointer; transition: 0.2s; }
+    .password-toggle:hover { opacity: 0.7; }
+    /* scrollable */
+    .msg-panel::-webkit-scrollbar { width: 4px; }
+    .msg-panel::-webkit-scrollbar-track { background: transparent; }
+    .msg-panel::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 20px; }
+  </style>
+</head>
+<body data-theme="light">
+
+  <!-- ===== AUTH CONTAINER ===== -->
+  <div class="fixed inset-0 z-[2000] flex items-center justify-center bg-[#f8fafc] dark:bg-[#0f172a] transition-colors" id="authContainer">
+    <div class="w-full max-w-md mx-4 bg-white dark:bg-[#1e293b] rounded-[40px] p-8 md:p-10 shadow-2xl auth-card border border-slate-200 dark:border-slate-700">
+      <div class="text-center mb-8">
+        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <i class="fa-regular fa-comment text-3xl text-white"></i>
+        </div>
+        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">WaveChat</h2>
+        <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Connect with friends</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl mb-6">
+        <div class="flex-1 text-center font-semibold py-2 rounded-xl bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm auth-tab active" data-tab="login">Login</div>
+        <div class="flex-1 text-center font-semibold py-2 rounded-xl text-slate-600 dark:text-slate-300 auth-tab" data-tab="register">Register</div>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm">
+        <div class="mb-3">
+          <input type="email" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white outline-none focus:border-blue-500 transition" placeholder="Email address" id="loginEmail" value="demo@wavechat.com">
+        </div>
+        <div class="mb-4 relative">
+          <input type="password" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white outline-none focus:border-blue-500 transition pr-12" placeholder="Password" id="loginPassword" value="demo123">
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 password-toggle" id="loginPassToggle">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+        <button id="doLogin" class="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg shadow-lg shadow-blue-500/30 hover:scale-[1.02] transition">Sign In</button>
+        <p class="text-center mt-4 text-xs text-slate-400"><i class="fas fa-info-circle"></i> Demo: any email/password</p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerForm" class="hidden">
+        <div class="mb-3">
+          <input type="text" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white outline-none focus:border-blue-500 transition" placeholder="Full name" id="registerName" value="Demo User">
+        </div>
+        <div class="mb-3">
+          <input type="email" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white outline-none focus:border-blue-500 transition" placeholder="Email address" id="registerEmail" value="demo@wavechat.com">
+        </div>
+        <div class="mb-4 relative">
+          <input type="password" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white outline-none focus:border-blue-500 transition pr-12" placeholder="Password" id="registerPassword" value="demo123">
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 password-toggle" id="registerPassToggle">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+        <button id="doRegister" class="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg shadow-lg shadow-blue-500/30 hover:scale-[1.02] transition">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APP ===== -->
+  <div class="hidden h-screen w-full overflow-hidden" id="mainApp">
+    <div class="flex h-full max-w-[1600px] mx-auto bg-[#f8fafc] dark:bg-[#0f172a] relative">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar w-[300px] min-w-[260px] md:w-[340px] bg-white dark:bg-[#1e293b] border-r border-slate-200 dark:border-slate-700 flex flex-col h-full z-50 shadow-md" id="sidebar">
+        <div class="p-5 border-b border-slate-200 dark:border-slate-700">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center text-white"><i class="fa-regular fa-comment"></i></div>
+              <h1 class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">WaveChat</h1>
+            </div>
+            <div class="flex gap-1">
+              <button class="w-9 h-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center justify-center text-slate-600 dark:text-slate-300" id="themeToggle"><i class="fas fa-sun"></i></button>
+              <button class="w-9 h-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center justify-center text-slate-600 dark:text-slate-300" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+          </div>
+          <div class="relative mt-4">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" placeholder="Search conversations..." id="searchInput" class="w-full pl-11 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/20">
+          </div>
+        </div>
+
+        <!-- Online strip -->
+        <div class="py-2 border-b border-slate-200 dark:border-slate-700 px-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold uppercase text-slate-400">Online</span>
+            <span class="text-sm font-bold text-blue-600 dark:text-blue-400" id="onlineCount">0</span>
+          </div>
+          <div class="flex gap-4 overflow-x-auto pb-1 scrollbar-thin" id="onlineUsers"></div>
+        </div>
+
+        <!-- Conversations -->
+        <div class="flex-1 overflow-y-auto py-3" id="conversationsList"></div>
+
+        <!-- Profile footer -->
+        <div class="border-t border-slate-200 dark:border-slate-700 p-4 flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer" id="profileBtn">
+          <div class="relative">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center text-white font-bold" id="currentUserAvatar"><i class="fas fa-user"></i></div>
+            <span class="status-badge online" id="currentUserStatus"></span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold truncate text-sm" id="currentUserDisplayName">Guest User</div>
+            <div class="text-xs text-slate-400 truncate" id="currentUserEmail">user@example.com</div>
+          </div>
+          <i class="fas fa-chevron-right text-slate-400 text-xs"></i>
+        </div>
+      </aside>
+
+      <!-- Overlay (mobile) -->
+      <div class="overlay hidden fixed inset-0 bg-black/40 z-40" id="overlay"></div>
+
+      <!-- CHAT MAIN -->
+      <main class="flex-1 flex flex-col min-w-0 bg-[#f8fafc] dark:bg-[#0f172a] h-full overflow-hidden">
+
+        <!-- Chat header -->
+        <div class="flex items-center justify-between px-4 md:px-6 py-3 bg-white/80 dark:bg-[#1e293b]/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
+          <div class="flex items-center gap-3 min-w-0">
+            <button class="md:hidden w-9 h-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <div class="relative">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center text-white" id="chatUserAvatar"><i class="fas fa-user-friends"></i></div>
+              <span class="status-badge online" id="chatUserStatus"></span>
+            </div>
+            <div class="min-w-0">
+              <h2 class="font-bold text-lg truncate" id="chatUserName">Select a chat</h2>
+              <p class="text-xs text-slate-400 truncate" id="chatUserStatusText">Click to start messaging</p>
+            </div>
+          </div>
+          <div class="flex gap-1">
+            <button class="w-9 h-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300" id="audioCallBtn"><i class="fas fa-phone"></i></button>
+            <button class="w-9 h-9 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300" id="videoCallBtn"><i class="fas fa-video"></i></button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 msg-panel relative" id="messagesContainer">
+          <div id="welcomeScreen" class="flex flex-col items-center justify-center h-full text-center px-4">
+            <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-pink-500 flex items-center justify-center mb-5 shadow-xl">
+              <i class="fas fa-comments text-4xl text-white"></i>
+            </div>
+            <h3 class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-pink-600 bg-clip-text text-transparent">Welcome to WaveChat</h3>
+            <p class="text-slate-500 dark:text-slate-400 max-w-xs text-sm mt-1">Select a conversation to start messaging</p>
+          </div>
+          <div id="chatMessages" class="hidden w-full flex flex-col gap-2"></div>
+          <!-- scroll bottom button -->
+          <button class="scroll-bottom-btn hidden fixed bottom-24 right-6 md:right-8 w-11 h-11 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1e293b] shadow-lg flex items-center justify-center text-slate-700 dark:text-white z-20" id="scrollBottomBtn" type="button">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+        </div>
+
+        <!-- Input area -->
+        <div class="bg-white dark:bg-[#1e293b] border-t border-slate-200 dark:border-slate-700 p-3 pb-4 relative">
+          <div class="flex items-center gap-2 bg-[#f1f5f9] dark:bg-[#0f172a] rounded-full px-2 pl-4 border border-slate-200 dark:border-slate-700 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition">
+            <button class="w-9 h-9 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500" id="attachBtn"><i class="fas fa-plus"></i></button>
+            <input type="text" class="flex-1 bg-transparent py-3 outline-none text-slate-800 dark:text-white placeholder:text-slate-400" placeholder="Type a message..." id="messageInput">
+            <button class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-pink-600 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center hover:scale-[1.04] transition" id="sendButton"><i class="fas fa-paper-plane"></i></button>
+          </div>
+          <!-- attachment menu -->
+          <div id="attachmentMenu" class="hidden absolute bottom-16 left-4 bg-white dark:bg-[#1e293b] rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700 p-3 flex gap-6 z-50">
+            <div class="flex flex-col items-center gap-1 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-blue-600" id="photoAttach"><i class="fas fa-image text-2xl"></i><span class="text-xs font-medium">Photo</span></div>
+            <div class="flex flex-col items-center gap-1 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-blue-600" id="fileAttach"><i class="fas fa-file text-2xl"></i><span class="text-xs font-medium">File</span></div>
+            <div class="flex flex-col items-center gap-1 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-blue-600" id="locationAttach"><i class="fas fa-map-marker-alt text-2xl"></i><span class="text-xs font-medium">Location</span></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="photoInput" class="hidden" accept="image/*">
+  <input type="file" id="fileInput" class="hidden" accept="*/*">
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    (function(){
+      'use strict';
+
+      // --- state ---
+      let currentUser = null;
+      let currentChatId = null;
+      let currentChatUser = null;
+      let localStream = null;
+      let callTimerInterval = null;
+      let callSeconds = 0;
+      let isCallMuted = false;
+      let isVideoEnabled = true;
+
+      // demo users
+      const demoUsers = [
+        { id: 'user1', name: 'John Doe', avatar: 'user-tie', status: 'online', lastSeen: 'now', email: 'john@example.com' },
+        { id: 'user2', name: 'Alice Smith', avatar: 'user-graduate', status: 'online', lastSeen: '2m', email: 'alice@example.com' },
+        { id: 'user3', name: 'Mike Johnson', avatar: 'user-ninja', status: 'away', lastSeen: '30m', email: 'mike@example.com' },
+        { id: 'user4', name: 'Sarah Brown', avatar: 'user-astronaut', status: 'offline', lastSeen: '2h', email: 'sarah@example.com' }
+      ];
+
+      // messages & conversations from localStorage
+      let messages = JSON.parse(localStorage.getItem('wavechat_messages'));
+      if (!messages) {
+        messages = {
+          'conv_user1': [
+            { id: 1, text: 'Hey! How are you?', sender: 'user1', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), type: 'text' },
+            { id: 2, text: 'Welcome to WaveChat! Start messaging now.', sender: 'user1', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), type: 'text' }
+          ],
+          'conv_user2': [
+            { id: 1, text: 'Hi there! Ready to chat?', sender: 'user2', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), type: 'text' }
+          ],
+          'conv_user3': [
+            { id: 1, text: 'Project files are ready for review', sender: 'user3', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), type: 'text' }
+          ]
+        };
+        localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+      }
+
+      let conversations = JSON.parse(localStorage.getItem('wavechat_conversations'));
+      if (!conversations) {
+        conversations = {};
+        demoUsers.forEach(u => {
+          conversations[`conv_${u.id}`] = {
+            userId: u.id,
+            lastMessage: u.id === 'user1' ? 'Hey! How are you?' : 'Hello! Ready to chat?',
+            lastMessageTime: new Date().toISOString(),
+            unreadCount: u.id === 'user1' ? 1 : 0
+          };
+        });
+        localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+      }
+
+      // DOM refs
+      const $ = id => document.getElementById(id);
+      const authContainer = $('authContainer');
+      const mainApp = $('mainApp');
+      const sidebar = $('sidebar');
+      const overlay = $('overlay');
+      const themeToggle = $('themeToggle');
+      const logoutBtn = $('logoutBtn');
+      const onlineUsers = $('onlineUsers');
+      const conversationsList = $('conversationsList');
+      const welcomeScreen = $('welcomeScreen');
+      const chatMessages = $('chatMessages');
+      const messagesContainer = $('messagesContainer');
+      const scrollBottomBtn = $('scrollBottomBtn');
+      const currentUserDisplayName = $('currentUserDisplayName');
+      const currentUserEmail = $('currentUserEmail');
+      const chatUserName = $('chatUserName');
+      const chatUserAvatar = $('chatUserAvatar');
+      const chatUserStatus = $('chatUserStatus');
+      const chatUserStatusText = $('chatUserStatusText');
+      const messageInput = $('messageInput');
+      const sendButton = $('sendButton');
+      const attachBtn = $('attachBtn');
+      const audioCallBtn = $('audioCallBtn');
+      const videoCallBtn = $('videoCallBtn');
+      const attachmentMenu = $('attachmentMenu');
+      const searchInput = $('searchInput');
+      const onlineCount = $('onlineCount');
+      const menuToggle = $('menuToggle');
+      const profileBtn = $('profileBtn');
+      const photoInput = $('photoInput');
+      const fileInput = $('fileInput');
+
+      // --- helpers ---
+      function showToast(msg) {
+        const t = document.createElement('div');
+        t.className = 'toast fixed bottom-8 left-1/2 -translate-x-1/2 text-white px-6 py-3 rounded-full shadow-xl z-[3000] text-sm font-medium animate-[fadeSlide_0.25s]';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2600);
+      }
+      window.showToast = showToast;
+
+      function scrollToBottom() {
+        setTimeout(() => { messagesContainer.scrollTop = messagesContainer.scrollHeight; }, 80);
+      }
+
+      function updateScrollBottomButton() {
+        if (!messagesContainer || !scrollBottomBtn) return;
+        const near = messagesContainer.scrollHeight - messagesContainer.scrollTop - messagesContainer.clientHeight <= 100;
+        scrollBottomBtn.classList.toggle('hidden', near);
+      }
+
+      function escapeHtml(s) { return String(s).replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' })[m] || m); }
+
+      // --- auth: toggle password visibility ---
+      function setupPasswordToggle(inputId, toggleId) {
+        const input = $(inputId);
+        const toggle = $(toggleId);
+        if (!input || !toggle) return;
+        toggle.addEventListener('click', function() {
+          const isPassword = input.type === 'password';
+          input.type = isPassword ? 'text' : 'password';
+          toggle.querySelector('i').className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+        });
+      }
+      setupPasswordToggle('loginPassword', 'loginPassToggle');
+      setupPasswordToggle('registerPassword', 'registerPassToggle');
+
+      // --- auth login/register ---
+      function login() {
+        const email = $('loginEmail').value.trim();
+        const pass = $('loginPassword').value.trim();
+        if (!email || !pass) { showToast('Please enter email and password'); return; }
+        const name = email.split('@')[0] || 'User';
+        currentUser = { uid: 'currentUser', displayName: name, email };
+        localStorage.setItem('wavechat_current_user', JSON.stringify(currentUser));
+        localStorage.setItem('wavechat_logged_in', 'true');
+        enterApp();
+      }
+
+      function register() {
+        const name = $('registerName').value.trim();
+        const email = $('registerEmail').value.trim();
+        const pass = $('registerPassword').value.trim();
+        if (!name || !email || !pass) { showToast('Please fill all fields'); return; }
+        currentUser = { uid: 'currentUser', displayName: name, email };
+        localStorage.setItem('wavechat_current_user', JSON.stringify(currentUser));
+        localStorage.setItem('wavechat_logged_in', 'true');
+        enterApp();
+      }
+
+      function enterApp() {
+        updateUI();
+        loadConversations();
+        loadOnlineUsers();
+        authContainer.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+        mainApp.classList.add('flex');
+        showToast(`Welcome ${currentUser.displayName}!`);
+        setTimeout(() => {
+          const first = document.querySelector('.conv-item');
+          if (first) first.click();
+        }, 300);
+      }
+
+      function logout() {
+        currentUser = null; currentChatId = null; currentChatUser = null;
+        localStorage.removeItem('wavechat_current_user');
+        localStorage.removeItem('wavechat_logged_in');
+        authContainer.classList.remove('hidden');
+        mainApp.classList.add('hidden');
+        mainApp.classList.remove('flex');
+        showToast('Logged out');
+      }
+
+      function updateUI() {
+        if (currentUser) {
+          currentUserDisplayName.textContent = currentUser.displayName;
+          currentUserEmail.textContent = currentUser.email;
+        }
+      }
+
+      // --- load conversations ---
+      function loadConversations() {
+        conversationsList.innerHTML = '';
+        Object.entries(conversations).forEach(([cid, data]) => {
+          const u = demoUsers.find(u => u.id === data.userId);
+          if (u) addConvItem(cid, u, data);
+        });
+      }
+
+      function addConvItem(cid, user, data) {
+        const div = document.createElement('div');
+        div.className = `conv-item flex items-center gap-3 px-4 py-3 mx-2 rounded-2xl cursor-pointer transition hover:bg-slate-100 dark:hover:bg-slate-800 ${currentChatId === cid ? 'active' : ''}`;
+        div.dataset.convid = cid;
+        div.onclick = () => selectChat(cid, user);
+        const unread = data.unreadCount || 0;
+        div.innerHTML = `
+          <div class="relative">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center text-white"><i class="fas fa-${user.avatar}"></i></div>
+            <span class="status-badge ${user.status}"></span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center"><span class="font-bold truncate">${escapeHtml(user.name)}</span><span class="text-xs text-slate-400">${user.lastSeen}</span></div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 truncate">${escapeHtml((data.lastMessage || 'Say hello!').substring(0, 40))}</p>
+          </div>
+          ${unread > 0 ? `<span class="unread-badge bg-gradient-to-r from-blue-600 to-pink-600 text-white text-[0.65rem] font-bold px-3 py-0.5 rounded-full">${unread}</span>` : ''}
+        `;
+        conversationsList.appendChild(div);
+      }
+
+      // --- select chat ---
+      function selectChat(cid, user) {
+        if (!user) return;
+        currentChatId = cid;
+        currentChatUser = user;
+        chatUserName.textContent = user.name;
+        chatUserAvatar.innerHTML = `<i class="fas fa-${user.avatar}"></i>`;
+        chatUserStatus.className = `status-badge ${user.status}`;
+        chatUserStatusText.textContent = user.status === 'online' ? 'Online' : user.status === 'away' ? 'Away' : 'Offline';
+        welcomeScreen.classList.add('hidden');
+        chatMessages.classList.remove('hidden');
+
+        if (conversations[cid]?.unreadCount) {
+          conversations[cid].unreadCount = 0;
+          localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+          loadConversations();
+        }
+        loadMessages(cid);
+        document.querySelectorAll('.conv-item').forEach(el => el.classList.toggle('active', el.dataset.convid === cid));
+        if (window.innerWidth < 768) closeSidebar();
+      }
+
+      function loadMessages(cid) {
+        chatMessages.innerHTML = '';
+        const msgs = messages[cid] || [];
+        msgs.forEach(m => displayMsg(m));
+        scrollToBottom();
+        updateScrollBottomButton();
+      }
+
+      function displayMsg(msg) {
+        const isOut = msg.sender === 'current';
+        const row = document.createElement('div');
+        row.className = `flex items-start gap-2 ${isOut ? 'justify-end' : ''} animate-[fadeSlide_0.2s]`;
+        row.dataset.msgid = String(msg.id || '');
+        let content = escapeHtml(msg.text);
+        if (msg.type === 'image') content = `<img src="${msg.text}" class="max-w-[200px] rounded-xl max-h-48 cursor-pointer" onclick="window.open(this.src)">`;
+        else if (msg.type === 'location') content = `<i class="fas fa-map-marker-alt mr-1"></i><a href="${msg.text}" target="_blank" class="underline">My Location</a>`;
+        else if (msg.type === 'file') content = `<i class="fas fa-paperclip mr-1"></i>${escapeHtml(msg.text)}`;
+
+        if (!isOut && currentChatUser) {
+          row.innerHTML = `
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center text-white text-xs flex-shrink-0"><i class="fas fa-${currentChatUser.avatar}"></i></div>
+            <div class="bubble in rounded-2xl px-4 py-2 max-w-[75%] shadow-sm">${content}<div class="text-[0.6rem] text-slate-400 mt-1 text-right">${msg.time}</div></div>
+          `;
+        } else {
+          const status = msg.status || 'sent';
+          const seen = status === 'seen';
+          row.innerHTML = `
+            <div class="bubble out rounded-2xl px-4 py-2 max-w-[75%] shadow-sm">${content}
+              <div class="flex items-center justify-end gap-2 mt-1 text-[0.6rem] text-white/80">
+                <span>${msg.time}</span>
+                <span class="message-status ${seen ? 'seen' : ''}" data-status="${status}"><i class="fas ${seen ? 'fa-check-double' : 'fa-check'}"></i></span>
+              </div>
+            </div>
+          `;
+        }
+        chatMessages.appendChild(row);
+        scrollToBottom();
+        updateScrollBottomButton();
+      }
+
+      function saveAndSend(text, type = 'text', rawUrl = null) {
+        if (!text.trim() || !currentChatId || !currentUser) return false;
+        const newMsg = {
+          id: Date.now(),
+          text: rawUrl || text,
+          sender: 'current',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type,
+          status: 'sent'
+        };
+        displayMsg(newMsg);
+        if (!messages[currentChatId]) messages[currentChatId] = [];
+        messages[currentChatId].push(newMsg);
+        localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+        if (conversations[currentChatId]) {
+          conversations[currentChatId].lastMessage = text.substring(0, 40);
+          conversations[currentChatId].lastMessageTime = new Date().toISOString();
+          localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+          loadConversations();
+        }
+        // auto reply
+        setTimeout(() => {
+          if (currentChatUser) {
+            const reply = {
+              id: Date.now() + 1,
+              text: 'Thanks for your message! 👍',
+              sender: currentChatUser.id,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              type: 'text'
+            };
+            displayMsg(reply);
+            messages[currentChatId].push(reply);
+            localStorage.setItem('wavechat_messages', JSON.stringify(messages));
+            if (conversations[currentChatId]) {
+              conversations[currentChatId].unreadCount = (conversations[currentChatId].unreadCount || 0) + 1;
+              localStorage.setItem('wavechat_conversations', JSON.stringify(conversations));
+              loadConversations();
+            }
+          }
+        }, 1500);
+        return true;
+      }
+
+      function sendMessage() {
+        const txt = messageInput.value.trim();
+        if (txt && currentChatId && currentUser) {
+          saveAndSend(txt, 'text', txt);
+          messageInput.value = '';
+        }
+      }
+
+      // --- online users ---
+      function loadOnlineUsers() {
+        const online = demoUsers.filter(u => u.status === 'online');
+        onlineCount.textContent = online.length;
+        onlineUsers.innerHTML = '';
+        online.forEach(u => {
+          const div = document.createElement('div');
+          div.className = 'online-item flex flex-col items-center gap-1 cursor-pointer min-w-[60px] hover:scale-105 transition';
+          div.onclick = () => { const cid = `conv_${u.id}`; selectChat(cid, u); };
+          div.innerHTML = `
+            <div class="relative"><div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center text-white"><i class="fas fa-${u.avatar}"></i></div><span class="status-badge online"></span></div>
+            <span class="text-xs font-medium truncate max-w-[60px]">${u.name.split(' ')[0]}</span>
+          `;
+          onlineUsers.appendChild(div);
+        });
+      }
+
+      // --- call functions (stubs) ---
+      function startAudioCall() { if (!currentChatUser) return showToast('Select a chat first'); showToast('🔊 Audio call started (demo)'); }
+      function startVideoCall() { if (!currentChatUser) return showToast('Select a chat first'); showToast('📹 Video call started (demo)'); }
+
+      // --- theme ---
+      function toggleTheme() {
+        const dark = document.body.dataset.theme === 'dark';
+        document.body.dataset.theme = dark ? 'light' : 'dark';
+        localStorage.setItem('theme', dark ? 'light' : 'dark');
+        const icon = themeToggle.querySelector('i');
+        if (icon) icon.className = dark ? 'fas fa-sun' : 'fas fa-moon';
+      }
+
+      function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') {
+          document.body.dataset.theme = 'dark';
+          const icon = themeToggle.querySelector('i');
+          if (icon) icon.className = 'fas fa-moon';
+        }
+      }
+
+      // --- sidebar toggle ---
+      function toggleSidebar() { sidebar.classList.toggle('active'); overlay.classList.toggle('hidden'); }
+      function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.add('hidden'); }
+
+      // --- check login ---
+      function checkLoginStatus() {
+        const loggedIn = localStorage.getItem('wavechat_logged_in') === 'true';
+        const saved = localStorage.getItem('wavechat_current_user');
+        if (loggedIn && saved) {
+          currentUser = JSON.parse(saved);
+          updateUI();
+          loadConversations();
+          loadOnlineUsers();
+          authContainer.classList.add('hidden');
+          mainApp.classList.remove('hidden');
+          mainApp.classList.add('flex');
+          setTimeout(() => { const first = document.querySelector('.conv-item'); if (first) first.click(); }, 300);
+        }
+      }
+
+      // --- event listeners ---
+      function init() {
+        initTheme();
+        checkLoginStatus();
+
+        $('doLogin')?.addEventListener('click', login);
+        $('doRegister')?.addEventListener('click', register);
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+          tab.addEventListener('click', function() {
+            const type = this.dataset.tab;
+            $('loginForm').classList.toggle('hidden', type !== 'login');
+            $('registerForm').classList.toggle('hidden', type !== 'register');
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('bg-white', 'dark:bg-slate-700', 'text-blue-600', 'dark:text-blue-400', 'shadow-sm'));
+            this.classList.add('bg-white', 'dark:bg-slate-700', 'text-blue-600', 'dark:text-blue-400', 'shadow-sm');
+          });
+        });
+
+        themeToggle?.addEventListener('click', toggleTheme);
+        logoutBtn?.addEventListener('click', logout);
+        sendButton?.addEventListener('click', sendMessage);
+        messageInput?.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+        attachBtn?.addEventListener('click', () => attachmentMenu?.classList.toggle('hidden'));
+        audioCallBtn?.addEventListener('click', startAudioCall);
+        videoCallBtn?.addEventListener('click', startVideoCall);
+        menuToggle?.addEventListener('click', toggleSidebar);
+        overlay?.addEventListener('click', closeSidebar);
+        profileBtn?.addEventListener('click', () => showToast(`Profile: ${currentUser?.displayName || 'Guest'}`));
+        scrollBottomBtn?.addEventListener('click', scrollToBottom);
+        messagesContainer?.addEventListener('scroll', updateScrollBottomButton, { passive: true });
+
+        searchInput?.addEventListener('input', e => {
+          const term = e.target.value.toLowerCase();
+          document.querySelectorAll('.conv-item').forEach(i => {
+            const name = i.querySelector('.font-bold')?.textContent?.toLowerCase() || '';
+            i.style.display = name.includes(term) ? 'flex' : 'none';
+          });
+        });
+
+        window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeSidebar(); });
+        window.addEventListener('resize', updateScrollBottomButton);
+
+        document.addEventListener('click', e => {
+          if (attachmentMenu && attachBtn && !attachmentMenu.contains(e.target) && !attachBtn.contains(e.target)) {
+            attachmentMenu.classList.add('hidden');
+          }
+        });
+
+        // attachments
+        $('photoAttach')?.addEventListener('click', () => { photoInput.click(); attachmentMenu.classList.add('hidden'); });
+        $('fileAttach')?.addEventListener('click', () => { fileInput.click(); attachmentMenu.classList.add('hidden'); });
+        $('locationAttach')?.addEventListener('click', () => {
+          attachmentMenu.classList.add('hidden');
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(p => {
+              const url = `https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
+              saveAndSend(`📍 My location`, 'location', url);
+              showToast('Location shared');
+            }, () => showToast('Unable to get location'));
+          } else showToast('Geolocation not supported');
+        });
+
+        photoInput?.addEventListener('change', e => {
+          if (e.target.files?.[0]) {
+            const reader = new FileReader();
+            reader.onload = ev => saveAndSend('📷 Photo', 'image', ev.target.result);
+            reader.readAsDataURL(e.target.files[0]);
+          }
+        });
+        fileInput?.addEventListener('change', e => {
+          if (e.target.files?.[0]) {
+            const f = e.target.files[0];
+            saveAndSend(`📎 File: ${f.name} (${(f.size/1024).toFixed(1)} KB)`, 'file');
+          }
+        });
+      }
+
+      // inject fadeSlide keyframe
+      const styleSheet = document.createElement("style");
+      styleSheet.textContent = `@keyframes fadeSlide { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }`;
+      document.head.appendChild(styleSheet);
+
+      init();
+    })();
+  </script>
+</body>
+</html>
